@@ -1,0 +1,81 @@
+/* ==========================================================================
+   SUPERSCIENCE // Customer Care & Showroom Styles (contact.html)
+   ========================================================================== */
+
+/* Form Controls */
+.form-control, .form-select {
+  border-color: #000000;
+  padding: 12px 14px;
+  font-size: 0.875rem;
+  font-family: var(--font-body);
+  transition: all var(--ss-transition-fast);
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--ss-black);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+
+.form-label, label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ss-black);
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Card Elevation & Hover States */
+.contact-module-card {
+  transition: border-color 0.2s ease, box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact-module-card:hover {
+  border-color: var(--ss-black);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+}
+
+/* FAQ Accordion */
+.accordion-item {
+  border: 1px solid var(--ss-border);
+  background-color: var(--ss-white);
+  margin-bottom: 8px;
+  transition: border-color 0.2s ease;
+}
+
+.accordion-item:hover {
+  border-color: var(--ss-black);
+}
+
+.accordion-button {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  padding: 18px 24px;
+  background-color: var(--ss-white);
+  color: var(--ss-black);
+  border: none;
+  box-shadow: none;
+  transition: background-color 0.15s ease;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: var(--ss-surface-light);
+  color: var(--ss-black);
+  box-shadow: none;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+  outline: 2px solid var(--ss-black) !important;
+  outline-offset: -2px !important;
+}
+
+.accordion-body {
+  padding: 18px 24px 24px 24px;
+  line-height: 1.6;
+  color: var(--ss-text-secondary);
+}

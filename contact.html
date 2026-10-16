@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Care & Showroom // SUPERSCIENCE Fitting Consultations</title>
+  <meta name="description"
+    content="Book private showroom fitting appointments and sizing consultations with the SUPERSCIENCE team. Access comprehensive FAQs, garment care instructions, and customer support.">
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- Modular Stylesheets (Common Tokens + Customer Care & Showroom Page) -->
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/contact.css">
+</head>
+
+<body>
+
+  <!-- ========================================================================
+       1. Top Announcement Bar
+       ======================================================================== -->
+  <div class="announcement-bar d-flex justify-content-center align-items-center gap-2">
+    <span>FLAGSHIP SHOWROOM OPEN FOR PRIVATE FITTING RESERVATIONS</span>
+    <span class="d-none d-md-inline">•</span>
+    <span class="d-none d-md-inline">FREE WORLDWIDE EXPRESS DISPATCH OVER ₱8,500</span>
+    <span class="d-none d-lg-inline">•</span>
+    <span class="d-none d-lg-inline">4-HOUR SIZING RESPONSE GUARANTEE</span>
+  </div>
+
+  <!-- ========================================================================
+       2. Sticky Navigation Header (Navbar Stays On Scroll)
+       ======================================================================== -->
+  <nav class="navbar navbar-expand-lg navbar-superscience sticky-top">
+    <div class="container-fluid px-3 px-md-5">
+      <!-- Mobile Toggle Button -->
+      <button class="navbar-toggler rounded-0 border-0 p-0 me-3 d-lg-none" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#mobileNavOffcanvas" aria-controls="mobileNavOffcanvas">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Brandmark Logo -->
+      <a class="navbar-brand-logo me-4 font-brand" href="index.html" title="SUPERSCIENCE">
+        <img src="assets/logo-black.png" alt="SUPERSCIENCE" class="navbar-logo-img" style="height: 26px; width: auto;">
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="catalog.html">Shop Collection</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="programs.html">Workout Programs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom active" href="contact.html">Fitting & Showroom</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="admin.html">Dashboard</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Right Header Actions (Search, Wishlist, Cart) -->
+      <div class="d-flex align-items-center gap-2">
+        <button class="header-action-btn open-search-trigger" title="Search Garments">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+
+        <button class="header-action-btn open-wishlist-trigger" title="Wishlist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+            </path>
+          </svg>
+          <span id="wishlist-badge-count" class="badge-counter" style="display:none;">0</span>
+        </button>
+
+        <!-- Athlete Profile Dropdown -->
+        <div class="dropdown profile-nav-dropdown">
+          <button class="header-action-btn" id="profileDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false" title="Athlete Account & Orders" aria-label="Athlete Account">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end profile-dropdown-menu rounded-0 shadow-sm border" aria-labelledby="profileDropdownBtn">
+            <li class="px-3 py-2 bg-light border-bottom">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-black text-white font-mono rounded-0" style="font-size:0.6rem;">TIER 01</span>
+                <span class="font-mono text-muted" style="font-size:0.68rem;">ID: SS-ATH-9821</span>
+              </div>
+              <div class="fw-bold font-brand text-dark fs-6 lh-1 mb-1">Marcus Vance</div>
+              <div class="font-mono text-muted text-truncate" style="font-size:0.72rem;">lifter@superscience.test</div>
+            </li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="profile.html"><span>Full Athlete Profile</span><span class="badge bg-dark text-white rounded-0 ms-auto font-mono" style="font-size:0.6rem;">MAIN</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="profile.html#orders"><span>Orders & Specimen Tracking</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="profile.html#sizing"><span>Biomechanical Fit Matrix</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="profile.html#wishlist"><span>Saved Specimen Vault</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="profile.html#protocol"><span>Active Workout Protocol</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="profile.html#account"><span>Credentials & Address</span></a></li>
+            <li><hr class="dropdown-divider my-1"></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2 small" href="admin.html"><span>Seller & Atelier Dashboard</span><span class="badge bg-dark text-white rounded-0 ms-auto font-mono" style="font-size:0.6rem;">SELLER</span></a></li>
+            <li><button class="dropdown-item font-mono py-2 d-flex align-items-center gap-2 small text-danger" onclick="window.showToast('Signed out of Marcus Vance profile.')"><span>Switch / Sign Out</span></button></li>
+          </ul>
+        </div>
+
+        <button class="header-action-btn" id="open-bag-btn" title="Your Bag">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span id="bag-badge-count" class="badge-counter" style="display:none;">0</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Offcanvas -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileNavOffcanvas" aria-labelledby="mobileNavLabel"
+    style="width: 300px;">
+    <div class="offcanvas-header border-bottom">
+      <a href="index.html" class="d-inline-flex align-items-center">
+        <img src="assets/logo-black.png" alt="SUPERSCIENCE" class="navbar-logo-img" style="height: 22px;">
+      </a>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+      <div class="list-group list-group-flush">
+        <a href="index.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Home</a>
+        <a href="catalog.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Shop
+          Collection</a>
+        <a href="programs.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Workout
+          Programs</a>
+        <a href="contact.html"
+          class="list-group-item list-group-item-action py-3 fw-bold text-uppercase bg-light">Fitting & Showroom</a>
+        <a href="profile.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase border-top">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Athlete Profile
+        </a>
+        <a href="admin.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase border-top d-flex align-items-center justify-content-between">
+          <span class="d-flex align-items-center">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2">
+              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+            </svg>
+            Seller Dashboard
+          </span>
+          <span class="badge bg-black text-white font-mono rounded-0" style="font-size:0.65rem;">SELLER</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       Contact Hero Header
+       ======================================================================== -->
+  <header class="page-header-banner">
+    <div class="container-fluid px-3 px-md-5">
+      <div class="page-breadcrumb">
+        <a href="index.html">HOME</a>
+        <span>/</span>
+        <span class="text-dark">FITTING & SHOWROOM</span>
+      </div>
+      <div class="row align-items-end">
+        <div class="col-12 col-md-8">
+          <h1 class="page-title mb-2">CUSTOMER CARE & SHOWROOM</h1>
+          <p class="page-description">
+            Get personalized garment sizing advice based on your height, weight, and torso proportions, or book a
+            private fitting reservation at our design flagship studio showroom.
+          </p>
+        </div>
+        <div class="col-12 col-md-4 text-md-end mt-3 mt-md-0">
+          <span class="badge bg-black font-mono text-white px-3 py-2 rounded-0" style="font-size:0.75rem;">DIRECT HUMAN FIT SUPPORT</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       Main Content: Form & Showroom
+       ======================================================================== -->
+  <main class="py-5">
+    <div class="container-fluid px-3 px-md-5">
+      <div class="row g-5">
+
+        <!-- Left: Interactive Sizing Consultation Form -->
+        <div class="col-12 col-lg-6">
+          <div class="p-4 p-md-5 border bg-white h-100">
+            <div class="section-eyebrow mb-1">MODULE 01</div>
+            <h3 class="fw-bold font-brand mb-3">SIZING & FIT CONSULTATION</h3>
+            <p class="text-secondary small mb-4">
+              Unsure between sizes? Provide your parameters below and our garment technicians will calculate the optimal
+              size for your intended street or lifting silhouette.
+            </p>
+
+            <form id="sizing-consultation-form"
+              onsubmit="event.preventDefault(); showToast('Consultation request received! A sizing technician will email you within 4 hours.'); this.reset();">
+              <div class="row g-3">
+                <div class="col-12 col-md-6">
+                  <label class="font-mono small fw-bold">YOUR NAME</label>
+                  <input type="text" class="form-control rounded-0 border-dark" placeholder="e.g. Jordan Hayes"
+                    required>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="font-mono small fw-bold">EMAIL ADDRESS</label>
+                  <input type="email" class="form-control rounded-0 border-dark" placeholder="jordan@example.com"
+                    required>
+                </div>
+
+                <div class="col-6">
+                  <label class="font-mono small fw-bold">HEIGHT (CM OR FT/IN)</label>
+                  <input type="text" class="form-control rounded-0 border-dark" placeholder="e.g. 182 cm / 6'0&quot;"
+                    required>
+                </div>
+                <div class="col-6">
+                  <label class="font-mono small fw-bold">BODY WEIGHT</label>
+                  <input type="text" class="form-control rounded-0 border-dark" placeholder="e.g. 85 kg / 187 lbs"
+                    required>
+                </div>
+
+                <div class="col-12">
+                  <label class="font-mono small fw-bold">TARGET FIT PREFERENCE</label>
+                  <select class="form-select rounded-0 border-dark" required>
+                    <option value="signature">SIGNATURE DROP-SHOULDER OVERSIZED (RECOMMENDED)</option>
+                    <option value="standard">STANDARD ATHLETIC FIT (SLIGHTLY TRIMMER)</option>
+                    <option value="ultra">ULTRA-BOXY STREETWEAR DRAPE (+1 SIZE UP)</option>
+                  </select>
+                </div>
+
+                <div class="col-12">
+                  <label class="font-mono small fw-bold">PRIMARY GARMENT OF INTEREST</label>
+                  <select class="form-select rounded-0 border-dark">
+                    <option>HEAVYWEIGHT BOXY TEE (380 GSM)</option>
+                    <option>OVERSIZED FRENCH TERRY HOODIE (450 GSM)</option>
+                    <option>WIDE-LEG RELAXED SWEATPANTS (400 GSM)</option>
+                    <option>COMPLETE DROP 01 CAPSULE SET</option>
+                  </select>
+                </div>
+
+                <div class="col-12">
+                  <label class="font-mono small fw-bold">SPECIFIC QUESTIONS / CHEST MEASUREMENTS</label>
+                  <textarea class="form-control rounded-0 border-dark" rows="3"
+                    placeholder="Tell us about your chest width, shoulder breadth, or desired length..."></textarea>
+                </div>
+
+                <div class="col-12">
+                  <button type="submit" class="btn btn-ss-dark w-100 py-3 rounded-0">
+                    SUBMIT SIZING REQUEST
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right: Private Showroom Booking & Coordinates -->
+        <div class="col-12 col-lg-6">
+          <div class="p-4 p-md-5 border bg-white h-100 d-flex flex-column">
+            <div class="section-eyebrow mb-1">MODULE 02</div>
+            <h3 class="fw-bold font-brand mb-3">PRIVATE SHOWROOM FITTING</h3>
+            <p class="text-secondary small mb-3">
+              Visit our flagship studio showroom to inspect fabric specimens, test biomechanical movement on our private
+              lifting platform, and receive bespoke sizing.
+            </p>
+
+            <img src="assets/stock/showroom.jpg" class="w-100 mb-4 border"
+              style="aspect-ratio: 16/10; object-fit: cover;" alt="Showroom Interior">
+
+            <!-- Appointment Form -->
+            <form id="showroom-booking-form"
+              onsubmit="event.preventDefault(); showToast('Private showroom reservation confirmed! Check your email for access instructions.'); this.reset();"
+              class="mb-4">
+              <div class="row g-2 mb-3">
+                <div class="col-12 col-md-6">
+                  <label class="font-mono small fw-bold">SELECT DATE</label>
+                  <input type="date" class="form-control rounded-0 border-dark" required>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="font-mono small fw-bold">TIME SLOT</label>
+                  <select class="form-select rounded-0 border-dark" required>
+                    <option>11:00 AM (MORNING SUITE)</option>
+                    <option>1:30 PM (MIDDAY SUITE)</option>
+                    <option>4:00 PM (AFTERNOON SUITE)</option>
+                    <option>6:00 PM (EVENING SUITE)</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-outline-dark w-100 py-3 rounded-0">
+                BOOK PRIVATE FITTING APPOINTMENT
+              </button>
+            </form>
+
+            <div class="mt-auto pt-3 border-top font-mono small">
+              <div class="fw-bold text-uppercase mb-1">FLAGSHIP STUDIO COORDINATES</div>
+              <div class="text-secondary mb-1">123 Science Avenue, Design & Performance District</div>
+              <div>DIRECT EMAIL: <strong>CARE@SUPERSCIENCE.COM</strong></div>
+              <div class="text-muted">HOURS: MON–FRI 10AM–7PM // SAT 11AM–6PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================================
+           Comprehensive FAQ Accordion Section
+           ======================================================================== -->
+      <section id="faq" class="py-5 mt-5 border-top">
+        <div class="row mb-4">
+          <div class="col-12 col-lg-8">
+            <div class="section-eyebrow">CUSTOMER DIRECTIVE</div>
+            <h2 class="section-title">FREQUENTLY ASKED QUESTIONS</h2>
+            <p class="section-desc mb-0">
+              Direct, transparent answers regarding fabric specifications, worldwide dispatch, garment care, and our
+              30-day trial policy.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion accordion-flush border" id="faqAccordion">
+          <!-- Item 1 -->
+          <div class="accordion-item rounded-0 border-bottom">
+            <h2 class="accordion-header" id="faq-heading-1">
+              <button class="accordion-button collapsed rounded-0 font-brand fw-bold" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq-collapse-1" aria-expanded="false"
+                aria-controls="faq-collapse-1">
+                01 // HOW DOES THE 380 GSM BOXY TEE FIT COMPARED TO STANDARD SHIRTS?
+              </button>
+            </h2>
+            <div id="faq-collapse-1" class="accordion-collapse collapse" aria-labelledby="faq-heading-1"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-secondary small">
+                Our tees feature an intentional drop-shoulder cut, wider chest dimensions, and a substantial 380 GSM
+                fabric density that creates a structured drape rather than clinging to the torso. If you prefer the
+                signature relaxed streetwear look, order your true size. If you want a standard athletic fit, size down
+                one size.
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="accordion-item rounded-0 border-bottom">
+            <h2 class="accordion-header" id="faq-heading-2">
+              <button class="accordion-button collapsed rounded-0 font-brand fw-bold" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq-collapse-2" aria-expanded="false"
+                aria-controls="faq-collapse-2">
+                02 // HOW DOES FREE WORLDWIDE EXPRESS DISPATCH OVER ₱8,500 WORK?
+              </button>
+            </h2>
+            <div id="faq-collapse-2" class="accordion-collapse collapse" aria-labelledby="faq-heading-2"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-secondary small">
+                Whenever your bag subtotal reaches or exceeds ₱8,500.00, premium tracked DHL Express shipping is
+                automatically complimentary. Orders are packed within 24 hours from our central warehouse and typically
+                arrive in 3–5 business days internationally.
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="accordion-item rounded-0 border-bottom">
+            <h2 class="accordion-header" id="faq-heading-3">
+              <button class="accordion-button collapsed rounded-0 font-brand fw-bold" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq-collapse-3" aria-expanded="false"
+                aria-controls="faq-collapse-3">
+                03 // HOW SHOULD I WASH AND CARE FOR 450 GSM HEAVYWEIGHT COTTON?
+              </button>
+            </h2>
+            <div id="faq-collapse-3" class="accordion-collapse collapse" aria-labelledby="faq-heading-3"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-secondary small">
+                Because our garments are bio-enzyme pre-shrunk, shrinkage is minimal (&lt;0.5%). We recommend machine
+                washing cold (30°C / 86°F) inside-out with like colors. Hang to air dry in the shade to preserve the
+                deep enzyme wash patina and rib collar elasticity indefinitely. Avoid high-heat tumble drying.
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="accordion-item rounded-0 border-bottom">
+            <h2 class="accordion-header" id="faq-heading-4">
+              <button class="accordion-button collapsed rounded-0 font-brand fw-bold" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq-collapse-4" aria-expanded="false"
+                aria-controls="faq-collapse-4">
+                04 // WHAT IS YOUR 30-DAY RETURN AND EXCHANGE POLICY?
+              </button>
+            </h2>
+            <div id="faq-collapse-4" class="accordion-collapse collapse" aria-labelledby="faq-heading-4"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-secondary small">
+                We offer hassle-free 30-day returns and size exchanges on all unworn items with original tags intact. If
+                the fit does not meet your expectations, simply initiate a return via email to care@superscience.com and
+                our team will dispatch a pre-paid return label.
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 5 -->
+          <div class="accordion-item rounded-0">
+            <h2 class="accordion-header" id="faq-heading-5">
+              <button class="accordion-button collapsed rounded-0 font-brand fw-bold" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq-collapse-5" aria-expanded="false"
+                aria-controls="faq-collapse-5">
+                05 // ARE THE WORKOUT PROGRAMS SUITABLE FOR BEGINNERS AS WELL AS ADVANCED LIFTERS?
+              </button>
+            </h2>
+            <div id="faq-collapse-5" class="accordion-collapse collapse" aria-labelledby="faq-heading-5"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-secondary small">
+                Yes. While protocols like the 6-Day PPL are calibrated for advanced volume tolerance, our 3-Day Full
+                Body Frequency split is specifically engineered for all lifters seeking maximum stimulus with minimal
+                fatigue. Every protocol includes exercise alternatives and calibrated RIR intensity guidance.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ========================================================================
+       Footer
+       ======================================================================== -->
+  <footer class="footer-superscience">
+    <div class="container-fluid px-3 px-md-5">
+      <div class="row g-4 mb-5">
+        <div class="col-12 col-lg-4">
+          <img src="assets/logo-white.png" alt="SUPERSCIENCE" class="footer-logo-img mb-3" style="height: 24px;">
+          <p class="text-secondary small mb-3">
+            Minimalist luxury streetwear engineered with heavyweight organic textiles and evidence-based biomechanical
+            training principles.
+          </p>
+          <div class="font-mono text-muted small">
+            DESIGNED & ENGINEERED FOR HIGH-EFFORT LIVING.
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="footer-heading">NAVIGATION</div>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="catalog.html">Shop All Garments</a></li>
+            <li><a href="catalog.html?category=tshirts">T-Shirts</a></li>
+            <li><a href="catalog.html?category=shorts">Shorts</a></li>
+            <li><a href="catalog.html?category=caps">Caps</a></li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="footer-heading">SCIENCE & CARE</div>
+          <ul class="footer-links">
+            <li><a href="programs.html">Workout Protocols</a></li>
+            <li><a href="contact.html">Fitting & Showroom</a></li>
+            <li><a href="profile.html">Athlete Profile</a></li>
+            <li><a href="admin.html">Seller Dashboard</a></li>
+          </ul>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="footer-heading">JOIN THE DROP ROSTER</div>
+          <p class="text-secondary small mb-3">
+            Receive private release codes, GSM laboratory disclosures, and hypertrophy routine updates before public
+            release.
+          </p>
+          <form class="d-flex gap-2"
+            onsubmit="event.preventDefault(); showToast('Subscribed to Drop Roster.'); this.reset();">
+            <input type="email" class="form-control rounded-0 border-dark" placeholder="athlete@example.com" required>
+            <button class="btn btn-ss-dark rounded-0 px-3" type="submit">JOIN</button>
+          </form>
+          <div class="form-text font-mono text-muted" style="font-size: 0.7rem;">Enter promo code
+            <strong>SCIENCE10</strong> for 10% off.</div>
+        </div>
+      </div>
+
+      <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+        <div class="font-mono small text-secondary">
+          &copy; 2026 SUPERSCIENCE APPAREL & ATHLETICS. ALL RIGHTS RESERVED.
+        </div>
+        <div class="d-flex gap-3 font-mono small text-secondary">
+          <a href="#" class="text-decoration-none text-secondary">PRIVACY POLICY</a>
+          <span>•</span>
+          <a href="#" class="text-decoration-none text-secondary">TERMS OF DISPATCH</a>
+          <span>•</span>
+          <a href="#" class="text-decoration-none text-secondary">EVIDENCE CITATIONS</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Slide-Over Bag Drawer -->
+  <div class="offcanvas offcanvas-end offcanvas-bag rounded-0" tabindex="-1" id="bagOffcanvas"
+    aria-labelledby="bagOffcanvasLabel">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title font-mono fw-bold" id="bagOffcanvasLabel">YOUR BAG</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="free-shipping-tracker">
+      <div id="free-shipping-msg" class="shipping-msg">Add ₱8,500.00 for Free Worldwide Express Dispatch</div>
+      <div class="shipping-progress-bg">
+        <div id="free-shipping-fill" class="shipping-progress-fill" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <div class="offcanvas-body p-0 d-flex flex-column">
+      <div id="bag-empty-state" class="p-5 text-center my-auto">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          class="text-muted mb-3">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <div class="fw-bold text-uppercase mb-2">YOUR BAG IS EMPTY</div>
+        <p class="text-secondary small mb-4">You currently have no garment specimens selected for dispatch.</p>
+        <button class="btn btn-ss-dark rounded-0 px-4" data-bs-dismiss="offcanvas">EXPLORE DROP 01</button>
+      </div>
+
+      <div id="bag-items-list" class="flex-grow-1 overflow-auto"></div>
+
+      <div id="bag-footer-area" class="border-top p-3 bg-white">
+        <div class="mb-3">
+          <div class="input-group input-group-sm">
+            <input type="text" id="promo-input" class="form-control rounded-0 font-mono text-uppercase"
+              placeholder="PROMO CODE (e.g. SCIENCE10)">
+            <button class="btn btn-outline-dark rounded-0 px-3" type="button" id="apply-promo-btn">APPLY</button>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between font-mono small mb-1">
+          <span class="text-secondary">SUBTOTAL:</span>
+          <span id="bag-subtotal-price" class="fw-bold">₱0.00</span>
+        </div>
+
+        <div id="bag-discount-row" class="d-flex justify-content-between font-mono small mb-1 text-success"
+          style="display:none;">
+          <span>DISCOUNT APPLIED:</span>
+          <span id="bag-discount-price">-₱0.00</span>
+        </div>
+
+        <div class="d-flex justify-content-between font-mono small mb-3">
+          <span class="text-secondary">ESTIMATED SHIPPING:</span>
+          <span class="text-muted">Calculated at checkout</span>
+        </div>
+
+        <div class="d-flex justify-content-between fs-5 font-mono fw-bold mb-3 border-top pt-2">
+          <span>TOTAL:</span>
+          <span id="bag-total-price">₱0.00</span>
+        </div>
+
+        <button id="bag-checkout-btn" class="btn btn-ss-dark w-100 py-3 rounded-0" disabled>
+          PROCEED TO CHECKOUT
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       Slide-Over Search Drawer (Offcanvas-End)
+       ======================================================================== -->
+  <div class="offcanvas offcanvas-end offcanvas-search offcanvas-drawer rounded-0" tabindex="-1" id="searchOffcanvas"
+    aria-labelledby="searchOffcanvasLabel">
+    <div class="offcanvas-header border-bottom py-3">
+      <div class="d-flex align-items-center gap-2">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <h5 class="offcanvas-title font-mono text-uppercase fs-6 fw-bold mb-0" id="searchOffcanvasLabel">SEARCH SPECIMENS</h5>
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <!-- Live Search Input Box -->
+    <div class="p-3 border-bottom bg-light">
+      <div class="input-group">
+        <span class="input-group-text bg-white border-end-0 rounded-0 text-muted">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input type="text" id="search-input" class="form-control border-start-0 rounded-0 font-mono small text-uppercase py-2"
+          placeholder="SEARCH BY NAME, CATEGORY, OR GSM..." autofocus>
+        <button class="btn btn-outline-dark rounded-0 px-2" id="clear-search-btn" type="button" title="Clear Search" style="display:none;">&times;</button>
+      </div>
+
+      <!-- Quick Filter Tag Suggestions -->
+      <div class="d-flex flex-wrap gap-1 mt-2 pt-1">
+        <span class="search-tag-pill active" data-search-tag="">ALL</span>
+        <span class="search-tag-pill" data-search-tag="t-shirt">T-SHIRTS</span>
+        <span class="search-tag-pill" data-search-tag="shorts">SHORTS</span>
+        <span class="search-tag-pill" data-search-tag="cap">CAPS</span>
+        <span class="search-tag-pill" data-search-tag="380 GSM">380 GSM</span>
+        <span class="search-tag-pill" data-search-tag="420 GSM">420 GSM</span>
+      </div>
+    </div>
+
+    <!-- Search Results / Specimen Matches -->
+    <div class="offcanvas-body p-0 d-flex flex-column">
+      <div id="search-results-list" class="flex-grow-1 overflow-auto">
+        <div class="p-4 text-center text-muted small font-mono">
+          Type above or select a tag to filter garments instantly.
+        </div>
+      </div>
+
+      <div class="p-3 border-top bg-light text-center">
+        <a href="catalog.html" class="font-mono small text-dark fw-bold text-decoration-underline" data-bs-dismiss="offcanvas">
+          VIEW FULL COLLECTION IN CATALOG &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       Slide-Over Wishlist Drawer (Offcanvas-End)
+       ======================================================================== -->
+  <div class="offcanvas offcanvas-end offcanvas-wishlist offcanvas-drawer rounded-0" tabindex="-1" id="wishlistOffcanvas"
+    aria-labelledby="wishlistOffcanvasLabel">
+    <div class="offcanvas-header border-bottom py-3">
+      <div class="d-flex align-items-center gap-2">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        <h5 class="offcanvas-title font-mono text-uppercase fs-6 fw-bold mb-0" id="wishlistOffcanvasLabel">
+          SAVED SPECIMENS (<span id="wishlist-drawer-count">0</span>)
+        </h5>
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <!-- Wishlist Sub-Bar -->
+    <div class="py-2 px-3 bg-light border-bottom font-mono text-muted d-flex justify-content-between align-items-center" style="font-size:0.75rem;">
+      <span>DROP 01 CURATED SELECTION</span>
+      <button class="btn btn-link p-0 text-muted font-mono text-decoration-underline" id="clear-wishlist-btn" style="font-size:0.7rem;">CLEAR ALL</button>
+    </div>
+
+    <!-- Wishlist Body -->
+    <div class="offcanvas-body p-0 d-flex flex-column">
+      <!-- Empty State -->
+      <div id="wishlist-empty-state" class="p-5 text-center my-auto" style="display:none;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-muted mb-3">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        <div class="fw-bold text-uppercase mb-2 font-mono">NO SAVED SPECIMENS</div>
+        <p class="text-muted small mb-4">Tap the heart icon on any garment to save it to your wishlist drawer.</p>
+        <button class="btn btn-ss-dark rounded-0 px-4" data-bs-dismiss="offcanvas">EXPLORE SPECIMENS</button>
+      </div>
+
+      <!-- Items List -->
+      <div id="wishlist-items-container" class="flex-grow-1 overflow-auto">
+        <!-- Rendered via JavaScript -->
+      </div>
+
+      <!-- Sticky Bottom Action -->
+      <div class="p-3 border-top bg-white mt-auto" id="wishlist-footer-actions">
+        <button class="btn btn-ss-dark w-100 py-3 rounded-0 font-mono text-uppercase fw-bold" id="move-all-wishlist-to-bag">
+          MOVE ALL SAVED TO BAG &rarr;
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Product Detail Spec Sheet Modal -->
+  <div class="modal fade" id="productDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content rounded-0">
+        <div class="modal-header border-bottom">
+          <span class="font-mono small text-muted">GARMENT SPECIMEN SPEC SHEET</span>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="row g-4">
+            <div class="col-12 col-md-6">
+              <img id="pdp-modal-main-img" src="assets/products/d0d159a5-2fc7-4bb2-b155-ccdcc942f226.jfif" class="w-100 border"
+                style="aspect-ratio: 4/5; object-fit: cover;" alt="Garment Photo">
+            </div>
+            <div class="col-12 col-md-6 d-flex flex-column">
+              <h3 id="pdp-modal-title" class="fw-bold text-uppercase mb-1">GARMENT NAME</h3>
+              <div id="pdp-modal-price" class="fs-4 font-mono fw-bold mb-3">₱4,200.00</div>
+              <p id="pdp-modal-desc" class="text-secondary small mb-4">Description text...</p>
+
+              <div class="mb-3">
+                <label class="font-mono small fw-bold text-muted mb-2">COLORWAY: <span id="pdp-modal-color-name"
+                    class="text-dark">Washed Black</span></label>
+                <div id="pdp-modal-colors" class="d-flex flex-wrap gap-2"></div>
+              </div>
+
+              <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <label class="font-mono small fw-bold text-muted">SELECT SIZE:</label>
+                  <span class="font-mono small text-decoration-underline text-muted">True to Size (Boxy Fit)</span>
+                </div>
+                <div id="pdp-modal-sizes" class="d-flex gap-2"></div>
+              </div>
+
+              <div class="p-3 bg-light border mb-4 font-mono small">
+                <div>FABRIC: <strong id="pdp-modal-fabric">100% Combed Cotton</strong></div>
+                <div>WEIGHT: <strong id="pdp-modal-gsm">380 GSM</strong></div>
+                <div>FIT: <strong id="pdp-modal-fit">Oversized Drop Shoulder</strong></div>
+                <div class="mt-2 text-muted" id="pdp-modal-workout-tiein"></div>
+              </div>
+
+              <button id="pdp-modal-add-btn" class="btn btn-ss-dark w-100 py-3 rounded-0 mt-auto">
+                ADD TO BAG
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout Routine Detail Modal (Bootstrap modal-xl) -->
+  <div class="modal fade" id="workoutProgramModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content rounded-0">
+        <div class="modal-header border-bottom">
+          <div>
+            <h4 class="modal-title fw-bold text-uppercase" id="modal-prog-title">PROGRAM TITLE</h4>
+            <div class="text-muted small font-mono" id="modal-prog-subtitle">Subtitle</div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <!-- Quick Specs Bar -->
+          <div class="row g-2 mb-4 text-center font-mono">
+            <div class="col-4">
+              <div class="p-2 border bg-light"><strong>FREQ:</strong> <span id="modal-prog-freq">4 Days</span></div>
+            </div>
+            <div class="col-4">
+              <div class="p-2 border bg-light"><strong>INTENSITY:</strong> <span id="modal-prog-intensity">1-3
+                  RIR</span></div>
+            </div>
+            <div class="col-4">
+              <div class="p-2 border bg-light"><strong>VOLUME:</strong> <span id="modal-prog-volume">12-16 Sets</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Scientific Principles -->
+          <div class="mb-4">
+            <h6 class="fw-bold font-mono text-uppercase">PHYSIOLOGICAL FOUNDATIONS</h6>
+            <ul id="modal-prog-principles" class="list-unstyled"></ul>
+          </div>
+
+          <!-- Tabbed Routine Breakdown -->
+          <div class="mb-4">
+            <div class="d-flex flex-wrap border-bottom pb-2 mb-3" id="modal-prog-tabs-nav"></div>
+            <div class="tab-content" id="modal-prog-tabs-content"></div>
+          </div>
+
+          <!-- Apparel Tie-in Box -->
+          <div id="modal-prog-apparel" class="mt-4"></div>
+        </div>
+        <div class="modal-footer border-top d-flex justify-content-between">
+          <button id="modal-prog-print-btn" class="btn btn-outline-dark btn-sm rounded-0">
+            PRINT PROGRAM SHEET
+          </button>
+          <button type="button" class="btn btn-ss-dark btn-sm rounded-0" data-bs-dismiss="modal">
+            CLOSE PROTOCOL
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="modal fade" id="checkoutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-0">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title font-mono fw-bold">EXPRESS CHECKOUT DISPATCH</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div id="checkout-form-view">
+            <div class="row g-4">
+              <div class="col-12 col-md-6">
+                <h6 class="font-mono fw-bold mb-3">1. DISPATCH DESTINATION</h6>
+                <form id="checkout-form">
+                  <div class="mb-2">
+                    <label class="font-mono small">FULL NAME</label>
+                    <input type="text" class="form-control rounded-0 form-control-sm border-dark" required
+                      placeholder="Alex Mercer">
+                  </div>
+                  <div class="mb-2">
+                    <label class="font-mono small">EMAIL (FOR TRACKING)</label>
+                    <input type="email" class="form-control rounded-0 form-control-sm border-dark" required
+                      placeholder="alex@example.com">
+                  </div>
+                  <div class="mb-2">
+                    <label class="font-mono small">DELIVERY ADDRESS</label>
+                    <input type="text" class="form-control rounded-0 form-control-sm border-dark" required
+                      placeholder="742 Evergreen Terrace">
+                  </div>
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <label class="font-mono small">CITY</label>
+                      <input type="text" class="form-control rounded-0 form-control-sm border-dark" required
+                        placeholder="Los Angeles">
+                    </div>
+                    <div class="col-6">
+                      <label class="font-mono small">POSTAL CODE</label>
+                      <input type="text" class="form-control rounded-0 form-control-sm border-dark" required
+                        placeholder="90001">
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-ss-dark w-100 rounded-0 py-3 mt-2">
+                    CONFIRM & PLACE ORDER
+                  </button>
+                </form>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <h6 class="font-mono fw-bold mb-3">ORDER BREAKDOWN</h6>
+                <div id="checkout-order-summary" class="mb-3"></div>
+                <div class="p-3 bg-light border font-mono small text-muted">
+                  Worldwide delivery via DHL Express with tracked shipping dispatched from our central warehouse.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="checkout-confirmation-view" style="display:none;" class="text-center py-4">
+            <div class="mb-3">
+              <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+            <h3 class="fw-bold font-brand mb-1">ORDER CONFIRMED</h3>
+            <p class="text-secondary small mb-3">Thank you for your order. Your garment specimens have been registered
+              for dispatch.</p>
+
+            <div class="p-3 border bg-light font-mono text-start small mb-4 mx-auto" style="max-width: 440px;">
+              <div>ORDER ID: <strong id="confirmed-order-id">SS-ORD-984213</strong></div>
+              <div>DATE: <span id="confirmed-order-date">Wed Oct 14 2026</span></div>
+              <div>STATUS: <span class="badge bg-success font-mono">PROCESSING</span></div>
+              <div class="mt-2 text-muted">A tracking notification will be dispatched via email.</div>
+            </div>
+
+            <button class="btn btn-ss-dark rounded-0 px-4" data-bs-dismiss="modal">CONTINUE BROWSING</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container-ss"></div>
+
+  <!-- Bootstrap 5.3 Bundle JS with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+  <!-- Main ES Module Application Script -->
+  <script type="module" src="js/app.js"></script>
+</body>
+
+</html>

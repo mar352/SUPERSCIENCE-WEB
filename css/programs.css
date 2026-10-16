@@ -1,0 +1,159 @@
+/* ==========================================================================
+   SUPERSCIENCE // Workout Programs & Training Protocols Styles (programs.html)
+   ========================================================================== */
+
+/* Split Filter Pills */
+.filter-bar {
+  border-bottom: 1px solid var(--ss-border);
+  padding-bottom: 16px;
+  margin-bottom: 32px;
+}
+
+.program-filter-btn {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background-color: var(--ss-white);
+  border: 1px solid var(--ss-border);
+  color: var(--ss-text-secondary);
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all var(--ss-transition-fast);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  white-space: nowrap;
+  outline: none;
+}
+
+.program-filter-btn:hover {
+  color: var(--ss-black);
+  border-color: var(--ss-black);
+  background-color: var(--ss-surface);
+}
+
+.program-filter-btn.active {
+  background-color: var(--ss-black) !important;
+  color: var(--ss-white) !important;
+  border-color: var(--ss-black) !important;
+  font-weight: 700;
+}
+
+/* Program Cards Grid */
+.program-card {
+  background: var(--ss-white);
+  border: 1px solid var(--ss-border);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.program-card:hover {
+  border-color: var(--ss-black);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
+}
+
+.program-img-wrapper {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background-color: var(--ss-dark);
+}
+
+.program-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.program-card:hover .program-img-wrapper img {
+  transform: scale(1.04);
+}
+
+.program-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: var(--ss-black);
+  color: var(--ss-white);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  letter-spacing: 0.04em;
+}
+
+.program-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.program-title {
+  font-size: 1.125rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.program-meta-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+}
+
+.program-meta-item {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ss-text-secondary);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--ss-border);
+  display: flex;
+  justify-content: space-between;
+}
+
+.program-meta-item strong {
+  color: var(--ss-black);
+}
+
+.program-filter-btn:active {
+  transform: translateY(1px);
+}
+
+/* Hypertrophy Matrix Table */
+.table-bordered {
+  border-color: var(--ss-border);
+}
+
+.table-bordered th {
+  background-color: var(--ss-black) !important;
+  color: var(--ss-white) !important;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 14px 18px;
+  border-color: #333333;
+}
+
+.table-bordered td {
+  padding: 14px 18px;
+  font-family: var(--font-mono);
+  font-size: 0.825rem;
+  font-variant-numeric: tabular-nums;
+  border-color: var(--ss-border);
+  transition: background-color 0.15s ease;
+}
+
+.table-hover tbody tr:hover td {
+  background-color: var(--ss-surface-light) !important;
+}

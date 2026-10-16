@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Athlete Profile & Biomechanical Telemetry // SUPERSCIENCE</title>
+  <meta name="description"
+    content="Athlete biometric dashboard, specimen order tracking, sizing calibration parameters, and saved hypertrophy workout splits for verified SUPERSCIENCE athletes.">
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- Modular Stylesheets (Common Tokens + Profile Page) -->
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/profile.css">
+</head>
+
+<body>
+
+  <!-- ========================================================================
+       1. Top Announcement Bar
+       ======================================================================== -->
+  <div class="announcement-bar d-flex justify-content-center align-items-center gap-2">
+    <span>FREE WORLDWIDE EXPRESS DISPATCH ON ORDERS OVER ₱8,500</span>
+    <span class="d-none d-md-inline">•</span>
+    <span class="d-none d-md-inline">SCIENCE-BASED TRAINING PROTOCOLS LIVE</span>
+    <span class="d-none d-lg-inline">•</span>
+    <span class="d-none d-lg-inline">HASSLE-FREE 30-DAY RETURNS</span>
+  </div>
+
+  <!-- ========================================================================
+       2. Sticky Navigation Header
+       ======================================================================== -->
+  <nav class="navbar navbar-expand-lg navbar-superscience sticky-top">
+    <div class="container-fluid px-3 px-md-5">
+      <!-- Mobile Toggle Button -->
+      <button class="navbar-toggler rounded-0 border-0 p-0 me-3 d-lg-none" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#mobileNavOffcanvas" aria-controls="mobileNavOffcanvas">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Brandmark Logo -->
+      <a class="navbar-brand-logo me-4 font-brand" href="index.html" title="SUPERSCIENCE">
+        <img src="assets/logo-black.png" alt="SUPERSCIENCE" class="navbar-logo-img" style="height: 26px; width: auto;">
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="catalog.html">Shop Collection</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="programs.html">Workout Programs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="contact.html">Fitting & Showroom</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom active" href="profile.html">Athlete Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="admin.html">Dashboard</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Right Header Actions (Search, Wishlist, Profile, Cart) -->
+      <div class="d-flex align-items-center gap-2">
+        <!-- Search Trigger -->
+        <button class="header-action-btn open-search-trigger" title="Search Specimens (Cmd+K)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+
+        <!-- Wishlist Trigger -->
+        <button class="header-action-btn open-wishlist-trigger" title="Wishlist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+            </path>
+          </svg>
+          <span id="wishlist-badge-count" class="badge-counter" style="display:none;">0</span>
+        </button>
+
+        <!-- Athlete Profile Dropdown -->
+        <div class="dropdown profile-nav-dropdown">
+          <button class="header-action-btn active text-dark" id="profileDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false" title="Athlete Account & Orders" aria-label="Athlete Account">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end profile-dropdown-menu rounded-0 shadow-sm border" aria-labelledby="profileDropdownBtn">
+            <li class="px-3 py-2 bg-light border-bottom">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-black text-white font-mono rounded-0" style="font-size:0.6rem;">TIER 01</span>
+                <span class="font-mono text-muted" style="font-size:0.68rem;">ID: SS-ATH-9821</span>
+              </div>
+              <div class="fw-bold font-brand text-dark fs-6 lh-1 mb-1">Marcus Vance</div>
+              <div class="font-mono text-muted text-truncate" style="font-size:0.72rem;">lifter@superscience.test</div>
+            </li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2 active bg-dark text-white" href="profile.html"><span>Full Athlete Profile</span><span class="badge bg-light text-dark rounded-0 ms-auto font-mono" style="font-size:0.6rem;">CURRENT</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="#orders-section"><span>Orders & Specimen Tracking</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="#sizing-section"><span>Biomechanical Fit Matrix</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="#wishlist-section"><span>Saved Specimen Vault</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="#training-section"><span>Active Workout Protocol</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="#account-section"><span>Credentials & Address</span></a></li>
+            <li><hr class="dropdown-divider my-1"></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2 small" href="admin.html"><span>Seller & Atelier Dashboard</span><span class="badge bg-dark text-white rounded-0 ms-auto font-mono" style="font-size:0.6rem;">SELLER</span></a></li>
+            <li><button class="dropdown-item font-mono py-2 d-flex align-items-center gap-2 small text-danger" onclick="window.showToast('Signed out of Marcus Vance profile.')"><span>Switch / Sign Out</span></button></li>
+          </ul>
+        </div>
+
+        <!-- Cart Bag Trigger -->
+        <button class="header-action-btn open-bag-trigger" title="Shopping Bag">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span id="bag-badge-count" class="badge-counter" style="display:none;">0</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Navigation Offcanvas -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileNavOffcanvas" aria-labelledby="mobileNavLabel"
+    style="width: 300px;">
+    <div class="offcanvas-header border-bottom">
+      <a href="index.html" class="d-inline-flex align-items-center">
+        <img src="assets/logo-black.png" alt="SUPERSCIENCE" class="navbar-logo-img" style="height: 22px;">
+      </a>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+      <div class="list-group list-group-flush">
+        <a href="index.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Home</a>
+        <a href="catalog.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Shop Collection</a>
+        <a href="programs.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Workout Programs</a>
+        <a href="contact.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Fitting & Showroom</a>
+        <a href="profile.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase bg-light border-top">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Athlete Profile
+        </a>
+        <a href="admin.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase border-top d-flex align-items-center justify-content-between">
+          <span class="d-flex align-items-center">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2">
+              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+            </svg>
+            Seller Dashboard
+          </span>
+          <span class="badge bg-black text-white font-mono rounded-0" style="font-size:0.65rem;">SELLER</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Breadcrumbs Strip -->
+  <div class="profile-breadcrumb-bar">
+    <div class="container-fluid px-3 px-md-5 d-flex justify-content-between align-items-center">
+      <div>
+        <a href="index.html">HOME</a>
+        <span class="mx-2">/</span>
+        <span class="text-dark fw-bold">ATHLETE PORTAL</span>
+        <span class="mx-2">/</span>
+        <span class="text-secondary">MARCUS VANCE (SS-ATH-9821)</span>
+      </div>
+      <div class="d-none d-sm-block">
+        <span class="badge bg-black text-white font-mono rounded-0" style="font-size:0.65rem;">TELEMETRY SYNCED</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       3. Athlete Hero Identity Banner
+       ======================================================================== -->
+  <section class="athlete-hero-section">
+    <div class="container-fluid px-3 px-md-5">
+      <div class="row align-items-center g-4">
+        <!-- Athlete Profile Header Info -->
+        <div class="col-12 col-lg-7">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="athlete-avatar-box" id="athlete-avatar-initials">
+              MV
+            </div>
+            <div>
+              <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                <h1 class="font-brand fs-3 fw-bold mb-0 lh-1" id="athlete-display-name">Marcus Vance</h1>
+                <span class="badge bg-success font-mono rounded-0 py-1 px-2" style="font-size:0.65rem;">VERIFIED ATHLETE</span>
+              </div>
+              <div class="font-mono text-muted small" style="font-size:0.775rem;">
+                TIER 01 // COMPETITIVE NATURAL PHYSIQUE & HYPERTROPHY RESEARCH
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+            <span class="athlete-badge-id">ID: SS-ATH-9821</span>
+            <span class="athlete-badge-pass">SCIENCE PASS ACTIVE</span>
+            <span class="badge bg-white text-dark border font-mono rounded-0 py-1 px-2" style="font-size:0.65rem;">
+              DISPATCH TIER: WORLDWIDE EXPRESS
+            </span>
+            <a href="admin.html" class="badge bg-dark text-white font-mono rounded-0 py-1 px-2 text-decoration-none" style="font-size:0.65rem;">
+              SELLER DASHBOARD &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Quick Actions & Sync Status -->
+        <div class="col-12 col-lg-5 text-lg-end">
+          <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+            <button class="btn btn-outline-dark rounded-0 font-mono small py-2 px-3" id="btn-recalibrate-sizing">
+              RE-CALCULATE SIZING
+            </button>
+            <button class="btn btn-ss-dark rounded-0 font-mono small py-2 px-3" id="btn-switch-athlete">
+              SWITCH ACCOUNT
+            </button>
+          </div>
+          <div class="font-mono text-muted small mt-2" style="font-size:0.7rem;">
+            AUTHENTICATED VIA SUPERSCIENCE PASSKEY // LAST ACTIVE: TODAY
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Strip -->
+      <div class="row g-3 mt-3">
+        <div class="col-6 col-md-3">
+          <div class="profile-stat-tile">
+            <div class="profile-stat-label">DISPATCHED ORDERS</div>
+            <div class="profile-stat-value" id="stat-total-orders">--</div>
+            <div class="profile-stat-sub">Tracked Garment Shipments</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="profile-stat-tile">
+            <div class="profile-stat-label">SAVED SPECIMENS</div>
+            <div class="profile-stat-value" id="stat-saved-wishlist">0</div>
+            <div class="profile-stat-sub">In Personal Specimen Vault</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="profile-stat-tile">
+            <div class="profile-stat-label">CALIBRATED FIT</div>
+            <div class="profile-stat-value" style="font-size:1.25rem;" id="stat-calibrated-size">SIZE L</div>
+            <div class="profile-stat-sub">380-450 GSM Oversized Cut</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="profile-stat-tile">
+            <div class="profile-stat-label">ACTIVE PROTOCOL</div>
+            <div class="profile-stat-value" style="font-size:1.15rem;">4-DAY SPLIT</div>
+            <div class="profile-stat-sub">Upper / Lower Hypertrophy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       4. Interactive Dashboard Tab Navigation
+       ======================================================================== -->
+  <div class="profile-tabs-wrapper">
+    <div class="container-fluid px-3 px-md-5">
+      <div class="d-flex overflow-x-auto" id="profile-tabs-nav" style="scrollbar-width:none;">
+        <button class="profile-tab-btn active" data-tab="orders">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          ORDERS & TRACKING (<span id="tab-orders-count">0</span>)
+        </button>
+        <button class="profile-tab-btn" data-tab="sizing">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          BIOMECHANICAL FIT
+        </button>
+        <button class="profile-tab-btn" data-tab="wishlist">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          SPECIMEN VAULT (<span id="tab-wishlist-count">0</span>)
+        </button>
+        <button class="profile-tab-btn" data-tab="protocol">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          WORKOUT PROTOCOL
+        </button>
+        <button class="profile-tab-btn" data-tab="account">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          CREDENTIALS & ADDRESS
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       5. Tab Contents Container
+       ======================================================================== -->
+  <main class="py-5 bg-light" style="min-height: 520px;">
+    <div class="container-fluid px-3 px-md-5">
+
+      <!-- ====================================================================
+           TAB 1: ORDERS & SPECIMEN TRACKING
+           ==================================================================== -->
+      <div class="profile-tab-content" id="tab-content-orders">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+          <div>
+            <h2 class="font-brand fs-4 fw-bold mb-1">SPECIMEN ORDERS & DISPATCH TELEMETRY</h2>
+            <p class="font-mono text-muted small mb-0">Live orders synchronized from SUPERSCIENCE PostgreSQL database</p>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-dark rounded-0 font-mono small py-1 px-3" id="btn-refresh-orders">
+              RE-SYNC ORDERS
+            </button>
+            <a href="catalog.html" class="btn btn-ss-dark rounded-0 font-mono small py-1 px-3">
+              SHOP DROP 01 &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Orders Loading State -->
+        <div id="orders-loading-state" class="text-center py-5 bg-white border font-mono text-muted">
+          <div class="spinner-border spinner-border-sm mb-2" role="status"></div>
+          <div>Querying central orders table...</div>
+        </div>
+
+        <!-- Empty Orders State -->
+        <div id="orders-empty-state" class="text-center py-5 bg-white border" style="display:none;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-muted mb-3">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <h4 class="font-brand fw-bold mb-1">NO ORDERS REGISTERED YET</h4>
+          <p class="font-mono text-muted small mb-3">You have not acquired any garment specimens under this athlete account.</p>
+          <div class="d-flex justify-content-center gap-2">
+            <a href="catalog.html" class="btn btn-ss-dark rounded-0 font-mono small px-4 py-2">DISCOVER DROP 01</a>
+            <button class="btn btn-outline-dark rounded-0 font-mono small px-4 py-2" id="btn-create-sample-order">
+              SIMULATE TEST DISPATCH
+            </button>
+          </div>
+        </div>
+
+        <!-- Orders List Container -->
+        <div id="orders-list-container" style="display:none;">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           TAB 2: BIOMECHANICAL FIT & SIZING PROFILE
+           ==================================================================== -->
+      <div class="profile-tab-content" id="tab-content-sizing" style="display:none;">
+        <div class="row g-4">
+          <!-- Sizing Form -->
+          <div class="col-12 col-lg-7">
+            <div class="bg-white border p-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="font-brand fs-4 fw-bold mb-0">BIOMECHANICAL SIZING CALIBRATION</h2>
+                <span class="badge bg-black font-mono text-white rounded-0">PARAMETRIC FIT ENGINE</span>
+              </div>
+              <p class="font-mono text-muted small mb-4">
+                Input your morphological dimensions. The SUPERSCIENCE engine calculates ideal garment sizing for 380 GSM drop-shoulder boxy tees and loopback French terry shorts.
+              </p>
+
+              <form id="bio-fit-form">
+                <div class="row g-3">
+                  <div class="col-6 col-md-4 bio-input-group">
+                    <label>HEIGHT (CM)</label>
+                    <input type="number" class="form-control" id="bio-height" value="185" min="140" max="230">
+                  </div>
+                  <div class="col-6 col-md-4 bio-input-group">
+                    <label>WEIGHT (KG)</label>
+                    <input type="number" class="form-control" id="bio-weight" value="88" min="40" max="180">
+                  </div>
+                  <div class="col-6 col-md-4 bio-input-group">
+                    <label>BODY FAT %</label>
+                    <input type="number" class="form-control" id="bio-bf" value="12" min="5" max="40">
+                  </div>
+                  <div class="col-6 col-md-4 bio-input-group">
+                    <label>CHEST (CM)</label>
+                    <input type="number" class="form-control" id="bio-chest" value="112" min="70" max="160">
+                  </div>
+                  <div class="col-6 col-md-4 bio-input-group">
+                    <label>SHOULDERS (CM)</label>
+                    <input type="number" class="form-control" id="bio-shoulders" value="52" min="35" max="75">
+                  </div>
+                  <div class="col-6 col-md-4 bio-input-group">
+                    <label>WAIST (CM)</label>
+                    <input type="number" class="form-control" id="bio-waist" value="82" min="50" max="140">
+                  </div>
+                  <div class="col-12 bio-input-group">
+                    <label>PREFERRED SILHOUETTE FIT</label>
+                    <select class="form-select" id="bio-silhouette">
+                      <option value="oversized" selected>OVERSIZED BOXY // Drop Shoulder & Structured Drape (Recommended)</option>
+                      <option value="fitted">ATHLETIC // Closer to Body Silhouette</option>
+                      <option value="relaxed">RELAXED CASUAL // Elongated Torso</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                  <button type="submit" class="btn btn-ss-dark rounded-0 font-mono small py-2 px-4">
+                    CALCULATE & SAVE FIT PROFILE
+                  </button>
+                  <button type="button" class="btn btn-outline-dark rounded-0 font-mono small py-2 px-3" id="btn-reset-fit">
+                    RESTORE DEFAULTS
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Fit Matrix Recommendation Output Card -->
+          <div class="col-12 col-lg-5">
+            <div class="fit-matrix-box">
+              <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary">
+                <span class="font-mono text-uppercase small text-secondary">RECOMMENDED SIZING</span>
+                <span class="badge bg-white text-dark font-mono rounded-0" style="font-size:0.65rem;">CALIBRATED</span>
+              </div>
+
+              <div class="mb-4">
+                <div class="text-secondary small font-mono">PRIMARY SPECIMEN CUT</div>
+                <div class="font-brand fs-3 fw-bold text-white mt-1" id="rec-primary-cut">
+                  SIZE L // OVERSIZED BOXY
+                </div>
+                <div class="text-muted small font-mono mt-1">
+                  Engineered drape for 112 cm chest and 52 cm shoulder span.
+                </div>
+              </div>
+
+              <div class="fit-matrix-metric">
+                <span class="text-secondary">380 GSM BOXY T-SHIRTS:</span>
+                <strong class="text-white" id="rec-tee-size">SIZE L (CHEST 64 CM FLAT)</strong>
+              </div>
+              <div class="fit-matrix-metric">
+                <span class="text-secondary">420 GSM LOOPBACK SHORTS:</span>
+                <strong class="text-white" id="rec-shorts-size">SIZE M (WAIST 80-86 CM)</strong>
+              </div>
+              <div class="fit-matrix-metric">
+                <span class="text-secondary">HEAVY DRILL CAPS:</span>
+                <strong class="text-white">ONE SIZE (54-62 CM STRAP)</strong>
+              </div>
+              <div class="fit-matrix-metric">
+                <span class="text-secondary">DROP-SHOULDER RATIO:</span>
+                <strong class="text-white" id="rec-drop-ratio">1.28 // ARCHITECTURAL</strong>
+              </div>
+
+              <div class="mt-4 pt-2">
+                <a href="catalog.html" class="btn btn-light w-100 rounded-0 font-mono small py-2 text-uppercase fw-bold text-dark">
+                  VIEW MATCHING SPECIMENS &rarr;
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           TAB 3: SAVED SPECIMEN VAULT (WISHLIST)
+           ==================================================================== -->
+      <div class="profile-tab-content" id="tab-content-wishlist" style="display:none;">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+          <div>
+            <h2 class="font-brand fs-4 fw-bold mb-1">SAVED SPECIMEN VAULT</h2>
+            <p class="font-mono text-muted small mb-0">Garment specimens saved for your next training cycle or release drop</p>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-dark rounded-0 font-mono small py-1 px-3" id="btn-move-vault-to-bag">
+              MOVE ALL TO BAG
+            </button>
+            <button class="btn btn-outline-danger rounded-0 font-mono small py-1 px-3" id="btn-clear-vault">
+              CLEAR VAULT
+            </button>
+          </div>
+        </div>
+
+        <div id="vault-empty-state" class="text-center py-5 bg-white border" style="display:none;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-muted mb-3">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <h4 class="font-brand fw-bold mb-1">YOUR SPECIMEN VAULT IS EMPTY</h4>
+          <p class="font-mono text-muted small mb-3">Tap the heart icon on any garment in the catalog to pin it here.</p>
+          <a href="catalog.html" class="btn btn-ss-dark rounded-0 font-mono small px-4 py-2">EXPLORE COLLECTION</a>
+        </div>
+
+        <div class="row g-4" id="vault-items-grid">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           TAB 4: ACTIVE WORKOUT PROTOCOL
+           ==================================================================== -->
+      <div class="profile-tab-content" id="tab-content-protocol" style="display:none;">
+        <div class="row g-4">
+          <div class="col-12 col-lg-8">
+            <div class="protocol-preview-card mb-4">
+              <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                <div>
+                  <span class="badge bg-black text-white font-mono rounded-0 mb-1">EVIDENCE-BASED PROTOCOL</span>
+                  <h3 class="font-brand fs-4 fw-bold mb-0">4-DAY UPPER / LOWER HYPERTROPHY</h3>
+                </div>
+                <div class="text-lg-end">
+                  <span class="font-mono small text-secondary">VOLUME: 16-20 SETS/MUSCLE/WEEK</span>
+                </div>
+              </div>
+
+              <p class="font-mono text-muted small mb-4">
+                Scientifically calibrated for drop-shoulder boxy tee unrestricted chest/lat mobility. Emphasizes mechanical tension, lengthened-position overload, and standardized rest intervals.
+              </p>
+
+              <!-- Routine Breakdown Accordion/Table -->
+              <div class="table-responsive border mb-4">
+                <table class="table exercise-telemetry-table">
+                  <thead>
+                    <tr>
+                      <th>DAY</th>
+                      <th>FOCUS</th>
+                      <th>PRIMARY APPARATUS</th>
+                      <th>TARGET INTENSITY</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="fw-bold">DAY 01</td>
+                      <td>Upper Power / Tension</td>
+                      <td>Barbell Incline Press + Chest-Supported Row</td>
+                      <td>RPE 8-9 (3-4 min rest)</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">DAY 02</td>
+                      <td>Lower Anterior / Quad</td>
+                      <td>High-Bar Squat + Romanian Deadlift</td>
+                      <td>RPE 8 (2.5-3 min rest)</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">DAY 03</td>
+                      <td>Rest & Active Bio-Recovery</td>
+                      <td>Mobility & 10,000 Step Flush</td>
+                      <td>Zone 2 Aerobic</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">DAY 04</td>
+                      <td>Upper Hypertrophy Volume</td>
+                      <td>Dumbbell Shoulder Press + Lat Pulldown</td>
+                      <td>RPE 8-10 (2 min rest)</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">DAY 05</td>
+                      <td>Lower Posterior / Calves</td>
+                      <td>Belt Squat + Glute-Ham Raise</td>
+                      <td>RPE 8-9 (2-3 min rest)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-ss-dark rounded-0 font-mono small py-2 px-3" onclick="openWorkoutModal('4-day-hypertrophy')">
+                  LAUNCH LIVE EXERCISE SHEET &rarr;
+                </button>
+                <a href="programs.html" class="btn btn-outline-dark rounded-0 font-mono small py-2 px-3">
+                  BROWSE ALL PROTOCOLS
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Protocol Sidebar Card -->
+          <div class="col-12 col-lg-4">
+            <div class="bg-white border p-4 mb-4">
+              <h5 class="font-mono fw-bold fs-6 text-uppercase mb-3">TRAINING COMPATIBILITY</h5>
+              <div class="mb-3">
+                <strong class="font-brand d-block mb-1">GARMENT MOBILITY SPEC:</strong>
+                <p class="font-mono text-muted small mb-0" style="font-size:0.775rem;">
+                  The 380 GSM Heavyweight Boxy Tee features zero-choke ribbing and elongated dropped sleeves to eliminate shoulder bind during high-incline presses and dips.
+                </p>
+              </div>
+              <div class="mb-3 pt-2 border-top">
+                <strong class="font-brand d-block mb-1">RECOVERY STATUS:</strong>
+                <span class="badge bg-success font-mono rounded-0">RECOVERY INDEX: 94% OPTIMAL</span>
+              </div>
+              <div class="pt-2 border-top">
+                <a href="programs.html" class="btn btn-outline-dark w-100 rounded-0 font-mono small py-2">
+                  SWITCH ACTIVE PROTOCOL
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           TAB 5: CREDENTIALS & SHIPPING ADDRESS
+           ==================================================================== -->
+      <div class="profile-tab-content" id="tab-content-account" style="display:none;">
+        <div class="row g-4">
+          <div class="col-12 col-lg-7">
+            <div class="bg-white border p-4">
+              <h2 class="font-brand fs-4 fw-bold mb-1">ATHLETE CREDENTIALS & SHIPPING</h2>
+              <p class="font-mono text-muted small mb-4">Default recipient profile used for instant 1-click specimen dispatch</p>
+
+              <form id="athlete-account-form">
+                <div class="row g-3">
+                  <div class="col-12 col-md-6 bio-input-group">
+                    <label>FULL LEGAL NAME</label>
+                    <input type="text" class="form-control" id="acc-name" value="Marcus Vance" required>
+                  </div>
+                  <div class="col-12 col-md-6 bio-input-group">
+                    <label>CONTACT EMAIL</label>
+                    <input type="email" class="form-control" id="acc-email" value="lifter@superscience.test" required>
+                  </div>
+                  <div class="col-12 bio-input-group">
+                    <label>STREET ADDRESS</label>
+                    <input type="text" class="form-control" id="acc-address" value="100 Olympic Way" required>
+                  </div>
+                  <div class="col-6 col-md-4 bio-input-group">
+                    <label>CITY</label>
+                    <input type="text" class="form-control" id="acc-city" value="Venice" required>
+                  </div>
+                  <div class="col-6 col-md-4 bio-input-group">
+                    <label>STATE / REGION</label>
+                    <input type="text" class="form-control" id="acc-state" value="CA" required>
+                  </div>
+                  <div class="col-6 col-md-4 bio-input-group">
+                    <label>ZIP / POSTAL CODE</label>
+                    <input type="text" class="form-control" id="acc-zip" value="90291" required>
+                  </div>
+                  <div class="col-6 col-md-6 bio-input-group">
+                    <label>COUNTRY</label>
+                    <input type="text" class="form-control" id="acc-country" value="United States" required>
+                  </div>
+                  <div class="col-12 col-md-6 bio-input-group">
+                    <label>MOBILE (SMS DISPATCH ALERTS)</label>
+                    <input type="tel" class="form-control" id="acc-phone" value="+1 (310) 555-0199">
+                  </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                  <button type="submit" class="btn btn-ss-dark rounded-0 font-mono small py-2 px-4">
+                    SAVE SHIPPING CREDENTIALS
+                  </button>
+                  <button type="button" class="btn btn-outline-dark rounded-0 font-mono small py-2 px-3" id="btn-export-profile">
+                    EXPORT BIO-DATA (JSON)
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Account Security & DB Card -->
+          <div class="col-12 col-lg-5">
+            <div class="bg-white border p-4 mb-4">
+              <h5 class="font-mono fw-bold fs-6 text-uppercase mb-3">SECURITY & DATABASE STATUS</h5>
+              <div class="p-3 bg-light border font-mono small mb-3">
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="text-muted">SESSION STATUS:</span>
+                  <span class="text-success fw-bold">ACTIVE</span>
+                </div>
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="text-muted">POSTGRES TABLE:</span>
+                  <span class="text-dark">orders, products</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span class="text-muted">ENCRYPTION:</span>
+                  <span class="text-dark">TLS 1.3 / AES-256</span>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <a href="admin.html" class="btn btn-outline-dark w-100 rounded-0 font-mono small py-2 text-uppercase">
+                  OPEN SELLER DASHBOARD &rarr;
+                </a>
+              </div>
+
+              <button class="btn btn-outline-danger w-100 rounded-0 font-mono small py-2" id="btn-purge-local-cache">
+                PURGE LOCAL CLIENT CACHE
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================
+       6. Global Footer
+       ======================================================================== -->
+  <footer class="footer-superscience">
+    <div class="container-fluid px-3 px-md-5">
+      <div class="row g-4 mb-5">
+        <!-- Col 1: Brand & Bio -->
+        <div class="col-12 col-lg-4">
+          <img src="assets/logo-white.png" alt="SUPERSCIENCE" class="footer-logo-img mb-3" style="height: 24px;">
+          <p class="text-secondary small pe-lg-4">
+            The intersection of science-based lifting mechanics and architectural heavyweight streetwear. 380–450 GSM
+            organic cotton engineered for daily comfort and heavy training.
+          </p>
+          <div class="font-mono text-muted small">
+            &copy; 2026 SUPERSCIENCE CORP. ALL RIGHTS RESERVED.
+          </div>
+        </div>
+
+        <!-- Col 2: Shop Links -->
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="footer-heading">NAVIGATION</div>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="catalog.html">Shop All Garments</a></li>
+            <li><a href="catalog.html?category=tshirts">T-Shirts</a></li>
+            <li><a href="catalog.html?category=shorts">Shorts</a></li>
+            <li><a href="catalog.html?category=caps">Caps</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Science & Training -->
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="footer-heading">SCIENCE & CARE</div>
+          <ul class="footer-links">
+            <li><a href="programs.html">Workout Protocols</a></li>
+            <li><a href="contact.html">Fitting & Showroom</a></li>
+            <li><a href="profile.html">Athlete Profile</a></li>
+            <li><a href="admin.html">Seller Dashboard</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Newsletter -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="footer-heading">JOIN THE RESEARCH ARCHIVE</div>
+          <p class="text-secondary small">Subscribe for early access to Drop 02 and new evidence-based lifting programs.</p>
+          <form onsubmit="event.preventDefault(); showToast('Subscribed! 10% discount code: SCIENCE10'); this.reset();"
+            class="d-flex">
+            <input type="email" class="form-control rounded-0 footer-input me-2" placeholder="Enter your email" required>
+            <button type="submit" class="btn btn-ss-white rounded-0 text-nowrap px-3">JOIN</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       MODALS & DRAWERS
+       ======================================================================== -->
+
+  <!-- Slide-Over Bag Drawer (Offcanvas-End) -->
+  <div class="offcanvas offcanvas-end offcanvas-bag" tabindex="-1" id="offcanvasBag"
+    aria-labelledby="offcanvasBagLabel">
+    <div class="offcanvas-header border-bottom">
+      <div class="d-flex align-items-center gap-2">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <h5 class="offcanvas-title font-mono text-uppercase fs-6 fw-bold mb-0" id="offcanvasBagLabel">SPECIMEN BAG (<span
+            id="bag-drawer-count">0</span>)</h5>
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body p-0 d-flex flex-column">
+      <div class="p-3 bg-light border-bottom font-mono small text-center" id="free-shipping-meter">
+        DISPATCH THRESHOLD: ADD ₱8,500.00 FOR EXPRESS DELIVERY
+      </div>
+
+      <div id="bag-empty-state" class="p-5 text-center my-auto" style="display:none;">
+        <div class="fw-bold text-uppercase mb-2 font-mono">BAG IS EMPTY</div>
+        <p class="text-muted small mb-4">No active specimens selected for this cycle.</p>
+        <button class="btn btn-ss-dark rounded-0 px-4" data-bs-dismiss="offcanvas">EXPLORE SPECIMENS</button>
+      </div>
+
+      <div id="bag-items-container" class="flex-grow-1 overflow-auto"></div>
+
+      <div class="p-3 border-top bg-white mt-auto" id="bag-footer-checkout">
+        <div class="d-flex justify-content-between font-mono mb-2">
+          <span>SUBTOTAL</span>
+          <span id="bag-subtotal-price">₱0.00</span>
+        </div>
+        <div class="d-flex justify-content-between font-mono small text-muted mb-3">
+          <span>ESTIMATED TAX & DISPATCH</span>
+          <span>CALCULATED NEXT</span>
+        </div>
+        <button class="btn btn-ss-dark w-100 py-3 rounded-0 font-mono text-uppercase fw-bold" id="btn-proceed-checkout">
+          PROCEED TO DISPATCH &rarr;
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide-Over Wishlist Drawer (Offcanvas-End) -->
+  <div class="offcanvas offcanvas-end offcanvas-wishlist offcanvas-drawer rounded-0" tabindex="-1"
+    id="wishlistOffcanvas" aria-labelledby="wishlistOffcanvasLabel">
+    <div class="offcanvas-header border-bottom py-3">
+      <div class="d-flex align-items-center gap-2">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+          </path>
+        </svg>
+        <h5 class="offcanvas-title font-mono text-uppercase fs-6 fw-bold mb-0" id="wishlistOffcanvasLabel">
+          SAVED SPECIMENS (<span id="wishlist-drawer-count">0</span>)
+        </h5>
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="py-2 px-3 bg-light border-bottom font-mono text-muted d-flex justify-content-between align-items-center"
+      style="font-size:0.75rem;">
+      <span>DROP 01 CURATED SELECTION</span>
+      <button class="btn btn-link p-0 text-muted font-mono text-decoration-underline" id="clear-wishlist-btn"
+        style="font-size:0.7rem;">CLEAR ALL</button>
+    </div>
+
+    <div class="offcanvas-body p-0 d-flex flex-column">
+      <div id="wishlist-empty-state" class="p-5 text-center my-auto" style="display:none;">
+        <div class="fw-bold text-uppercase mb-2 font-mono">NO SAVED SPECIMENS</div>
+        <p class="text-muted small mb-4">Tap the heart icon on any garment to save it to your wishlist drawer.</p>
+        <button class="btn btn-ss-dark rounded-0 px-4" data-bs-dismiss="offcanvas">EXPLORE SPECIMENS</button>
+      </div>
+
+      <div id="wishlist-items-container" class="flex-grow-1 overflow-auto"></div>
+
+      <div class="p-3 border-top bg-white mt-auto" id="wishlist-footer-actions">
+        <button class="btn btn-ss-dark w-100 py-3 rounded-0 font-mono text-uppercase fw-bold"
+          id="move-all-wishlist-to-bag">
+          MOVE ALL SAVED TO BAG &rarr;
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide-Over Search Drawer (Offcanvas-End) -->
+  <div class="offcanvas offcanvas-end offcanvas-search offcanvas-drawer rounded-0" tabindex="-1" id="searchOffcanvas"
+    aria-labelledby="searchOffcanvasLabel">
+    <div class="offcanvas-header border-bottom py-3">
+      <div class="d-flex align-items-center gap-2">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <h5 class="offcanvas-title font-mono text-uppercase fs-6 fw-bold mb-0" id="searchOffcanvasLabel">SEARCH
+          SPECIMENS</h5>
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="p-3 border-bottom bg-light">
+      <div class="input-group">
+        <span class="input-group-text bg-white border-end-0 rounded-0 text-muted">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input type="text" id="search-input"
+          class="form-control border-start-0 rounded-0 font-mono small text-uppercase py-2"
+          placeholder="SEARCH BY NAME, CATEGORY, OR GSM...">
+        <button class="btn btn-outline-dark rounded-0 px-2" id="clear-search-btn" type="button" title="Clear Search"
+          style="display:none;">&times;</button>
+      </div>
+
+      <div class="d-flex flex-wrap gap-1 mt-2 pt-1">
+        <span class="search-tag-pill active" data-search-tag="">ALL</span>
+        <span class="search-tag-pill" data-search-tag="t-shirt">T-SHIRTS</span>
+        <span class="search-tag-pill" data-search-tag="shorts">SHORTS</span>
+        <span class="search-tag-pill" data-search-tag="cap">CAPS</span>
+        <span class="search-tag-pill" data-search-tag="380 GSM">380 GSM</span>
+      </div>
+    </div>
+
+    <div class="offcanvas-body p-0 d-flex flex-column">
+      <div id="search-results-list" class="flex-grow-1 overflow-auto">
+        <div class="p-4 text-center text-muted small font-mono">
+          Type above or select a tag to filter garments instantly.
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Workout Protocol Modal -->
+  <div class="modal fade" id="workoutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content rounded-0">
+        <div class="modal-header border-bottom">
+          <div>
+            <div class="font-mono text-muted small" id="workoutModalCategory">HYPERTROPHY PROTOCOL</div>
+            <h4 class="modal-title font-brand fw-bold" id="workoutModalTitle">PROTOCOL SPECIFICATION</h4>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4" id="workoutModalBody">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Modal -->
+  <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content rounded-0">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title font-brand fw-bold" id="productModalTitle">SPECIMEN SPECIFICATION</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4" id="productModalBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Simulation Modal -->
+  <div class="modal fade" id="checkoutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-0">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title font-mono fw-bold">DISPATCH CHECKOUT</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div id="checkout-form-view">
+            <div class="row g-4">
+              <div class="col-12 col-md-6">
+                <form id="checkout-form">
+                  <div class="mb-3">
+                    <label class="form-label font-mono small text-uppercase">ATHLETE NAME</label>
+                    <input type="text" class="form-control rounded-0" id="checkout-name" value="Marcus Vance" required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label font-mono small text-uppercase">EMAIL ADDRESS</label>
+                    <input type="email" class="form-control rounded-0" id="checkout-email" value="lifter@superscience.test" required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label font-mono small text-uppercase">SHIPPING ADDRESS</label>
+                    <input type="text" class="form-control rounded-0" id="checkout-address" value="100 Olympic Way" required>
+                  </div>
+                  <button type="submit" class="btn btn-ss-dark w-100 py-3">CONFIRM & DISPATCH ORDER</button>
+                </form>
+              </div>
+              <div class="col-12 col-md-6">
+                <h6 class="font-mono fw-bold mb-3">ORDER BREAKDOWN</h6>
+                <div id="checkout-order-summary" class="mb-3"></div>
+              </div>
+            </div>
+          </div>
+          <div id="checkout-confirmation-view" style="display:none;" class="text-center py-4">
+            <h3 class="fw-bold font-brand mb-1">ORDER CONFIRMED</h3>
+            <p class="text-secondary small mb-3">Your garment specimens have been registered for dispatch.</p>
+            <button class="btn btn-ss-dark rounded-0 px-4" data-bs-dismiss="modal">CONTINUE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container-ss"></div>
+
+  <!-- Bootstrap 5.3 Bundle JS with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+  <!-- Main ES Module Application Script -->
+  <script type="module" src="js/app.js"></script>
+
+  <!-- Page Specific Profile Interactive Logic -->
+  <script type="module">
+    import { API } from "./js/api.js";
+    import { Store, formatPrice } from "./js/store.js";
+    import { products } from "./js/products.js";
+
+    const STORAGE_KEY_PROFILE = "superscience_athlete_profile_v1";
+
+    const defaultProfile = {
+      name: "Marcus Vance",
+      email: "lifter@superscience.test",
+      address: "100 Olympic Way",
+      city: "Venice",
+      state: "CA",
+      zip: "90291",
+      country: "United States",
+      phone: "+1 (310) 555-0199",
+      height: 185,
+      weight: 88,
+      bf: 12,
+      chest: 112,
+      shoulders: 52,
+      waist: 82,
+      silhouette: "oversized"
+    };
+
+    function loadProfileData() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY_PROFILE);
+        if (saved) return Object.assign({}, defaultProfile, JSON.parse(saved));
+      } catch (e) {}
+      return Object.assign({}, defaultProfile);
+    }
+
+    function saveProfileData(data) {
+      localStorage.setItem(STORAGE_KEY_PROFILE, JSON.stringify(data));
+    }
+
+    // Initialize Page
+    document.addEventListener("DOMContentLoaded", () => {
+      Store.init();
+      initProfilePage();
+    });
+
+    async function initProfilePage() {
+      const profile = loadProfileData();
+      populateProfileInputs(profile);
+      calculateFitMatrix(profile);
+      setupTabNavigation();
+      await loadAthleteOrders();
+      renderVaultGrid();
+
+      // Listen for global store updates (e.g. wishlist toggle)
+      window.addEventListener("superscience:state-updated", () => {
+        renderVaultGrid();
+        updateVaultCountBadge();
+      });
+
+      // Bio fit form submit
+      const fitForm = document.getElementById("bio-fit-form");
+      if (fitForm) {
+        fitForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const p = loadProfileData();
+          p.height = parseInt(document.getElementById("bio-height").value, 10) || 185;
+          p.weight = parseInt(document.getElementById("bio-weight").value, 10) || 88;
+          p.bf = parseInt(document.getElementById("bio-bf").value, 10) || 12;
+          p.chest = parseInt(document.getElementById("bio-chest").value, 10) || 112;
+          p.shoulders = parseInt(document.getElementById("bio-shoulders").value, 10) || 52;
+          p.waist = parseInt(document.getElementById("bio-waist").value, 10) || 82;
+          p.silhouette = document.getElementById("bio-silhouette").value;
+          saveProfileData(p);
+          calculateFitMatrix(p);
+          window.showToast("Biomechanical fit matrix recalibrated & saved.");
+        });
+      }
+
+      // Reset fit button
+      const resetFitBtn = document.getElementById("btn-reset-fit");
+      if (resetFitBtn) {
+        resetFitBtn.addEventListener("click", () => {
+          saveProfileData(defaultProfile);
+          populateProfileInputs(defaultProfile);
+          calculateFitMatrix(defaultProfile);
+          window.showToast("Restored factory morphological parameters.");
+        });
+      }
+
+      // Account form submit
+      const accForm = document.getElementById("athlete-account-form");
+      if (accForm) {
+        accForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const p = loadProfileData();
+          p.name = document.getElementById("acc-name").value.trim();
+          p.email = document.getElementById("acc-email").value.trim();
+          p.address = document.getElementById("acc-address").value.trim();
+          p.city = document.getElementById("acc-city").value.trim();
+          p.state = document.getElementById("acc-state").value.trim();
+          p.zip = document.getElementById("acc-zip").value.trim();
+          p.country = document.getElementById("acc-country").value.trim();
+          p.phone = document.getElementById("acc-phone").value.trim();
+          saveProfileData(p);
+
+          document.getElementById("athlete-display-name").textContent = p.name;
+          document.getElementById("athlete-avatar-initials").textContent = p.name.split(" ").map(w => w[0]).join("").toUpperCase() || "MV";
+          window.showToast("Shipping credentials & athlete ID saved.");
+        });
+      }
+
+      // Refresh orders
+      document.getElementById("btn-refresh-orders")?.addEventListener("click", () => {
+        loadAthleteOrders(true);
+      });
+
+      // Sample order simulation
+      document.getElementById("btn-create-sample-order")?.addEventListener("click", async () => {
+        await simulateTestOrder();
+      });
+
+      // Move all vault to bag
+      document.getElementById("btn-move-vault-to-bag")?.addEventListener("click", () => {
+        const ids = Store.state.wishlist || [];
+        if (ids.length === 0) {
+          window.showToast("Vault is empty.");
+          return;
+        }
+        let count = 0;
+        ids.forEach(id => {
+          const prod = products.find(p => p.id === id);
+          if (prod) {
+            Store.addToCart(prod, prod.sizes[0].size);
+            count++;
+          }
+        });
+        window.showToast(`Moved ${count} specimens into your bag.`);
+        window.openBagDrawer();
+      });
+
+      // Clear vault
+      document.getElementById("btn-clear-vault")?.addEventListener("click", () => {
+        Store.state.wishlist = [];
+        Store.saveWishlist();
+        window.showToast("Specimen vault cleared.");
+        renderVaultGrid();
+      });
+
+      // Export profile JSON
+      document.getElementById("btn-export-profile")?.addEventListener("click", () => {
+        const p = loadProfileData();
+        const blob = new Blob([JSON.stringify(p, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `SUPERSCIENCE_ATHLETE_${p.name.replace(/\s+/g, '_').toUpperCase()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        window.showToast("Bio-telemetry JSON file generated.");
+      });
+
+      // Purge cache
+      document.getElementById("btn-purge-local-cache")?.addEventListener("click", () => {
+        if (confirm("Reset local profile & preferences?")) {
+          localStorage.removeItem(STORAGE_KEY_PROFILE);
+          window.showToast("Local profile cache purged.");
+          setTimeout(() => location.reload(), 500);
+        }
+      });
+
+      // Quick header action buttons
+      document.getElementById("btn-recalibrate-sizing")?.addEventListener("click", () => {
+        switchTab("sizing");
+      });
+
+      document.getElementById("btn-switch-athlete")?.addEventListener("click", () => {
+        switchTab("account");
+      });
+    }
+
+    function populateProfileInputs(p) {
+      document.getElementById("athlete-display-name").textContent = p.name;
+      document.getElementById("athlete-avatar-initials").textContent = p.name.split(" ").map(w => w[0]).join("").toUpperCase() || "MV";
+
+      document.getElementById("bio-height").value = p.height;
+      document.getElementById("bio-weight").value = p.weight;
+      document.getElementById("bio-bf").value = p.bf;
+      document.getElementById("bio-chest").value = p.chest;
+      document.getElementById("bio-shoulders").value = p.shoulders;
+      document.getElementById("bio-waist").value = p.waist;
+      document.getElementById("bio-silhouette").value = p.silhouette;
+
+      document.getElementById("acc-name").value = p.name;
+      document.getElementById("acc-email").value = p.email;
+      document.getElementById("acc-address").value = p.address;
+      document.getElementById("acc-city").value = p.city;
+      document.getElementById("acc-state").value = p.state;
+      document.getElementById("acc-zip").value = p.zip;
+      document.getElementById("acc-country").value = p.country;
+      document.getElementById("acc-phone").value = p.phone;
+    }
+
+    function calculateFitMatrix(p) {
+      let teeSize = "L";
+      let shortsSize = "M";
+
+      if (p.chest < 96) teeSize = "S";
+      else if (p.chest < 106) teeSize = "M";
+      else if (p.chest < 118) teeSize = "L";
+      else teeSize = "XL";
+
+      if (p.waist < 76) shortsSize = "S";
+      else if (p.waist < 86) shortsSize = "M";
+      else if (p.waist < 96) shortsSize = "L";
+      else shortsSize = "XL";
+
+      const primaryCut = `SIZE ${teeSize} // ${p.silhouette.toUpperCase()} BOXY`;
+      document.getElementById("rec-primary-cut").textContent = primaryCut;
+      document.getElementById("stat-calibrated-size").textContent = `SIZE ${teeSize}`;
+      document.getElementById("rec-tee-size").textContent = `SIZE ${teeSize} (CHEST ${p.chest + 12} CM FLAT)`;
+      document.getElementById("rec-shorts-size").textContent = `SIZE ${shortsSize} (WAIST ${p.waist - 2}-${p.waist + 4} CM)`;
+
+      const ratio = (p.shoulders / (p.height * 0.25)).toFixed(2);
+      document.getElementById("rec-drop-ratio").textContent = `${ratio} // ARCHITECTURAL`;
+    }
+
+    function setupTabNavigation() {
+      const tabButtons = document.querySelectorAll(".profile-tab-btn");
+      tabButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const tabId = btn.getAttribute("data-tab");
+          switchTab(tabId);
+        });
+      });
+
+      // Handle URL hash (e.g. profile.html#sizing)
+      if (window.location.hash) {
+        const hashTab = window.location.hash.replace("#", "");
+        if (document.getElementById(`tab-content-${hashTab}`)) {
+          switchTab(hashTab);
+        }
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll(".profile-tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
+      });
+
+      document.querySelectorAll(".profile-tab-content").forEach(content => {
+        content.style.display = content.id === `tab-content-${tabId}` ? "block" : "none";
+      });
+
+      history.replaceState(null, null, `#${tabId}`);
+    }
+
+    async function loadAthleteOrders(forceToast = false) {
+      const loadingEl = document.getElementById("orders-loading-state");
+      const emptyEl = document.getElementById("orders-empty-state");
+      const listEl = document.getElementById("orders-list-container");
+      const statOrders = document.getElementById("stat-total-orders");
+      const tabOrdersCount = document.getElementById("tab-orders-count");
+
+      loadingEl.style.display = "block";
+      emptyEl.style.display = "none";
+      listEl.style.display = "none";
+
+      try {
+        const res = await API.getOrders();
+        const orders = res && res.orders ? res.orders : [];
+
+        statOrders.textContent = orders.length;
+        tabOrdersCount.textContent = orders.length;
+        loadingEl.style.display = "none";
+
+        if (orders.length === 0) {
+          emptyEl.style.display = "block";
+          return;
+        }
+
+        listEl.style.display = "block";
+        listEl.innerHTML = orders.map(renderOrderCard).join("");
+
+        if (forceToast) window.showToast(`Fetched ${orders.length} order specimens from database.`);
+      } catch (e) {
+        loadingEl.style.display = "none";
+        emptyEl.style.display = "block";
+        if (forceToast) window.showToast("Database connection standby.");
+      }
+    }
+
+    function renderOrderCard(o) {
+      const items = typeof o.items === "string" ? JSON.parse(o.items) : (o.items || []);
+      const dateStr = o.created_at ? new Date(o.created_at).toLocaleDateString("en-US", {
+        year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+      }) : "Oct 15, 2026";
+
+      const totalNum = Number(o.total || 0).toFixed(2);
+      const subtotalNum = Number(o.subtotal || totalNum).toFixed(2);
+      const trackingCode = `DHL-SS-${(o.id || "98214").replace(/\D/g, '') || "48201"}-EXP`;
+
+      return `
+        <div class="order-specimen-card">
+          <!-- Card Header -->
+          <div class="order-card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div class="d-flex align-items-center gap-3">
+              <strong class="font-mono fs-6 text-dark">${o.id}</strong>
+              <span class="badge bg-black font-mono text-white rounded-0">${(o.status || "CONFIRMED").toUpperCase()}</span>
+            </div>
+            <div class="text-secondary small">
+              DISPATCH DATE: <strong class="text-dark">${dateStr}</strong>
+            </div>
+          </div>
+
+          <!-- Visual Stepper Progress Line -->
+          <div class="order-stepper">
+            <div class="stepper-step completed">
+              <div class="stepper-icon">✓</div>
+              <div class="stepper-label">1. PLACED</div>
+            </div>
+            <div class="stepper-step completed">
+              <div class="stepper-icon">✓</div>
+              <div class="stepper-label">2. QC VERIFIED</div>
+            </div>
+            <div class="stepper-step active">
+              <div class="stepper-icon">3</div>
+              <div class="stepper-label">3. DISPATCHED</div>
+            </div>
+            <div class="stepper-step">
+              <div class="stepper-icon">4</div>
+              <div class="stepper-label">4. DELIVERED</div>
+            </div>
+          </div>
+
+          <!-- Items Breakdown -->
+          <div class="p-3 border-top bg-white">
+            <div class="table-responsive">
+              <table class="table table-sm align-middle font-mono mb-0" style="font-size:0.8rem;">
+                <thead>
+                  <tr class="text-muted border-bottom">
+                    <th>SPECIMEN</th>
+                    <th>SIZE</th>
+                    <th>QTY</th>
+                    <th class="text-end">UNIT PRICE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${items.map(it => `
+                    <tr>
+                      <td class="fw-bold text-dark py-2">${it.name}</td>
+                      <td><span class="badge bg-light text-dark border font-mono rounded-0">${it.size || "L"}</span></td>
+                      <td>${it.quantity}</td>
+                      <td class="text-end">${formatPrice(it.price)}</td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Card Footer & Courier Info -->
+          <div class="p-3 border-top bg-light d-flex flex-wrap justify-content-between align-items-center gap-2 font-mono small">
+            <div>
+              <span class="text-muted">CARRIER:</span> <strong class="text-dark">DHL EXPRESS</strong>
+              <span class="mx-2">•</span>
+              <span class="text-muted">TRACKING:</span> <strong class="text-dark">${trackingCode}</strong>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+              <div>
+                <span class="text-muted">TOTAL:</span> <strong class="text-dark fs-6">${formatPrice(totalNum)}</strong>
+              </div>
+              <button class="btn btn-outline-dark rounded-0 font-mono py-1 px-3" style="font-size:0.75rem;"
+                onclick="window.showToast('Specimen Tracking: En route via DHL Express flight #SS942.')">
+                TRACK SHIPMENT
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function simulateTestOrder() {
+      const testId = `SS-ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+      window.showToast("Submitting simulation order to database...");
+
+      await API.createOrder({
+        id: testId,
+        customer_name: "Marcus Vance",
+        customer_email: "lifter@superscience.test",
+        customer_address: "100 Olympic Way",
+        customer_city: "Venice",
+        customer_country: "USA",
+        items: [
+          { name: "Heavyweight Boxy Tee - Carbon Black", size: "L", quantity: 1, price: 4200.00 },
+          { name: "Heavy Loopback Terry Shorts - Heather Grey", size: "M", quantity: 1, price: 4800.00 }
+        ],
+        subtotal: 9000.00,
+        discount: 0,
+        shipping: 0,
+        total: 9000.00,
+        promo_code: "FREE-DISPATCH"
+      });
+
+      await loadAthleteOrders(true);
+    }
+
+    function renderVaultGrid() {
+      const container = document.getElementById("vault-items-grid");
+      const emptyEl = document.getElementById("vault-empty-state");
+      const countEl = document.getElementById("stat-saved-wishlist");
+      const tabCount = document.getElementById("tab-wishlist-count");
+
+      const savedIds = Store.state.wishlist || [];
+      countEl.textContent = savedIds.length;
+      tabCount.textContent = savedIds.length;
+
+      if (savedIds.length === 0) {
+        emptyEl.style.display = "block";
+        container.innerHTML = "";
+        return;
+      }
+
+      emptyEl.style.display = "none";
+      const savedProducts = savedIds.map(id => products.find(p => p.id === id)).filter(Boolean);
+
+      container.innerHTML = savedProducts.map(p => {
+        const img = p.images && p.images.primary ? p.images.primary : "assets/products/d0d159a5-2fc7-4bb2-b155-ccdcc942f226.jfif";
+        return `
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="vault-item-card">
+              <div class="vault-img-container">
+                <img src="${img}" alt="${p.name}">
+                <span class="badge bg-black text-white font-mono rounded-0 position-absolute top-0 start-0 m-2" style="font-size:0.65rem;">
+                  ${p.gsm || "380 GSM"}
+                </span>
+              </div>
+              <div class="p-3 d-flex flex-column flex-grow-1">
+                <div class="font-mono text-muted small text-uppercase" style="font-size:0.7rem;">${p.category}</div>
+                <h4 class="font-brand fs-6 fw-bold text-dark text-truncate mb-1">${p.name}</h4>
+                <div class="font-mono fw-bold text-dark mb-3">${formatPrice(p.price)}</div>
+                <div class="mt-auto d-flex gap-2">
+                  <button class="btn btn-ss-dark w-100 rounded-0 font-mono small py-1" onclick="handleMoveSingleVaultToBag('${p.id}')">
+                    MOVE TO BAG
+                  </button>
+                  <button class="btn btn-outline-dark rounded-0 px-2 font-mono small py-1" title="Remove" onclick="handleRemoveVault('${p.id}')">
+                    &times;
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function updateVaultCountBadge() {
+      const count = (Store.state.wishlist || []).length;
+      document.getElementById("stat-saved-wishlist").textContent = count;
+      document.getElementById("tab-wishlist-count").textContent = count;
+    }
+
+    window.handleMoveSingleVaultToBag = (productId) => {
+      const prod = products.find(p => p.id === productId);
+      if (prod) {
+        Store.addToCart(prod, prod.sizes[0].size);
+        window.showToast(`Added ${prod.name} to your bag.`);
+        window.openBagDrawer();
+      }
+    };
+
+    window.handleRemoveVault = (productId) => {
+      Store.toggleWishlist(productId);
+      window.showToast("Specimen removed from vault.");
+      renderVaultGrid();
+    };
+  </script>
+</body>
+
+</html>

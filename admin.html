@@ -1,0 +1,1888 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SELLER DASHBOARD // SUPERSCIENCE</title>
+  <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom Brand Styles -->
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/superscience.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <!-- Live Server Security Guard (Restricts unauthorized Live Server / file:// access) -->
+  <style id="live-server-security-style">
+    html.live-server-blocked body {
+      background: #000 !important;
+      color: #fff !important;
+      overflow: hidden !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    html.live-server-blocked body > *:not(#live-server-guard-screen) {
+      display: none !important;
+      visibility: hidden !important;
+    }
+    #live-server-guard-screen {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      z-index: 2147483647;
+      overflow-y: auto;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+    html.live-server-blocked #live-server-guard-screen {
+      display: flex !important;
+    }
+  </style>
+  <script>
+    (function() {
+      // Detect VS Code Live Server (port 5500, 5501, etc.), file protocol, or unauthorized static hosts
+      var port = window.location.port;
+      var host = window.location.hostname;
+      var proto = window.location.protocol;
+
+      var isLiveServerPort = (port === '5500' || port === '5501' || port === '5502' || port === '8080');
+      var isFileProtocol = (proto === 'file:');
+      var isUnauthorizedLocal = ((host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0') && port !== '3000');
+      var isLiveServerClient = Boolean(window.LiveServer) || Boolean(window.liveServerParams);
+
+      var isLiveServerBlocked = isLiveServerPort || isFileProtocol || isUnauthorizedLocal || isLiveServerClient;
+
+      if (isLiveServerBlocked) {
+        window.__IS_LIVE_SERVER_BLOCKED__ = true;
+        document.documentElement.classList.add('live-server-blocked');
+
+        function purgeAndLockdown() {
+          document.title = "403 ACCESS RESTRICTED // SUPERSCIENCE";
+          var originEl = document.getElementById('detected-live-server-origin');
+          if (originEl) {
+            originEl.innerText = window.location.origin || 'file:// (Static Protocol)';
+          }
+          if (document.body) {
+            Array.from(document.body.children).forEach(function(el) {
+              if (el.id !== 'live-server-guard-screen' && el.id !== 'toast-container') {
+                el.remove();
+              }
+            });
+          }
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', purgeAndLockdown);
+        } else {
+          purgeAndLockdown();
+        }
+      }
+    })();
+  </script>
+</head>
+
+<body class="bg-white">
+
+  <!-- ========================================================================
+       LIVE SERVER SECURITY RESTRICTION SCREEN
+       ======================================================================== -->
+  <div id="live-server-guard-screen">
+    <div style="max-width: 680px; width: 100%; border: 1px solid #333; background: #0a0a0a; padding: 36px 32px; box-shadow: 0 25px 60px rgba(0,0,0,0.9); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+      <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #222; padding-bottom: 14px; margin-bottom: 22px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="background: #e11d48; color: #fff; font-family: monospace; font-size: 11px; font-weight: 700; padding: 3px 8px; letter-spacing: 0.05em;">SECURITY PROTOCOL // 403</span>
+          <span style="font-family: monospace; font-size: 11px; color: #888;">LIVE_SERVER_RESTRICTED</span>
+        </div>
+        <span style="font-family: monospace; font-size: 11px; color: #555;">SUPERSCIENCE STORE</span>
+      </div>
+
+      <h2 style="font-weight: 700; font-size: 22px; letter-spacing: -0.02em; margin: 0 0 14px 0; color: #fff; text-transform: uppercase;">
+        Admin Dashboard Cannot Be Accessed via Live Server
+      </h2>
+
+      <p style="color: #aaa; font-size: 13.5px; line-height: 1.6; margin-bottom: 20px;">
+        The <strong>SUPERSCIENCE Seller & Admin Dashboard</strong> is an enterprise operations console containing real-time gross revenue metrics, confidential customer shipping data, size inventory controls, and PostgreSQL database telemetry.
+      </p>
+
+      <div style="background: #111; border: 1px solid #262626; padding: 16px; margin-bottom: 22px; font-family: monospace; font-size: 12px; line-height: 1.75;">
+        <div style="color: #777; margin-bottom: 4px;">// SYSTEM AUDIT DIAGNOSTIC:</div>
+        <div style="color: #f59e0b;">• Detected Origin: <strong id="detected-live-server-origin">Live Server / Static Protocol</strong></div>
+        <div style="color: #ef4444;">• Access Status: <strong>BLOCKED & TERMINATED (Unauthorized Live Server)</strong></div>
+        <div style="color: #10b981;">• Authorized Gateway: <strong>Node.js / Express Server on Port 3000</strong></div>
+      </div>
+
+      <p style="color: #888; font-size: 12.5px; line-height: 1.5; margin-bottom: 24px;">
+        VS Code Live Server (Port 5500) only serves static files and does not process Node.js fulfillment APIs, PostgreSQL query pools, or authenticated seller commands. For data integrity and security, direct Live Server access is disabled.
+      </p>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 26px;">
+        <a href="http://localhost:3000/admin.html" style="background: #fff; color: #000; text-decoration: none; font-family: monospace; font-size: 11.5px; font-weight: 700; padding: 11px 18px; letter-spacing: 0.04em; display: inline-flex; align-items: center; gap: 6px;">
+          LAUNCH VIA SECURE NODE.JS SERVER (PORT 3000) &rarr;
+        </a>
+        <a href="http://localhost:3000/index.html" style="background: transparent; color: #fff; text-decoration: none; border: 1px solid #444; font-family: monospace; font-size: 11.5px; padding: 11px 18px; letter-spacing: 0.04em;">
+          RETURN TO STOREFRONT
+        </a>
+      </div>
+
+      <div style="border-top: 1px solid #222; padding-top: 16px; font-family: monospace; font-size: 11px; color: #666; line-height: 1.6;">
+        <strong>HOW TO START THE AUTHORIZED DEV SERVER:</strong><br>
+        1. In terminal: run <code>npm run dev</code> or execute <code>.\\run-dev.bat</code><br>
+        2. Open in browser: <a href="http://localhost:3000/admin.html" style="color: #999; text-decoration: underline;">http://localhost:3000/admin.html</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       APP SHELL: FIXED LEFT SIDEBAR + MAIN WORKSPACE
+       ======================================================================== -->
+  <div class="admin-app-layout">
+
+    <!-- 1. LEFT FIXED SIDEBAR -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <!-- Sidebar Brand & Identity -->
+      <div class="sidebar-header">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <a href="index.html" class="d-flex align-items-center gap-2 text-decoration-none text-white">
+            <img src="assets/logo-black.png" alt="SUPERSCIENCE" style="filter: invert(1); height: 18px;">
+            <span class="sidebar-brand-title">SUPERSCIENCE</span>
+          </a>
+        </div>
+        <div class="d-flex align-items-center">
+          <span class="sidebar-badge-desk">SELLER DASHBOARD</span>
+        </div>
+      </div>
+
+      <!-- Sidebar Action Buttons (Compact Precision Controls) -->
+      <div class="sidebar-actions-section">
+        <!-- Primary Action Button: NEW PRODUCT -->
+        <button id="btn-quick-add-product" class="btn-sidebar-primary" data-bs-toggle="modal" data-bs-target="#addProductModal" title="Create New Product">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>NEW PRODUCT</span>
+        </button>
+
+        <!-- Secondary Action Buttons Toolbar on Sidebar -->
+        <div class="sidebar-quick-grid">
+          <button id="btn-export-csv" class="btn-sidebar-secondary" title="Download Orders CSV">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>EXPORT CSV</span>
+          </button>
+          <button id="btn-refresh-all" class="btn-sidebar-icon" title="Reload Dashboard Data">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <polyline points="1 20 1 14 7 14"></polyline>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar Navigation Menu (Tabs) -->
+      <div class="sidebar-nav-container">
+        <div class="sidebar-group-title">OPERATIONS & PIPELINE</div>
+        <ul class="nav flex-column sidebar-nav-list" id="sellerTabs" role="tablist">
+          <li class="nav-item">
+            <button class="sidebar-nav-link active" id="tab-overview-btn" data-bs-toggle="tab" data-bs-target="#tab-overview" type="button" data-title="Overview & Analytics">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="9"></rect>
+                <rect x="14" y="3" width="7" height="5"></rect>
+                <rect x="14" y="12" width="7" height="9"></rect>
+                <rect x="3" y="16" width="7" height="5"></rect>
+              </svg>
+              <span>Overview & Analytics</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="sidebar-nav-link" id="tab-orders-btn" data-bs-toggle="tab" data-bs-target="#tab-orders" type="button" data-title="Orders & Dispatch Desk">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+              <span>Orders & Dispatch</span>
+              <span class="sidebar-count-badge" id="tab-badge-orders">0</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="sidebar-nav-link" id="tab-catalog-btn" data-bs-toggle="tab" data-bs-target="#tab-catalog" type="button" data-title="Product Inventory">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+              </svg>
+              <span>Product Inventory</span>
+              <span class="sidebar-count-badge" id="tab-badge-products">12</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="sidebar-nav-link" id="tab-consultations-btn" data-bs-toggle="tab" data-bs-target="#tab-consultations" type="button" data-title="Sizing & Tailor Inquiries">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>Sizing Desk</span>
+              <span class="sidebar-count-badge" id="tab-badge-consultations">0</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="sidebar-nav-link" id="tab-bookings-btn" data-bs-toggle="tab" data-bs-target="#tab-bookings" type="button" data-title="VIP Showroom Reservations">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>Showroom VIP</span>
+              <span class="sidebar-count-badge" id="tab-badge-bookings">0</span>
+            </button>
+          </li>
+
+          <div class="sidebar-group-title mt-3">ARCHIVE & ENGINE</div>
+
+          <li class="nav-item">
+            <button class="sidebar-nav-link" id="tab-marketing-btn" data-bs-toggle="tab" data-bs-target="#tab-marketing" type="button" data-title="Promotions & Newsletter Archive">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              <span>Promos & Subscribers</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="sidebar-nav-link" id="tab-telemetry-btn" data-bs-toggle="tab" data-bs-target="#tab-telemetry" type="button" data-title="Database & Server Telemetry">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+              <span>PostgreSQL Telemetry</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="sidebar-telemetry-meta">
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-secondary">CURRENCY</span>
+            <span class="text-white fw-bold font-mono">PHP (₱)</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="text-secondary">LATENCY</span>
+            <span class="text-white font-mono" id="ping-latency">-- ms</span>
+          </div>
+        </div>
+
+        <!-- Seller User Info & Logout Button -->
+        <div class="sidebar-user-section">
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-2">
+              <div class="sidebar-user-avatar">SA</div>
+              <div class="font-mono lh-1">
+                <div class="text-white small fw-bold">STORE ADMIN</div>
+                <div class="text-secondary" style="font-size: 0.62rem;">admin@superscience.ph</div>
+              </div>
+            </div>
+            <button id="btn-sidebar-logout" class="btn-sidebar-logout" data-bs-toggle="modal" data-bs-target="#logoutConfirmModal" title="Sign out of Admin Dashboard">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              <span>LOGOUT</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 2. MAIN WORKSPACE CONTENT -->
+    <main class="admin-main">
+      <!-- Minimalist Top Header Bar (No Cluttered Action Buttons) -->
+      <header class="admin-topbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-sm btn-dark d-lg-none rounded-0 font-mono" id="btn-toggle-sidebar" type="button">
+            ☰ MENU
+          </button>
+          <div>
+            <div class="topbar-breadcrumb">SUPERSCIENCE // OPERATIONS CONSOLE</div>
+            <h1 class="topbar-title" id="active-view-title">Overview & Analytics</h1>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+          <div class="topbar-meta-item d-none d-md-flex">
+            <span class="text-secondary">BACKEND:</span>
+            <span class="badge bg-black text-white font-mono rounded-0">NODE PORT 3000</span>
+          </div>
+          <div class="topbar-meta-item d-none d-sm-flex">
+            <span class="text-secondary">FREE SHIP:</span>
+            <span class="text-dark fw-bold font-mono">₱8,500.00</span>
+          </div>
+          <div class="topbar-meta-item text-secondary font-mono d-none d-xl-flex">
+            SYNCED: <span id="telemetry-sync-time" class="text-dark ms-1">Just now</span>
+          </div>
+          <a href="index.html" class="btn btn-sm btn-outline-dark rounded-0 font-mono px-3">
+            VIEW STORE ↗
+          </a>
+          <button id="btn-topbar-logout" class="btn btn-sm btn-outline-danger rounded-0 font-mono px-3 d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#logoutConfirmModal" title="Sign out of Admin Dashboard">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span>LOGOUT</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Workspace Canvas -->
+      <div class="admin-workspace-body p-3 p-md-4">
+
+        <!-- Executive KPI Metric Cards Strip -->
+        <div class="row g-3 mb-4">
+          <!-- KPI 1: Gross Sales -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="admin-kpi-card">
+              <div class="kpi-label">
+                <span>GROSS SALES REVENUE</span>
+                <span class="badge bg-black text-white font-mono rounded-0" style="font-size:0.6rem;">PHP ₱</span>
+              </div>
+              <div id="kpi-gross-revenue" class="kpi-value">₱0.00</div>
+              <div class="kpi-trend neutral font-mono">
+                <span class="text-muted small">Live Store Revenue</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI 2: Total Orders -->
+          <div class="col-12 col-sm-6 col-xl-2">
+            <div class="admin-kpi-card">
+              <div class="kpi-label">
+                <span>CONFIRMED ORDERS</span>
+                <span class="badge bg-light text-dark border font-mono rounded-0" style="font-size:0.6rem;">LIFETIME</span>
+              </div>
+              <div id="kpi-total-orders" class="kpi-value">0</div>
+              <div class="kpi-trend neutral font-mono">
+                <span id="kpi-fulfillment-rate">0 active orders</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI 3: Average Order Value -->
+          <div class="col-12 col-sm-6 col-xl-2">
+            <div class="admin-kpi-card">
+              <div class="kpi-label">
+                <span>AVG. ORDER VALUE (AOV)</span>
+              </div>
+              <div id="kpi-aov" class="kpi-value" style="font-size: 1.75rem;">₱0.00</div>
+              <div class="kpi-trend neutral font-mono">
+                <span>Average basket size</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI 4: Catalog Product Count -->
+          <div class="col-12 col-sm-6 col-xl-2">
+            <div class="admin-kpi-card">
+              <div class="kpi-label">
+                <span>PRODUCT CATALOG</span>
+              </div>
+              <div id="kpi-product-count" class="kpi-value">12</div>
+              <div class="kpi-trend neutral font-mono">
+                <span>Drop 01 live in market</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI 5: VIP Showroom Bookings -->
+          <div class="col-12 col-sm-6 col-xl-1">
+            <div class="admin-kpi-card">
+              <div class="kpi-label">
+                <span>SHOWROOM</span>
+              </div>
+              <div id="kpi-bookings-count" class="kpi-value" style="font-size: 1.8rem;">0</div>
+              <div class="kpi-trend neutral font-mono" style="font-size:0.65rem;">
+                <span>VIP visits</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI 6: Tailor Consultations -->
+          <div class="col-12 col-sm-6 col-xl-2">
+            <div class="admin-kpi-card">
+              <div class="kpi-label">
+                <span>SIZING DESK</span>
+              </div>
+              <div id="kpi-consultations-count" class="kpi-value" style="font-size: 1.8rem;">0</div>
+              <div class="kpi-trend neutral font-mono">
+                <span>Biomechanical inquiries</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Tabbed Seller Control Surface -->
+        <div class="bg-white border">
+          <!-- Tabs Content Container -->
+          <div class="tab-content p-3 p-md-4" id="sellerTabsContent">
+
+        <!-- ====================================================================
+             TAB 1: Overview & Analytics
+             ==================================================================== -->
+        <div class="tab-pane fade show active" id="tab-overview" role="tabpanel">
+          <div class="row g-4">
+            <!-- Left: Sales Distribution & Pipeline -->
+            <div class="col-12 col-lg-7">
+              <!-- Revenue Category Breakdown -->
+              <div class="p-3 border bg-white mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h6 class="font-brand fw-bold mb-0">GARMENT CATEGORY SALES BREAKDOWN</h6>
+                  <span class="font-mono text-muted small">Real-time GMV Distribution</span>
+                </div>
+
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between font-mono small mb-1">
+                    <span>380 GSM HEAVYWEIGHT T-SHIRTS</span>
+                    <strong id="cat-rev-tees">₱0.00 (0%)</strong>
+                  </div>
+                  <div class="cat-progress-bar">
+                    <div id="cat-bar-tees" class="cat-progress-fill" style="width: 0%;"></div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between font-mono small mb-1">
+                    <span>420 GSM HIGH-DENSITY TRAINING SHORTS</span>
+                    <strong id="cat-rev-shorts">₱0.00 (0%)</strong>
+                  </div>
+                  <div class="cat-progress-bar">
+                    <div id="cat-bar-shorts" class="cat-progress-fill" style="width: 0%;"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="d-flex justify-content-between font-mono small mb-1">
+                    <span>SUEDE & HIGH-AIRFLOW MESH CAPS</span>
+                    <strong id="cat-rev-caps">₱0.00 (0%)</strong>
+                  </div>
+                  <div class="cat-progress-bar">
+                    <div id="cat-bar-caps" class="cat-progress-fill" style="width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Order Pipeline Status Badges Matrix -->
+              <div class="p-3 border bg-white">
+                <h6 class="font-brand fw-bold mb-3">FULFILLMENT & LOGISTICS PIPELINE</h6>
+                <div class="row g-2 text-center font-mono">
+                  <div class="col-6 col-sm-3">
+                    <div class="p-3 bg-light border">
+                      <div class="small text-muted mb-1">CONFIRMED</div>
+                      <div id="pipeline-confirmed" class="fs-4 fw-bold text-dark">0</div>
+                      <div class="text-secondary" style="font-size:0.65rem;">Pending QC</div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-sm-3">
+                    <div class="p-3 bg-light border">
+                      <div class="small text-muted mb-1">QC VERIFIED</div>
+                      <div id="pipeline-qc" class="fs-4 fw-bold text-dark">0</div>
+                      <div class="text-secondary" style="font-size:0.65rem;">Packaged</div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-sm-3">
+                    <div class="p-3 bg-light border">
+                      <div class="small text-muted mb-1">DISPATCHED</div>
+                      <div id="pipeline-dispatched" class="fs-4 fw-bold text-dark">0</div>
+                      <div class="text-secondary" style="font-size:0.65rem;">En route DHL</div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-sm-3">
+                    <div class="p-3 bg-light border">
+                      <div class="small text-muted mb-1">DELIVERED</div>
+                      <div id="pipeline-delivered" class="fs-4 fw-bold text-dark">0</div>
+                      <div class="text-secondary" style="font-size:0.65rem;">Completed</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Live Activity & Quick Simulation Box -->
+            <div class="col-12 col-lg-5">
+              <!-- Live Activity Feed -->
+              <div class="p-3 border bg-white mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h6 class="font-brand fw-bold mb-0">RECENT TRANSACTIONS</h6>
+                  <span class="badge bg-black text-white font-mono rounded-0" style="font-size:0.65rem;">LIVE</span>
+                </div>
+                <div id="recent-activity-feed" class="font-mono small">
+                  <div class="text-muted py-3 text-center">Loading activity feed...</div>
+                </div>
+              </div>
+
+              <!-- Store Dispatch Guidelines -->
+              <div class="p-3 bg-white border">
+                <h6 class="font-brand fw-bold mb-2">STORE DISPATCH GUIDELINES</h6>
+                <p class="small text-secondary mb-3">
+                  Live orders placed through the public storefront stream directly into this dashboard with instant DHL tracking generation.
+                </p>
+                <div class="font-mono small p-2 bg-light border mb-3">
+                  <div class="text-dark fw-bold mb-1">FULFILLMENT WORKFLOW:</div>
+                  <div class="text-secondary">• 1. Verify customer address & items</div>
+                  <div class="text-secondary">• 2. Complete tension & seam quality check</div>
+                  <div class="text-secondary">• 3. Print packing slip & dispatch DHL package</div>
+                </div>
+                <a href="catalog.html" class="btn btn-sm btn-outline-dark font-mono rounded-0 w-100">
+                  BROWSE STOREFRONT CATALOG &rarr;
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====================================================================
+             TAB 2: Orders & Fulfillment Desk
+             ==================================================================== -->
+        <div class="tab-pane fade" id="tab-orders" role="tabpanel">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <div>
+              <h5 class="font-brand fw-bold mb-0">RECORDED CUSTOMER ORDERS & DISPATCH</h5>
+              <span class="font-mono text-muted small">Update fulfillment status in real time. All prices in Philippine Peso (₱).</span>
+            </div>
+
+            <!-- Search & Filters -->
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <input type="text" id="order-search-input" class="form-control form-control-sm rounded-0 font-mono" placeholder="Search by Order ID, customer, courier..." style="width: 250px;">
+              <button id="btn-filter-order-clear" class="btn btn-sm btn-outline-dark font-mono rounded-0">CLEAR</button>
+            </div>
+          </div>
+
+          <!-- Status Filter Buttons -->
+          <div class="d-flex flex-wrap gap-1 mb-3" id="order-status-filters">
+            <button class="filter-btn-pill active" data-status="all">ALL ORDERS</button>
+            <button class="filter-btn-pill" data-status="confirmed">CONFIRMED</button>
+            <button class="filter-btn-pill" data-status="qc_verified">QC VERIFIED</button>
+            <button class="filter-btn-pill" data-status="dispatched">DISPATCHED</button>
+            <button class="filter-btn-pill" data-status="delivered">DELIVERED</button>
+            <button class="filter-btn-pill" data-status="cancelled">CANCELLED</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table admin-table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>ORDER ID</th>
+                  <th>CUSTOMER & DESTINATION</th>
+                  <th>ORDERED PRODUCTS</th>
+                  <th>SUBTOTAL</th>
+                  <th>TOTAL (PHP)</th>
+                  <th>STATUS</th>
+                  <th>TRACKING (DHL)</th>
+                  <th class="text-end">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="orders-table-body">
+                <tr>
+                  <td colspan="8" class="text-center py-4 text-muted">Loading recorded orders...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ====================================================================
+             TAB 3: Product Inventory
+             ==================================================================== -->
+        <div class="tab-pane fade" id="tab-catalog" role="tabpanel">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <div>
+              <h5 class="font-brand fw-bold mb-0">PRODUCT CATALOG & STOCK MATRIX</h5>
+              <span class="font-mono text-muted small">Manage products, pricing, and size availability.</span>
+            </div>
+
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <input type="text" id="product-search-input" class="form-control form-control-sm rounded-0 font-mono" placeholder="Search product name or GSM..." style="width: 230px;">
+              <button class="btn btn-sm btn-ss-dark font-mono rounded-0" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                + ADD PRODUCT
+              </button>
+            </div>
+          </div>
+
+          <!-- Category Filter Pills -->
+          <div class="d-flex flex-wrap gap-1 mb-3" id="product-category-filters">
+            <button class="filter-btn-pill active" data-category="all">ALL PRODUCTS</button>
+            <button class="filter-btn-pill" data-category="tshirts">T-SHIRTS (380 GSM)</button>
+            <button class="filter-btn-pill" data-category="shorts">SHORTS (420 GSM)</button>
+            <button class="filter-btn-pill" data-category="caps">CAPS & HEADWEAR</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table admin-table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>PRODUCT</th>
+                  <th>CATEGORY</th>
+                  <th>GSM & FABRIC</th>
+                  <th>UNIT PRICE (PHP)</th>
+                  <th style="white-space: nowrap; min-width: 140px;">SIZES IN STOCK</th>
+                  <th>RATING</th>
+                  <th class="text-end">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="products-table-body">
+                <tr>
+                  <td colspan="7" class="text-center py-4 text-muted">Loading garment inventory...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ====================================================================
+             TAB 4: Sizing Consultations & Tailor Desk
+             ==================================================================== -->
+        <div class="tab-pane fade" id="tab-consultations" role="tabpanel">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h5 class="font-brand fw-bold mb-0">BIOMECHANICAL SIZING CONSULTATIONS</h5>
+              <span class="font-mono text-muted small">Tailor advice inquiries submitted from Customer Care.</span>
+            </div>
+            <button id="btn-refresh-consultations" class="btn btn-sm btn-outline-dark font-mono rounded-0">
+              REFRESH INQUIRIES
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table admin-table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>ATHLETE NAME</th>
+                  <th>EMAIL</th>
+                  <th>HEIGHT / WEIGHT / BF</th>
+                  <th>FIT PREFERENCE</th>
+                  <th>INQUIRY DETAILS</th>
+                  <th>STATUS</th>
+                  <th>SUBMITTED</th>
+                </tr>
+              </thead>
+              <tbody id="consultations-table-body">
+                <tr>
+                  <td colspan="8" class="text-center py-4 text-muted">Loading consultations...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ====================================================================
+             TAB 5: Showroom VIP Fitting Reservations
+             ==================================================================== -->
+        <div class="tab-pane fade" id="tab-bookings" role="tabpanel">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h5 class="font-brand fw-bold mb-0">FLAGSHIP SHOWROOM VIP RESERVATIONS</h5>
+              <span class="font-mono text-muted small">Private fitting appointments booked through Showroom Scheduler.</span>
+            </div>
+            <button id="btn-refresh-bookings" class="btn btn-sm btn-outline-dark font-mono rounded-0">
+              REFRESH CALENDAR
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table admin-table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>GUEST NAME</th>
+                  <th>EMAIL & PHONE</th>
+                  <th>DATE & TIME SLOT</th>
+                  <th>EXPERIENCE FOCUS</th>
+                  <th>GUESTS</th>
+                  <th>STATUS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="bookings-table-body">
+                <tr>
+                  <td colspan="8" class="text-center py-4 text-muted">Loading VIP bookings...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ====================================================================
+             TAB 6: Promos & Newsletter Marketing
+             ==================================================================== -->
+        <div class="tab-pane fade" id="tab-marketing" role="tabpanel">
+          <div class="row g-4">
+            <!-- Active Promo Codes -->
+            <div class="col-12 col-lg-6">
+              <div class="p-3 border bg-white h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h6 class="font-brand fw-bold mb-0">ACTIVE PROMOTIONAL CODES</h6>
+                  <button class="btn btn-sm btn-outline-dark font-mono rounded-0" data-bs-toggle="modal" data-bs-target="#newPromoModal">
+                    + NEW CODE
+                  </button>
+                </div>
+
+                <div class="table-responsive">
+                  <table class="table admin-table mb-0">
+                    <thead>
+                      <tr>
+                        <th>CODE</th>
+                        <th>DISCOUNT</th>
+                        <th>CONDITIONS</th>
+                        <th>STATUS</th>
+                      </tr>
+                    </thead>
+                    <tbody id="promo-codes-table-body">
+                      <tr>
+                        <td><strong>SCIENCE10</strong></td>
+                        <td>10% OFF</td>
+                        <td>Site-wide on any order value</td>
+                        <td><span class="badge bg-success font-mono">ACTIVE</span></td>
+                      </tr>
+                      <tr>
+                        <td><strong>DROP01</strong></td>
+                        <td>₱1,000.00 FLAT</td>
+                        <td>Drop 01 Welcome Credit</td>
+                        <td><span class="badge bg-success font-mono">ACTIVE</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Newsletter Subscribers List -->
+            <div class="col-12 col-lg-6">
+              <div class="p-3 border bg-white h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h6 class="font-brand fw-bold mb-0">SUBSCRIBED ATHLETES & RESEARCH BRIEFS</h6>
+                  <span class="badge bg-black text-white font-mono rounded-0" id="badge-newsletter-count">0</span>
+                </div>
+
+                <div class="table-responsive" style="max-height: 380px; overflow-y: auto;">
+                  <table class="table admin-table mb-0">
+                    <thead>
+                      <tr>
+                        <th>EMAIL</th>
+                        <th>SOURCE</th>
+                        <th>DATE</th>
+                      </tr>
+                    </thead>
+                    <tbody id="newsletter-table-body">
+                      <tr>
+                        <td colspan="3" class="text-center py-4 text-muted">Loading subscribers...</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====================================================================
+             TAB 7: Database & Server Telemetry
+             ==================================================================== -->
+        <div class="tab-pane fade" id="tab-telemetry" role="tabpanel">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h5 class="font-brand fw-bold mb-0">POSTGRESQL & SERVER TELEMETRY CONSOLE</h5>
+              <span class="font-mono text-muted small">Node.js Express backend and PostgreSQL health diagnostics.</span>
+            </div>
+            <button id="btn-seed-db" class="btn btn-sm btn-ss-dark font-mono rounded-0">
+              SEED / RE-SYNC CATALOG
+            </button>
+          </div>
+
+          <div id="db-alert-msg" class="p-3 bg-white border font-mono small mb-4" style="display: none;"></div>
+
+          <div class="row g-4">
+            <div class="col-12 col-lg-6">
+              <div class="p-3 border h-100 bg-white">
+                <h6 class="font-mono fw-bold mb-2">OPTION 1: FREE CLOUD DATABASE (SUPABASE / NEON)</h6>
+                <p class="small text-secondary mb-3">
+                  You can get a free instant PostgreSQL database from <strong>Supabase</strong> (supabase.com) or <strong>Neon</strong> (neon.tech) in 30 seconds.
+                </p>
+                <ol class="small text-secondary ps-3 mb-3">
+                  <li>Create a free database on <strong>Supabase</strong> or <strong>Neon</strong>.</li>
+                  <li>Copy the connection string (URI).</li>
+                  <li>Open the file <code>.env</code> in your project root.</li>
+                  <li>Set <code>DATABASE_URL</code> to your URI:</li>
+                </ol>
+                <div class="code-box mb-2">
+DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres?sslmode=require
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+              <div class="p-3 border h-100 bg-white">
+                <h6 class="font-mono fw-bold mb-2">OPTION 2: LOCAL POSTGRESQL (PGADMIN / LOCALHOST)</h6>
+                <p class="small text-secondary mb-3">
+                  If you have PostgreSQL installed on your machine or inside Docker:
+                </p>
+                <div class="code-box mb-2">
+# In .env file:
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/superscience
+
+# Or individual settings:
+PGHOST=localhost
+PGPORT=5432
+PGUSER=postgres
+PGPASSWORD=your_password
+PGDATABASE=superscience
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+  <!-- ========================================================================
+       5. Modals & Dialogs
+       ======================================================================== -->
+
+  <!-- Modal 1: Add New Product -->
+  <div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-0">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title font-brand fw-bold">CREATE NEW PRODUCT</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="add-product-form">
+          <div class="modal-body p-4 font-mono small">
+            <div class="row g-3">
+              <div class="col-12 col-md-4">
+                <label class="form-label fw-bold">PRODUCT ID / SKU</label>
+                <input type="text" id="add-p-id" class="form-control rounded-0 font-mono" placeholder="SS-TEE-06" required>
+              </div>
+              <div class="col-12 col-md-8">
+                <label class="form-label fw-bold">PRODUCT NAME</label>
+                <input type="text" id="add-p-name" class="form-control rounded-0" placeholder="e.g. Iron Ore Oversized Boxy Tee" required>
+              </div>
+              <div class="col-12 col-md-4">
+                <label class="form-label fw-bold">CATEGORY</label>
+                <select id="add-p-category" class="form-select rounded-0 font-mono">
+                  <option value="tshirts">T-Shirts (tshirts)</option>
+                  <option value="shorts">Shorts (shorts)</option>
+                  <option value="caps">Caps & Headwear (caps)</option>
+                </select>
+              </div>
+              <div class="col-12 col-md-4">
+                <label class="form-label fw-bold">UNIT PRICE (PHP ₱)</label>
+                <input type="number" id="add-p-price" class="form-control rounded-0 font-mono" placeholder="4200.00" step="50" required>
+              </div>
+              <div class="col-12 col-md-4">
+                <label class="form-label fw-bold">FABRIC WEIGHT (GSM)</label>
+                <input type="text" id="add-p-gsm" class="form-control rounded-0 font-mono" placeholder="380 GSM" value="380 GSM">
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label fw-bold">FIT SPECIFICATION</label>
+                <input type="text" id="add-p-fit" class="form-control rounded-0 font-mono" placeholder="Oversized Boxy Fit" value="Oversized Boxy Fit">
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label fw-bold">FABRIC COMPOSITION</label>
+                <input type="text" id="add-p-fabric" class="form-control rounded-0 font-mono" placeholder="100% Combed Heavyweight Organic Cotton" value="100% Combed Heavyweight Organic Cotton">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-bold">PRODUCT DESCRIPTION</label>
+                <textarea id="add-p-desc" class="form-control rounded-0 font-mono" rows="2" placeholder="Describe the geometric drape, ribbed collar, and fabric finish..."></textarea>
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-bold d-block mb-1">AVAILABLE SIZES IN STOCK</label>
+                <div class="d-flex gap-3">
+                  <label class="form-check-label"><input type="checkbox" id="add-size-s" checked> Size S</label>
+                  <label class="form-check-label"><input type="checkbox" id="add-size-m" checked> Size M</label>
+                  <label class="form-check-label"><input type="checkbox" id="add-size-l" checked> Size L</label>
+                  <label class="form-check-label"><input type="checkbox" id="add-size-xl" checked> Size XL</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer border-top bg-light">
+            <button type="button" class="btn btn-outline-dark rounded-0 font-mono" data-bs-dismiss="modal">CANCEL</button>
+            <button type="submit" class="btn btn-ss-dark rounded-0 font-mono px-4">CREATE PRODUCT</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Quick Edit Product Price & GSM -->
+  <div class="modal fade" id="editProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-0">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title font-brand fw-bold">EDIT PRODUCT PRICING & DETAILS</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="edit-product-form">
+          <div class="modal-body p-4 font-mono small">
+            <input type="hidden" id="edit-p-id">
+            <div class="mb-3">
+              <label class="form-label fw-bold">GARMENT NAME</label>
+              <input type="text" id="edit-p-name" class="form-control rounded-0 font-mono" required>
+            </div>
+            <div class="row g-3">
+              <div class="col-6">
+                <label class="form-label fw-bold">UNIT PRICE (PHP ₱)</label>
+                <input type="number" id="edit-p-price" class="form-control rounded-0 font-mono" step="50" required>
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-bold">GSM WEIGHT</label>
+                <input type="text" id="edit-p-gsm" class="form-control rounded-0 font-mono" required>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer border-top bg-light">
+            <button type="button" class="btn btn-outline-dark rounded-0 font-mono" data-bs-dismiss="modal">CANCEL</button>
+            <button type="submit" class="btn btn-ss-dark rounded-0 font-mono px-4">SAVE CHANGES</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Order Packing Slip & Invoice View -->
+  <div class="modal fade" id="packingSlipModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-0">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title font-brand fw-bold">OFFICIAL DISPATCH MANIFEST // PACKING SLIP</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4 bg-light">
+          <div id="slip-content" class="slip-sheet bg-white">
+            <!-- Dynamic Slip Content -->
+          </div>
+        </div>
+        <div class="modal-footer border-top bg-light">
+          <button type="button" class="btn btn-outline-dark rounded-0 font-mono" data-bs-dismiss="modal">CLOSE</button>
+          <button type="button" class="btn btn-ss-dark rounded-0 font-mono px-4" onclick="window.print()">
+            🖨️ PRINT SLIP
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: New Promo Code -->
+  <div class="modal fade" id="newPromoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-0">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title font-brand fw-bold">CREATE PROMOTIONAL DROP CODE</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="create-promo-form">
+          <div class="modal-body p-4 font-mono small">
+            <div class="mb-3">
+              <label class="form-label fw-bold">PROMO CODE</label>
+              <input type="text" id="promo-code-input" class="form-control rounded-0 font-mono text-uppercase" placeholder="e.g. VIP20" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">DISCOUNT TYPE & VALUE</label>
+              <div class="input-group">
+                <input type="number" id="promo-val-input" class="form-control rounded-0 font-mono" placeholder="e.g. 500" required>
+                <select id="promo-type-input" class="form-select rounded-0 font-mono" style="max-width: 140px;">
+                  <option value="flat">PHP ₱ Flat</option>
+                  <option value="percent">% Percent</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">CAMPAIGN NOTE</label>
+              <input type="text" id="promo-note-input" class="form-control rounded-0 font-mono" placeholder="e.g. Private Fitting Incentive">
+            </div>
+          </div>
+          <div class="modal-footer border-top bg-light">
+            <button type="button" class="btn btn-outline-dark rounded-0 font-mono" data-bs-dismiss="modal">CANCEL</button>
+            <button type="submit" class="btn btn-ss-dark rounded-0 font-mono px-4">SAVE PROMO</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Confirm Sign Out / Logout -->
+  <div class="modal fade" id="logoutConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+      <div class="modal-content rounded-0">
+        <div class="modal-header border-bottom py-2 px-3">
+          <h6 class="modal-title font-brand fw-bold mb-0">CONFIRM SIGN OUT</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4 font-mono small">
+          <p class="mb-2 text-dark">Are you sure you want to end your current Seller session?</p>
+          <div class="text-secondary" style="font-size:0.75rem;">
+            You will be signed out of the operations console and redirected to the public storefront.
+          </div>
+        </div>
+        <div class="modal-footer border-top bg-light py-2 px-3">
+          <button type="button" class="btn btn-sm btn-outline-dark rounded-0 font-mono" data-bs-dismiss="modal">CANCEL</button>
+          <button type="button" id="btn-confirm-logout-execute" class="btn btn-sm btn-danger rounded-0 font-mono px-3">LOGOUT & EXIT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1090;"></div>
+
+  <!-- Bootstrap 5.3 Bundle JS with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Main Seller Dashboard ES Module Script -->
+  <script type="module">
+    import { API } from './js/api.js';
+    import { formatPrice } from './js/store.js';
+
+    // If Live Server is detected, abort all dashboard operations immediately
+    if (window.__IS_LIVE_SERVER_BLOCKED__) {
+      console.warn('[SECURITY] Live Server detected. Halting dashboard initialization.');
+      throw new Error('SECURITY_RESTRICTED: Live Server is not permitted.');
+    }
+
+    // Global in-memory cache for seller dashboard
+    let cachedOrders = [];
+    let cachedProducts = [];
+    let cachedConsultations = [];
+    let cachedBookings = [];
+    let cachedNewsletter = [];
+
+    let currentOrderFilter = 'all';
+    let currentCategoryFilter = 'all';
+
+    // Toast alert helper
+    function showToast(msg) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast-ss bg-black text-white p-3 border mb-2 font-mono small d-flex align-items-center justify-content-between gap-3';
+      toast.innerHTML = `<span>[STORE SYSTEM] ${msg}</span><span style="cursor:pointer;" onclick="this.parentElement.remove()">&times;</span>`;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+    }
+    window.showToast = showToast;
+
+    /* ==========================================================================
+       1. Core Telemetry & Data Loading
+       ========================================================================== */
+    async function loadAllDashboardData() {
+      const startTime = performance.now();
+      const statusPill = document.getElementById('db-status-pill');
+      const statusText = document.getElementById('db-status-text');
+      const pingLatency = document.getElementById('ping-latency');
+      const alertMsg = document.getElementById('db-alert-msg');
+      const syncTimeEl = document.getElementById('telemetry-sync-time');
+
+      try {
+        const health = await API.checkHealth();
+        const latency = Math.round(performance.now() - startTime);
+        if (pingLatency) pingLatency.textContent = `${latency} ms`;
+
+        if (health.database && health.database.connected) {
+          if (statusPill) statusPill.className = 'status-pill status-online';
+          if (statusText) statusText.textContent = `POSTGRESQL CONNECTED [${health.database.database || 'superscience'}]`;
+          if (alertMsg) {
+            alertMsg.style.display = 'block';
+            alertMsg.className = 'p-3 bg-white border border-success font-mono small text-success mb-4';
+            alertMsg.innerHTML = `✓ PostgreSQL active and executing live queries. Timestamp: <strong>${health.timestamp}</strong>`;
+          }
+        } else {
+          if (statusPill) statusPill.className = 'status-pill status-standby';
+          if (statusText) statusText.textContent = 'STANDBY MEMORY MODE';
+          if (alertMsg) {
+            alertMsg.style.display = 'block';
+            alertMsg.className = 'p-3 bg-white border border-warning font-mono small text-dark mb-4';
+            const errMsg = health.database ? (health.database.error || 'Connection standby') : health.error;
+            alertMsg.innerHTML = `
+              <strong>Notice:</strong> Express backend is active on Port 3000. PostgreSQL is in standby (<code>${errMsg}</code>). 
+              The seller dashboard is running smoothly on high-speed memory fallback.
+            `;
+          }
+        }
+      } catch (e) {
+        if (statusPill) statusPill.className = 'status-pill status-offline';
+        if (statusText) statusText.textContent = 'SERVER OFFLINE';
+      }
+
+      if (syncTimeEl) {
+        syncTimeEl.textContent = new Date().toLocaleTimeString();
+      }
+
+      // Fetch all core datasets concurrently
+      await Promise.all([
+        fetchOrders(),
+        fetchProducts(),
+        fetchConsultations(),
+        fetchBookings(),
+        fetchNewsletter()
+      ]);
+
+      // Calculate executive KPIs
+      computeExecutiveMetrics();
+    }
+
+    /* ==========================================================================
+       2. Orders Management
+       ========================================================================== */
+    async function fetchOrders() {
+      try {
+        const res = await API.getOrders();
+        cachedOrders = res && res.orders ? res.orders : [];
+        renderOrdersTable();
+      } catch (e) {
+        console.error('Failed to fetch orders:', e);
+      }
+    }
+
+    function renderOrdersTable() {
+      const tbody = document.getElementById('orders-table-body');
+      const badgeCount = document.getElementById('tab-badge-orders');
+      if (badgeCount) badgeCount.textContent = cachedOrders.length;
+
+      const searchVal = (document.getElementById('order-search-input')?.value || '').toLowerCase().trim();
+
+      let filtered = cachedOrders.filter(o => {
+        if (currentOrderFilter !== 'all' && (o.status || 'confirmed').toLowerCase() !== currentOrderFilter) {
+          return false;
+        }
+        if (searchVal) {
+          const matchId = (o.id || '').toLowerCase().includes(searchVal);
+          const matchCustomer = (o.customer_name || '').toLowerCase().includes(searchVal);
+          const matchEmail = (o.customer_email || '').toLowerCase().includes(searchVal);
+          return matchId || matchCustomer || matchEmail;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="text-center py-5 text-muted">
+              No customer orders recorded yet. Orders placed through the storefront will appear here automatically.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(o => {
+        const items = typeof o.items === 'string' ? JSON.parse(o.items) : (o.items || []);
+        const totalNum = Number(o.total || 0);
+        const subtotalNum = Number(o.subtotal || totalNum);
+        const trackingCode = `DHL-SS-${(o.id || '98214').replace(/\D/g, '') || '48201'}-EXP`;
+        const status = (o.status || 'confirmed').toLowerCase();
+
+        const itemsHtml = items.map(it => `
+          <span class="order-item-chip">
+            <strong>${it.name}</strong> (${it.size || 'L'}) × ${it.quantity}
+          </span>
+        `).join('');
+
+        return `
+          <tr>
+            <td>
+              <strong class="font-mono text-dark">${o.id}</strong>
+              <div class="text-muted" style="font-size:0.7rem;">${o.created_at ? new Date(o.created_at).toLocaleDateString() : 'Today'}</div>
+            </td>
+            <td>
+              <div class="fw-bold text-dark">${o.customer_name || 'Anonymous Lifter'}</div>
+              <div class="text-secondary small" style="font-size:0.75rem;">${o.customer_email || 'customer@superscience.test'}</div>
+              <div class="text-muted" style="font-size:0.7rem;">${o.customer_city || 'Metro Manila'}, ${o.customer_country || 'PH'}</div>
+            </td>
+            <td style="max-width: 280px;">${itemsHtml || 'Standard Product'}</td>
+            <td>${formatPrice(subtotalNum)}</td>
+            <td>
+              <strong class="fs-6 text-dark">${formatPrice(totalNum)}</strong>
+              ${o.promo_code ? `<br><span class="badge bg-dark font-mono" style="font-size:0.65rem;">${o.promo_code}</span>` : ''}
+            </td>
+            <td>
+              <select class="order-status-select rounded-0" data-order-id="${o.id}">
+                <option value="confirmed" ${status === 'confirmed' ? 'selected' : ''}>CONFIRMED</option>
+                <option value="qc_verified" ${status === 'qc_verified' ? 'selected' : ''}>QC VERIFIED</option>
+                <option value="dispatched" ${status === 'dispatched' ? 'selected' : ''}>DISPATCHED</option>
+                <option value="delivered" ${status === 'delivered' ? 'selected' : ''}>DELIVERED</option>
+                <option value="cancelled" ${status === 'cancelled' ? 'selected' : ''}>CANCELLED</option>
+              </select>
+            </td>
+            <td>
+              <a href="javascript:void(0)" class="text-decoration-underline text-dark" style="font-size:0.75rem;" 
+                onclick="window.showToast('Courier En Route: ${trackingCode} via DHL Express Aircraft SS-409')">
+                ${trackingCode}
+              </a>
+            </td>
+            <td class="text-end">
+              <div class="btn-group btn-group-sm">
+                <button class="btn btn-outline-dark rounded-0 px-2 py-1 btn-slip-order" data-order-id="${o.id}" title="Print Packing Slip">
+                  SLIP
+                </button>
+                <button class="btn btn-outline-danger rounded-0 px-2 py-1 btn-delete-order" data-order-id="${o.id}" title="Remove Order">
+                  &times;
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Attach event listeners
+      tbody.querySelectorAll('.order-status-select').forEach(select => {
+        select.addEventListener('change', async (e) => {
+          const ordId = e.target.getAttribute('data-order-id');
+          const newStatus = e.target.value;
+          const res = await API.updateOrderStatus(ordId, newStatus);
+          if (res && res.success) {
+            const found = cachedOrders.find(x => x.id === ordId);
+            if (found) found.status = newStatus;
+            showToast(`Order ${ordId} status changed to ${newStatus.toUpperCase()}`);
+            computeExecutiveMetrics();
+          }
+        });
+      });
+
+      tbody.querySelectorAll('.btn-slip-order').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const ordId = btn.getAttribute('data-order-id');
+          openPackingSlip(ordId);
+        });
+      });
+
+      tbody.querySelectorAll('.btn-delete-order').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const ordId = btn.getAttribute('data-order-id');
+          if (confirm(`Archive and delete Order ${ordId}?`)) {
+            await API.deleteOrder(ordId);
+            cachedOrders = cachedOrders.filter(x => x.id !== ordId);
+            showToast(`Order ${ordId} removed.`);
+            renderOrdersTable();
+            computeExecutiveMetrics();
+          }
+        });
+      });
+    }
+
+    // Packing Slip Dialog
+    function openPackingSlip(orderId) {
+      const order = cachedOrders.find(o => o.id === orderId);
+      if (!order) return;
+      const items = typeof order.items === 'string' ? JSON.parse(order.items) : (order.items || []);
+      const container = document.getElementById('slip-content');
+
+      container.innerHTML = `
+        <div class="slip-header d-flex justify-content-between align-items-center">
+          <div>
+            <h3 class="font-brand fw-bold mb-1">SUPERSCIENCE</h3>
+            <div class="font-mono small text-muted">CENTRAL STORE // DISPATCH MANIFEST</div>
+          </div>
+          <div class="text-end font-mono">
+            <h5 class="fw-bold mb-0">${order.id}</h5>
+            <div class="small text-muted">DATE: ${order.created_at ? new Date(order.created_at).toLocaleDateString() : 'Oct 16, 2026'}</div>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-4 font-mono small">
+          <div class="col-6">
+            <strong>RECIPIENT CUSTOMER:</strong>
+            <div>${order.customer_name || 'Valued Customer'}</div>
+            <div>${order.customer_email}</div>
+            <div>${order.customer_address || 'Flagship District'}</div>
+            <div>${order.customer_city || 'Venice'}, ${order.customer_country || 'USA'}</div>
+          </div>
+          <div class="col-6 text-end">
+            <strong>LOGISTICS SPEC:</strong>
+            <div>CARRIER: DHL EXPRESS WORLDWIDE</div>
+            <div>TRACKING: DHL-SS-${(order.id || '98214').replace(/\D/g, '') || '48201'}-EXP</div>
+            <div>QC VERIFIED: PASSED (3-STEP TENSION AUDIT)</div>
+          </div>
+        </div>
+
+        <table class="table table-bordered font-mono small mb-4">
+          <thead class="table-light">
+            <tr>
+              <th>PRODUCT</th>
+              <th>SIZE</th>
+              <th>QTY</th>
+              <th class="text-end">PRICE</th>
+              <th class="text-end">LINE TOTAL</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${items.map(it => `
+              <tr>
+                <td class="fw-bold">${it.name}</td>
+                <td>${it.size || 'L'}</td>
+                <td>${it.quantity}</td>
+                <td class="text-end">${formatPrice(it.price)}</td>
+                <td class="text-end">${formatPrice(it.price * it.quantity)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" class="text-end fw-bold">SUBTOTAL:</td>
+              <td class="text-end">${formatPrice(order.subtotal || order.total)}</td>
+            </tr>
+            ${order.discount > 0 ? `
+              <tr class="text-success">
+                <td colspan="4" class="text-end fw-bold">DISCOUNT (${order.promo_code || 'PROMO'}):</td>
+                <td class="text-end">-${formatPrice(order.discount)}</td>
+              </tr>
+            ` : ''}
+            <tr>
+              <td colspan="4" class="text-end fw-bold">ESTIMATED DISPATCH:</td>
+              <td class="text-end">${order.shipping > 0 ? formatPrice(order.shipping) : 'FREE'}</td>
+            </tr>
+            <tr class="fs-6 fw-bold table-light">
+              <td colspan="4" class="text-end">TOTAL DUE:</td>
+              <td class="text-end">${formatPrice(order.total)}</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <div class="p-3 bg-light border text-center font-mono small text-secondary">
+          IN SCIENCE WE TRUST // BIO-ENZYME WASHED HEAVYWEIGHT COTTON // HASSLE-FREE 30-DAY EXCHANGE
+        </div>
+      `;
+
+      const modal = new bootstrap.Modal(document.getElementById('packingSlipModal'));
+      modal.show();
+    }
+
+    /* ==========================================================================
+       3. Products Management
+       ========================================================================== */
+    async function fetchProducts() {
+      try {
+        const res = await API.getProducts('all');
+        cachedProducts = res && res.data ? res.data : [];
+        renderProductsTable();
+      } catch (e) {
+        console.error('Failed to fetch products:', e);
+      }
+    }
+
+    function renderProductsTable() {
+      const tbody = document.getElementById('products-table-body');
+      const badgeCount = document.getElementById('tab-badge-products');
+      if (badgeCount) badgeCount.textContent = cachedProducts.length;
+
+      const searchVal = (document.getElementById('product-search-input')?.value || '').toLowerCase().trim();
+
+      let filtered = cachedProducts.filter(p => {
+        if (currentCategoryFilter !== 'all' && (p.category || '').toLowerCase() !== currentCategoryFilter) {
+          return false;
+        }
+        if (searchVal) {
+          const matchName = (p.name || '').toLowerCase().includes(searchVal);
+          const matchId = (p.id || '').toLowerCase().includes(searchVal);
+          const matchGsm = (p.gsm || '').toLowerCase().includes(searchVal);
+          return matchName || matchId || matchGsm;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">No products found matching filters.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(p => {
+        const thumb = p.images && p.images.primary ? p.images.primary : 'assets/products/d0d159a5-2fc7-4bb2-b155-ccdcc942f226.jfif';
+        const sizes = p.sizes || [
+          { size: 'S', inStock: true },
+          { size: 'M', inStock: true },
+          { size: 'L', inStock: true },
+          { size: 'XL', inStock: true }
+        ];
+
+        const sizesHtml = sizes.map(s => `
+          <span class="size-stock-chip ${s.inStock ? 'in-stock' : 'out-of-stock'}" title="${s.size}: ${s.inStock ? 'In Stock' : 'Out of Stock'}">
+            ${s.size}
+          </span>
+        `).join('');
+
+        return `
+          <tr>
+            <td>
+              <div class="d-flex align-items-center gap-3">
+                <img src="${thumb}" alt="${p.name}" class="product-thumb">
+                <div>
+                  <strong class="text-dark">${p.name}</strong>
+                  <div class="text-muted font-mono" style="font-size:0.7rem;">SKU: ${p.id}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="badge bg-light text-dark border font-mono">${(p.category || 'TOPS').toUpperCase()}</span>
+            </td>
+            <td>
+              <div><strong>${p.gsm || '380 GSM'}</strong></div>
+              <div class="text-secondary small text-truncate" style="max-width: 220px;" title="${p.fabric || ''}">${p.fabric || '100% Combed Cotton'}</div>
+            </td>
+            <td>
+              <strong class="fs-6 text-dark">${formatPrice(p.price)}</strong>
+            </td>
+            <td style="white-space: nowrap;"><div class="size-stock-group">${sizesHtml}</div></td>
+            <td>★ ${p.rating || '5.0'} (${p.reviewsCount || 0})</td>
+            <td class="text-end">
+              <div class="btn-group btn-group-sm">
+                <button class="btn btn-outline-dark rounded-0 px-2 py-1 btn-edit-product" data-product-id="${p.id}" title="Edit Price / Specs">
+                  EDIT
+                </button>
+                <button class="btn btn-outline-danger rounded-0 px-2 py-1 btn-delete-product" data-product-id="${p.id}" title="Delete Product">
+                  &times;
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Event handlers for Edit & Delete
+      tbody.querySelectorAll('.btn-edit-product').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const pId = btn.getAttribute('data-product-id');
+          const p = cachedProducts.find(x => x.id === pId);
+          if (p) {
+            document.getElementById('edit-p-id').value = p.id;
+            document.getElementById('edit-p-name').value = p.name;
+            document.getElementById('edit-p-price').value = p.price;
+            document.getElementById('edit-p-gsm').value = p.gsm || '380 GSM';
+            const modal = new bootstrap.Modal(document.getElementById('editProductModal'));
+            modal.show();
+          }
+        });
+      });
+
+      tbody.querySelectorAll('.btn-delete-product').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const pId = btn.getAttribute('data-product-id');
+          if (confirm(`Remove product ${pId} from catalog?`)) {
+            await API.deleteProduct(pId);
+            cachedProducts = cachedProducts.filter(x => x.id !== pId);
+            showToast(`Product ${pId} removed from catalog.`);
+            renderProductsTable();
+            computeExecutiveMetrics();
+          }
+        });
+      });
+    }
+
+    /* ==========================================================================
+       4. Consultations & Showroom Bookings
+       ========================================================================== */
+    async function fetchConsultations() {
+      try {
+        const res = await API.getConsultations();
+        cachedConsultations = res && res.data ? res.data : [];
+        const badge = document.getElementById('tab-badge-consultations');
+        if (badge) badge.textContent = cachedConsultations.length;
+
+        const tbody = document.getElementById('consultations-table-body');
+        if (cachedConsultations.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">No sizing inquiries received yet.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = cachedConsultations.map(c => `
+          <tr>
+            <td><strong>#${c.id}</strong></td>
+            <td class="fw-bold">${c.name}</td>
+            <td>${c.email}</td>
+            <td>${c.height || '--'} / ${c.weight || '--'} / ${c.bf ? c.bf + '%' : '--'}</td>
+            <td><span class="badge bg-light text-dark border font-mono">${(c.fit_preference || 'OVERSIZED').toUpperCase()}</span></td>
+            <td class="text-truncate" style="max-width: 250px;" title="${c.questions || ''}">${c.questions || c.garment_interest || 'Standard Consultation'}</td>
+            <td>
+              <select class="order-status-select rounded-0" onchange="API.updateConsultationStatus(${c.id}, this.value); window.showToast('Inquiry #${c.id} updated.');">
+                <option value="pending" ${c.status === 'pending' ? 'selected' : ''}>PENDING</option>
+                <option value="answered" ${c.status === 'answered' ? 'selected' : ''}>ANSWERED</option>
+                <option value="archived" ${c.status === 'archived' ? 'selected' : ''}>ARCHIVED</option>
+              </select>
+            </td>
+            <td class="text-muted">${c.created_at ? new Date(c.created_at).toLocaleDateString() : 'Today'}</td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error('Error fetching consultations:', e);
+      }
+    }
+
+    async function fetchBookings() {
+      try {
+        const res = await API.getBookings();
+        cachedBookings = res && res.data ? res.data : [];
+        const badge = document.getElementById('tab-badge-bookings');
+        if (badge) badge.textContent = cachedBookings.length;
+
+        const tbody = document.getElementById('bookings-table-body');
+        if (cachedBookings.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">No showroom appointments scheduled yet.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = cachedBookings.map(b => `
+          <tr>
+            <td><strong>#${b.id}</strong></td>
+            <td class="fw-bold">${b.name}</td>
+            <td>${b.email}<br><small class="text-muted">${b.phone || '--'}</small></td>
+            <td><strong>${b.booking_date}</strong><br><span class="text-secondary small">${b.time_slot}</span></td>
+            <td>${b.experience_focus || 'Private Fitting'}</td>
+            <td>${b.guests || 1} guest(s)</td>
+            <td>
+              <select class="order-status-select rounded-0" onchange="API.updateBookingStatus(${b.id}, this.value); window.showToast('Booking #${b.id} updated.');">
+                <option value="confirmed" ${b.status === 'confirmed' ? 'selected' : ''}>CONFIRMED</option>
+                <option value="completed" ${b.status === 'completed' ? 'selected' : ''}>COMPLETED</option>
+                <option value="cancelled" ${b.status === 'cancelled' ? 'selected' : ''}>CANCELLED</option>
+              </select>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-outline-dark rounded-0 py-1 px-2" onclick="window.showToast('Reminder notification sent to ${b.email}');">
+                NOTIFY
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error('Error fetching bookings:', e);
+      }
+    }
+
+    async function fetchNewsletter() {
+      try {
+        const res = await API.getNewsletter();
+        cachedNewsletter = res && res.data ? res.data : [];
+        const badge = document.getElementById('badge-newsletter-count');
+        if (badge) badge.textContent = cachedNewsletter.length;
+
+        const tbody = document.getElementById('newsletter-table-body');
+        if (cachedNewsletter.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="3" class="text-center py-3 text-muted">No subscribers yet.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = cachedNewsletter.map(n => `
+          <tr>
+            <td class="fw-bold">${n.email}</td>
+            <td><span class="badge bg-light text-dark border font-mono">${(n.source || 'footer').toUpperCase()}</span></td>
+            <td class="text-muted">${n.created_at ? new Date(n.created_at).toLocaleDateString() : 'Today'}</td>
+          </tr>
+        `).join('');
+      } catch (e) {}
+    }
+
+    /* ==========================================================================
+       5. Executive Analytics Computation
+       ========================================================================== */
+    function computeExecutiveMetrics() {
+      const grossRevenue = cachedOrders.reduce((sum, o) => sum + Number(o.total || 0), 0);
+      const totalOrdersCount = cachedOrders.length;
+      const aov = totalOrdersCount > 0 ? (grossRevenue / totalOrdersCount) : 0;
+
+      // Update KPI strip
+      const revEl = document.getElementById('kpi-gross-revenue');
+      if (revEl) revEl.textContent = formatPrice(grossRevenue);
+
+      const ordEl = document.getElementById('kpi-total-orders');
+      if (ordEl) ordEl.textContent = totalOrdersCount;
+
+      const aovEl = document.getElementById('kpi-aov');
+      if (aovEl) aovEl.textContent = formatPrice(aov);
+
+      const prodEl = document.getElementById('kpi-product-count');
+      if (prodEl) prodEl.textContent = cachedProducts.length;
+
+      const bookEl = document.getElementById('kpi-bookings-count');
+      if (bookEl) bookEl.textContent = cachedBookings.length;
+
+      const consultEl = document.getElementById('kpi-consultations-count');
+      if (consultEl) consultEl.textContent = cachedConsultations.length;
+
+      // Pipeline distribution counts
+      const confirmed = cachedOrders.filter(o => (o.status || 'confirmed').toLowerCase() === 'confirmed').length;
+      const qc = cachedOrders.filter(o => (o.status || '').toLowerCase() === 'qc_verified').length;
+      const dispatched = cachedOrders.filter(o => (o.status || '').toLowerCase() === 'dispatched').length;
+      const delivered = cachedOrders.filter(o => (o.status || '').toLowerCase() === 'delivered').length;
+
+      document.getElementById('pipeline-confirmed').textContent = confirmed;
+      document.getElementById('pipeline-qc').textContent = qc;
+      document.getElementById('pipeline-dispatched').textContent = dispatched;
+      document.getElementById('pipeline-delivered').textContent = delivered;
+
+      // Category breakdown calculation
+      let teesRev = 0;
+      let shortsRev = 0;
+      let capsRev = 0;
+
+      cachedOrders.forEach(o => {
+        const items = typeof o.items === 'string' ? JSON.parse(o.items) : (o.items || []);
+        items.forEach(it => {
+          const val = Number(it.price || 0) * (it.quantity || 1);
+          const name = (it.name || '').toLowerCase();
+          if (name.includes('short')) shortsRev += val;
+          else if (name.includes('cap') || name.includes('hat')) capsRev += val;
+          else teesRev += val;
+        });
+      });
+
+      if (grossRevenue === 0 || (teesRev + shortsRev + capsRev) === 0) {
+        document.getElementById('cat-rev-tees').textContent = `₱0.00 (0%)`;
+        document.getElementById('cat-bar-tees').style.width = `0%`;
+        document.getElementById('cat-rev-shorts').textContent = `₱0.00 (0%)`;
+        document.getElementById('cat-bar-shorts').style.width = `0%`;
+        document.getElementById('cat-rev-caps').textContent = `₱0.00 (0%)`;
+        document.getElementById('cat-bar-caps').style.width = `0%`;
+      } else {
+        const catTotal = teesRev + shortsRev + capsRev;
+        const teesPct = Math.round((teesRev / catTotal) * 100);
+        const shortsPct = Math.round((shortsRev / catTotal) * 100);
+        const capsPct = Math.round((capsRev / catTotal) * 100);
+
+        document.getElementById('cat-rev-tees').textContent = `${formatPrice(teesRev)} (${teesPct}%)`;
+        document.getElementById('cat-bar-tees').style.width = `${teesPct}%`;
+        document.getElementById('cat-rev-shorts').textContent = `${formatPrice(shortsRev)} (${shortsPct}%)`;
+        document.getElementById('cat-bar-shorts').style.width = `${shortsPct}%`;
+        document.getElementById('cat-rev-caps').textContent = `${formatPrice(capsRev)} (${capsPct}%)`;
+        document.getElementById('cat-bar-caps').style.width = `${capsPct}%`;
+      }
+
+      // Recent Activity Feed
+      const feed = document.getElementById('recent-activity-feed');
+      if (feed) {
+        if (cachedOrders.length === 0) {
+          feed.innerHTML = `<div class="text-muted py-3 text-center">No transactions registered yet.</div>`;
+        } else {
+          feed.innerHTML = cachedOrders.slice(0, 5).map(o => `
+            <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+              <div>
+                <strong>${o.id}</strong> — ${o.customer_name || 'Guest'}
+                <div class="text-muted" style="font-size:0.7rem;">Status: ${(o.status || 'confirmed').toUpperCase()}</div>
+              </div>
+              <strong class="text-dark">${formatPrice(o.total)}</strong>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    /* ==========================================================================
+       6. Event Listeners & Interactive Handlers
+       ========================================================================== */
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAllDashboardData();
+
+      // Top Refresh button
+      document.getElementById('btn-refresh-all')?.addEventListener('click', () => {
+        loadAllDashboardData();
+        showToast('Store metrics refreshed.');
+      });
+
+      // Quick Consultation & Booking refresh
+      document.getElementById('btn-refresh-consultations')?.addEventListener('click', () => {
+        fetchConsultations();
+        showToast('Consultations refreshed.');
+      });
+
+      document.getElementById('btn-refresh-bookings')?.addEventListener('click', () => {
+        fetchBookings();
+        showToast('Showroom bookings refreshed.');
+      });
+
+      // Order Search & Filter Pills
+      document.getElementById('order-search-input')?.addEventListener('input', () => {
+        renderOrdersTable();
+      });
+
+      document.getElementById('btn-filter-order-clear')?.addEventListener('click', () => {
+        const inp = document.getElementById('order-search-input');
+        if (inp) inp.value = '';
+        currentOrderFilter = 'all';
+        document.querySelectorAll('#order-status-filters .filter-btn-pill').forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute('data-status') === 'all');
+        });
+        renderOrdersTable();
+      });
+
+      document.querySelectorAll('#order-status-filters .filter-btn-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#order-status-filters .filter-btn-pill').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentOrderFilter = btn.getAttribute('data-status');
+          renderOrdersTable();
+        });
+      });
+
+      // Product Search & Category Filters
+      document.getElementById('product-search-input')?.addEventListener('input', () => {
+        renderProductsTable();
+      });
+
+      document.querySelectorAll('#product-category-filters .filter-btn-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#product-category-filters .filter-btn-pill').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentCategoryFilter = btn.getAttribute('data-category');
+          renderProductsTable();
+        });
+      });
+
+      // Seed Database Button
+      document.getElementById('btn-seed-db')?.addEventListener('click', async () => {
+        showToast('Re-syncing product catalog with PostgreSQL...');
+        await fetchProducts();
+        showToast('Catalog synchronized successfully.');
+      });
+
+      // Quick Add Product Form Submit
+      document.getElementById('add-product-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newP = {
+          id: document.getElementById('add-p-id').value.trim(),
+          name: document.getElementById('add-p-name').value.trim(),
+          category: document.getElementById('add-p-category').value,
+          price: parseFloat(document.getElementById('add-p-price').value),
+          gsm: document.getElementById('add-p-gsm').value.trim(),
+          fit: document.getElementById('add-p-fit').value.trim(),
+          fabric: document.getElementById('add-p-fabric').value.trim(),
+          description: document.getElementById('add-p-desc').value.trim(),
+          sizes: [
+            { size: 'S', inStock: document.getElementById('add-size-s').checked },
+            { size: 'M', inStock: document.getElementById('add-size-m').checked },
+            { size: 'L', inStock: document.getElementById('add-size-l').checked },
+            { size: 'XL', inStock: document.getElementById('add-size-xl').checked }
+          ]
+        };
+
+        const res = await API.addProduct(newP);
+        if (res && res.success) {
+          showToast(`Created product ${newP.id} (${newP.name}).`);
+          bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide();
+          await fetchProducts();
+          computeExecutiveMetrics();
+        }
+      });
+
+      // Edit Product Form Submit
+      document.getElementById('edit-product-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const pId = document.getElementById('edit-p-id').value;
+        const updates = {
+          name: document.getElementById('edit-p-name').value.trim(),
+          price: parseFloat(document.getElementById('edit-p-price').value),
+          gsm: document.getElementById('edit-p-gsm').value.trim()
+        };
+
+        const res = await API.updateProduct(pId, updates);
+        if (res && res.success) {
+          showToast(`Product ${pId} updated.`);
+          bootstrap.Modal.getInstance(document.getElementById('editProductModal')).hide();
+          await fetchProducts();
+          computeExecutiveMetrics();
+        }
+      });
+
+      // New Promo Code Submit
+      document.getElementById('create-promo-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const code = document.getElementById('promo-code-input').value.trim().toUpperCase();
+        const val = document.getElementById('promo-val-input').value;
+        const type = document.getElementById('promo-type-input').value;
+        const note = document.getElementById('promo-note-input').value.trim();
+
+        const tbody = document.getElementById('promo-codes-table-body');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${code}</strong></td>
+          <td>${type === 'percent' ? val + '%' : '₱' + Number(val).toLocaleString('en-PH', {minimumFractionDigits:2})} OFF</td>
+          <td>${note || 'Custom seller promotion'}</td>
+          <td><span class="badge bg-success font-mono">ACTIVE</span></td>
+        `;
+        tbody.prepend(tr);
+
+        showToast(`Promo Code ${code} created.`);
+        bootstrap.Modal.getInstance(document.getElementById('newPromoModal')).hide();
+      });
+
+      // Export CSV Button
+      document.getElementById('btn-export-csv')?.addEventListener('click', () => {
+        if (cachedOrders.length === 0) {
+          showToast('No orders available to export.');
+          return;
+        }
+
+        let csv = 'Order ID,Date,Customer,Email,City,Country,Items,Subtotal,Discount,Shipping,Total,Status\n';
+        cachedOrders.forEach(o => {
+          const items = typeof o.items === 'string' ? JSON.parse(o.items) : (o.items || []);
+          const itemsStr = items.map(i => `${i.name} (${i.size}) x${i.quantity}`).join('; ');
+          csv += `"${o.id}","${o.created_at || ''}","${o.customer_name || ''}","${o.customer_email || ''}","${o.customer_city || ''}","${o.customer_country || ''}","${itemsStr}",${o.subtotal || 0},${o.discount || 0},${o.shipping || 0},${o.total || 0},"${o.status || 'confirmed'}"\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `SUPERSCIENCE_ORDERS_${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast('Exported orders CSV successfully.');
+      });
+
+      // Synchronize active view title in topbar when tabs change
+      document.querySelectorAll('#sellerTabs .sidebar-nav-link').forEach(btn => {
+        btn.addEventListener('shown.bs.tab', (e) => {
+          const title = btn.getAttribute('data-title') || btn.querySelector('span')?.innerText.trim();
+          const titleEl = document.getElementById('active-view-title');
+          if (titleEl && title) {
+            titleEl.innerText = title;
+          }
+          // Close mobile sidebar if open
+          document.getElementById('adminSidebar')?.classList.remove('show');
+        });
+      });
+
+      // Mobile sidebar toggle
+      document.getElementById('btn-toggle-sidebar')?.addEventListener('click', () => {
+        document.getElementById('adminSidebar')?.classList.toggle('show');
+      });
+
+      // Logout Execution
+      document.getElementById('btn-confirm-logout-execute')?.addEventListener('click', () => {
+        const modalEl = document.getElementById('logoutConfirmModal');
+        if (modalEl) {
+          const inst = bootstrap.Modal.getInstance(modalEl);
+          if (inst) inst.hide();
+        }
+        showToast('Logged out of seller console. Returning to store...');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 500);
+      });
+    });
+  </script>
+</body>
+</html>

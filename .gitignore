@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+
+# Test & scratch scripts
+scratch/
+
+# IDE and agent directories
+.vscode/
+.gemini/
+.agent/
+.claude/
+.cursor/
+.grok/
+.impeccable/
+.kiro/
+
+# OS generated files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,343 @@
+/* ==========================================================================
+   SUPERSCIENCE // Athlete Profile & Biomechanical Telemetry (profile.html)
+   ========================================================================== */
+
+/* Breadcrumb Sub-Header */
+.profile-breadcrumb-bar {
+  background-color: var(--ss-surface-light);
+  border-bottom: 1px solid var(--ss-border);
+  padding: 10px 0;
+  font-family: var(--font-mono);
+  font-size: 0.725rem;
+  letter-spacing: 0.05em;
+  color: var(--ss-muted);
+}
+
+.profile-breadcrumb-bar a {
+  color: var(--ss-black);
+  text-decoration: none;
+}
+
+.profile-breadcrumb-bar a:hover {
+  text-decoration: underline;
+}
+
+/* Athlete Hero Banner */
+.athlete-hero-section {
+  background-color: var(--ss-white);
+  border-bottom: 1px solid var(--ss-border);
+  padding: 36px 0 28px 0;
+}
+
+.athlete-avatar-box {
+  width: 72px;
+  height: 72px;
+  background-color: var(--ss-black);
+  color: var(--ss-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--ss-black);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.athlete-badge-pass {
+  background-color: var(--ss-black);
+  color: var(--ss-white);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 4px 8px;
+  border-radius: 0;
+}
+
+.athlete-badge-id {
+  background-color: var(--ss-surface-light);
+  color: var(--ss-black);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 4px 8px;
+  border: 1px solid var(--ss-border);
+  border-radius: 0;
+}
+
+/* Telemetry Counter Tiles */
+.profile-stat-tile {
+  background-color: var(--ss-white);
+  border: 1px solid var(--ss-border);
+  padding: 20px 18px;
+  transition: border-color var(--ss-transition-fast), transform var(--ss-transition-fast), box-shadow var(--ss-transition-fast);
+  height: 100%;
+}
+
+.profile-stat-tile:hover {
+  border-color: var(--ss-black);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+}
+
+.profile-stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--ss-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.profile-stat-value {
+  font-family: var(--font-brand);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--ss-black);
+  font-variant-numeric: tabular-nums;
+}
+
+.profile-stat-sub {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ss-text-muted);
+  margin-top: 4px;
+}
+
+/* Tab Navigation Header */
+.profile-tabs-wrapper {
+  background-color: var(--ss-surface-light);
+  border-bottom: 1px solid var(--ss-border);
+  position: sticky;
+  top: 61px;
+  z-index: 1020;
+}
+
+.profile-tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ss-muted);
+  font-family: var(--font-mono);
+  font-size: 0.775rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: all var(--ss-transition-fast);
+  white-space: nowrap;
+}
+
+.profile-tab-btn:hover {
+  color: var(--ss-black);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.profile-tab-btn.active {
+  color: var(--ss-black);
+  border-bottom-color: var(--ss-black);
+  background-color: var(--ss-white);
+  font-weight: 700;
+}
+
+/* Order Cards & Tracking Stepper */
+.order-specimen-card {
+  background-color: var(--ss-white);
+  border: 1px solid var(--ss-border);
+  transition: border-color var(--ss-transition-fast);
+  margin-bottom: 24px;
+}
+
+.order-specimen-card:hover {
+  border-color: var(--ss-black);
+}
+
+.order-card-header {
+  padding: 16px 20px;
+  background-color: var(--ss-surface-light);
+  border-bottom: 1px solid var(--ss-border);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.order-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding: 24px 20px 16px 20px;
+}
+
+.order-stepper::before {
+  content: '';
+  position: absolute;
+  top: 36px;
+  left: 40px;
+  right: 40px;
+  height: 2px;
+  background-color: #e5e5e5;
+  z-index: 1;
+}
+
+.stepper-step {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  background-color: var(--ss-white);
+  padding: 0 8px;
+}
+
+.stepper-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background-color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  transition: all var(--ss-transition-fast);
+}
+
+.stepper-step.completed .stepper-icon {
+  background-color: var(--ss-black);
+  border-color: var(--ss-black);
+  color: var(--ss-white);
+}
+
+.stepper-step.active .stepper-icon {
+  background-color: #fff;
+  border-color: var(--ss-black);
+  color: var(--ss-black);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.stepper-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--ss-text-muted);
+}
+
+.stepper-step.completed .stepper-label,
+.stepper-step.active .stepper-label {
+  color: var(--ss-black);
+}
+
+/* Biomechanical Fit Form */
+.bio-input-group label {
+  font-family: var(--font-mono);
+  font-size: 0.725rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.bio-input-group .form-control,
+.bio-input-group .form-select {
+  border: 1px solid var(--ss-black);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  padding: 10px 14px;
+}
+
+.bio-input-group .form-control:focus,
+.bio-input-group .form-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+  border-color: var(--ss-black);
+}
+
+.fit-matrix-box {
+  background-color: var(--ss-black);
+  color: var(--ss-white);
+  padding: 24px;
+  font-family: var(--font-mono);
+}
+
+.fit-matrix-metric {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8125rem;
+}
+
+/* Specimen Vault Item Card */
+.vault-item-card {
+  background-color: var(--ss-white);
+  border: 1px solid var(--ss-border);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.vault-item-card:hover {
+  border-color: var(--ss-black);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+.vault-img-container {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--ss-surface-light);
+}
+
+.vault-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--ss-transition-normal);
+}
+
+.vault-item-card:hover .vault-img-container img {
+  transform: scale(1.03);
+}
+
+/* Workout Protocol Card in Profile */
+.protocol-preview-card {
+  border: 1px solid var(--ss-border);
+  background-color: var(--ss-white);
+  padding: 24px;
+  transition: border-color var(--ss-transition-fast);
+}
+
+.protocol-preview-card:hover {
+  border-color: var(--ss-black);
+}
+
+.exercise-telemetry-table {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  margin-bottom: 0;
+}
+
+.exercise-telemetry-table th {
+  background-color: var(--ss-surface-light);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 8px 12px;
+}
+
+.exercise-telemetry-table td {
+  padding: 10px 12px;
+  vertical-align: middle;
+}

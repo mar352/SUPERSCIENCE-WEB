@@ -1,0 +1,988 @@
+/* ==========================================================================
+   SUPERSCIENCE // Gymshark-Calibrated Minimalist E-Commerce Design System
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:ital,wght@1,700&display=swap');
+
+:root {
+  /* Core Monochromatic Palette - Strict High-Contrast WCAG Standards */
+  --ss-black: #000000;
+  --ss-dark: #111111;
+  --ss-carbon: #1e1e1e;
+  --ss-white: #ffffff;
+  --ss-surface: #f8f8f9;
+  --ss-surface-light: #f8f8f9;
+  --ss-border: #e5e5e7;
+  --ss-border-dark: rgba(0, 0, 0, 0.16);
+  --ss-text-primary: #000000;
+  --ss-text-secondary: #404040;
+  --ss-text-muted: #666666;
+  --ss-accent-green: #1b8a37;
+
+  /* Typography */
+  --font-brand: 'Space Grotesk', -apple-system, sans-serif;
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Geometry & Layout */
+  --ss-radius: 0px;
+  --ss-transition-fast: 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  --ss-transition-smooth: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --ss-navbar-bottom: 65px;
+}
+
+/* Base & Resets (Impeccable Craft Standards) */
+*, *::before, *::after {
+  border-radius: 0 !important;
+  box-sizing: border-box;
+}
+
+::selection {
+  background-color: var(--ss-black);
+  color: var(--ss-white);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ss-black) !important;
+  outline-offset: 2px !important;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ss-surface-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222222;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ss-black);
+}
+
+html {
+  overflow-x: clip;
+  max-width: 100%;
+  scrollbar-gutter: stable;
+  caret-color: var(--ss-black);
+  text-underline-offset: 4px;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--ss-white);
+  color: var(--ss-text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Zero Layout Shift Guarantee - Prevent Bootstrap from shifting page on scroll-lock */
+body,
+body.modal-open,
+body.ss-drawer-open,
+body[style*="overflow: hidden"],
+body[style*="padding-right"],
+.navbar,
+.navbar-superscience,
+.navbar-superscience.navbar-locked-top {
+  padding-right: 0px !important;
+  margin-right: 0px !important;
+}
+
+/* Maintain sticky navbar positioning when Bootstrap offcanvas or modal opens */
+body.modal-open,
+body[style*="overflow: hidden"],
+body[style*="overflow:hidden"] {
+  overflow: visible !important;
+}
+
+/* Typography Helpers */
+.font-brand {
+  font-family: var(--font-brand);
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.tracking-tight-custom {
+  letter-spacing: -0.02em;
+}
+
+.tracking-wide-custom {
+  letter-spacing: 0.05em;
+}
+
+/* Button Overrides */
+.btn {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  padding: 12px 24px;
+  transition: all var(--ss-transition-fast);
+}
+
+.btn-ss-dark {
+  background-color: var(--ss-black);
+  color: var(--ss-white);
+  border: 1px solid var(--ss-black);
+}
+
+.btn-ss-dark:hover, .btn-ss-dark:focus {
+  background-color: #222222;
+  color: var(--ss-white);
+  border-color: #222222;
+}
+
+.btn-ss-outline {
+  background-color: transparent;
+  color: var(--ss-black);
+  border: 1px solid var(--ss-black);
+}
+
+.btn-ss-outline:hover, .btn-ss-outline:focus {
+  background-color: var(--ss-black);
+  color: var(--ss-white);
+}
+
+.btn-ss-white {
+  background-color: var(--ss-white);
+  color: var(--ss-black);
+  border: 1px solid var(--ss-white);
+}
+
+.btn-ss-white:hover {
+  background-color: #f0f0f0;
+  color: var(--ss-black);
+}
+
+/* ==========================================================================
+   Header & Announcement Bar
+   ========================================================================== */
+.announcement-bar {
+  background-color: var(--ss-black);
+  color: var(--ss-white);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  padding: 8px 16px;
+  text-align: center;
+  position: relative;
+  z-index: 1060 !important;
+}
+
+.navbar-superscience {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1060 !important;
+  background-color: #ffffff !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--ss-border);
+  padding: 14px 0;
+  transition: all 0.2s ease;
+}
+
+.navbar-brand-logo {
+  font-size: 1.5rem;
+  color: var(--ss-black);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-link-custom {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--ss-black) !important;
+  padding: 8px 14px !important;
+  letter-spacing: 0.03em;
+  position: relative;
+}
+
+.nav-link-custom::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 14px;
+  right: 14px;
+  height: 2px;
+  background-color: var(--ss-black);
+  transform: scaleX(0);
+  transition: transform var(--ss-transition-fast);
+}
+
+.nav-link-custom:hover::after,
+.nav-link-custom.active::after {
+  transform: scaleX(1);
+}
+
+.header-action-btn {
+  background: transparent;
+  border: none;
+  color: var(--ss-black);
+  padding: 6px 10px;
+  position: relative;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-counter {
+  position: absolute;
+  top: 0px;
+  right: 2px;
+  background-color: var(--ss-black);
+  color: var(--ss-white);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 2px 5px;
+  min-width: 16px;
+  text-align: center;
+  line-height: 1;
+}
+
+/* Athlete Profile Navbar Dropdown */
+.profile-nav-dropdown {
+  position: relative;
+}
+
+.profile-dropdown-menu {
+  min-width: 290px;
+  border-radius: 0 !important;
+  border: 1px solid var(--ss-black) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
+  padding: 0;
+  margin-top: 10px !important;
+  background-color: var(--ss-white);
+  z-index: 1080 !important;
+}
+
+.profile-dropdown-menu .dropdown-item {
+  font-family: var(--font-mono);
+  font-size: 0.775rem;
+  letter-spacing: 0.03em;
+  color: var(--ss-black);
+  padding: 10px 16px;
+  transition: all var(--ss-transition-fast);
+}
+
+.profile-dropdown-menu .dropdown-item:hover,
+.profile-dropdown-menu .dropdown-item:focus {
+  background-color: var(--ss-black);
+  color: var(--ss-white);
+}
+
+.profile-dropdown-menu .dropdown-item:hover svg,
+.profile-dropdown-menu .dropdown-item:focus svg {
+  stroke: var(--ss-white);
+}
+
+.profile-dropdown-menu .dropdown-divider {
+  margin: 0;
+  border-top-color: var(--ss-border);
+}
+
+/* ==========================================================================
+   Hero Section
+   ========================================================================== */
+.hero-wrapper {
+  background-color: var(--ss-surface-light);
+  border-bottom: 1px solid var(--ss-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-editorial-col {
+  background-color: var(--ss-surface-light);
+}
+
+.hero-subject-container {
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 3 / 4;
+  position: relative;
+  background: #e9e9e9;
+  border: 1px solid var(--ss-border);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.hero-subject-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+.hero-photo-tag {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  padding: 8px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-transform: uppercase;
+}
+
+.hero-content {
+  padding: 48px 24px;
+}
+
+.hero-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ss-text-muted);
+  margin-bottom: 12px;
+}
+
+.hero-title {
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.hero-subtitle {
+  font-size: 1.0625rem;
+  color: var(--ss-text-secondary);
+  max-width: 480px;
+  margin-bottom: 28px;
+}
+
+/* ==========================================================================
+   Category Spotlight Cards (Gymshark 3-Col Layout)
+   ========================================================================== */
+.category-card {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  overflow: hidden;
+  background-color: var(--ss-dark);
+  aspect-ratio: 4 / 5;
+}
+
+.category-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.category-card:hover img {
+  transform: scale(1.04);
+}
+
+.category-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.85) 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 24px;
+}
+
+.category-title {
+  color: var(--ss-white);
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
+
+.category-cta {
+  color: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ==========================================================================
+   Science-Based Workout Programs Showcase (Featured on Home Page)
+   ========================================================================== */
+.training-section {
+  background-color: var(--ss-surface-light);
+  border-top: 1px solid var(--ss-border);
+  border-bottom: 1px solid var(--ss-border);
+  padding: 64px 0;
+}
+
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ss-text-muted);
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.section-desc {
+  color: var(--ss-text-secondary);
+  font-size: 0.9375rem;
+  max-width: 600px;
+}
+
+.program-card {
+  background: var(--ss-white);
+  border: 1px solid var(--ss-border);
+  transition: all 0.25s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.program-card:hover {
+  border-color: var(--ss-black);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+}
+
+.program-img-wrapper {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background-color: var(--ss-dark);
+}
+
+.program-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.program-card:hover .program-img-wrapper img {
+  transform: scale(1.03);
+}
+
+.program-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: var(--ss-black);
+  color: var(--ss-white);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  letter-spacing: 0.04em;
+}
+
+.program-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.program-title {
+  font-size: 1.125rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.program-meta-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+}
+
+.program-meta-item {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ss-text-secondary);
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--ss-border);
+  display: flex;
+  justify-content: space-between;
+}
+
+.program-meta-item strong {
+  color: var(--ss-black);
+}
+
+/* ==========================================================================
+   Product Catalog Grid (Gymshark Signature UX)
+   ========================================================================== */
+.catalog-section {
+  padding: 64px 0;
+}
+
+.filter-bar {
+  border-bottom: 1px solid var(--ss-border);
+  padding-bottom: 16px;
+  margin-bottom: 32px;
+}
+
+.filter-pill-btn,
+.program-filter-btn {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background-color: var(--ss-white);
+  border: 1px solid var(--ss-border);
+  color: var(--ss-text-secondary);
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all var(--ss-transition-fast);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  white-space: nowrap;
+  outline: none;
+}
+
+.filter-pill-btn:hover,
+.program-filter-btn:hover {
+  color: var(--ss-black);
+  border-color: var(--ss-black);
+  background-color: var(--ss-surface);
+}
+
+.filter-pill-btn.active,
+.program-filter-btn.active {
+  background-color: var(--ss-black) !important;
+  color: var(--ss-white) !important;
+  border-color: var(--ss-black) !important;
+  font-weight: 700;
+}
+
+.product-card {
+  position: relative;
+  background: var(--ss-white);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.product-card:hover {
+  border-color: var(--ss-border);
+}
+
+.product-image-container {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background-color: #f6f6f7;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.25s ease, transform 0.3s ease;
+}
+
+.product-card:hover .product-img {
+  transform: scale(1.02);
+}
+
+.wishlist-btn-card {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  transition: background 0.15s ease;
+}
+
+.wishlist-btn-card:hover {
+  background: var(--ss-white);
+}
+
+.wishlist-btn-card.active svg {
+  fill: var(--ss-black);
+}
+
+.product-badge-tag {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: var(--ss-black);
+  color: var(--ss-white);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 3px 6px;
+  letter-spacing: 0.05em;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Gymshark Hover Quick-Size Bar */
+.quick-size-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid var(--ss-border);
+  padding: 8px 6px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  transform: translateY(100%);
+  transition: transform var(--ss-transition-smooth);
+  z-index: 10;
+}
+
+.product-card:hover .quick-size-bar {
+  transform: translateY(0);
+}
+
+.quick-size-btn {
+  background: var(--ss-white);
+  border: 1px solid var(--ss-border);
+  color: var(--ss-black);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  min-width: 34px;
+  cursor: pointer;
+  transition: all var(--ss-transition-fast);
+}
+
+.quick-size-btn:hover {
+  background: var(--ss-black);
+  color: var(--ss-white);
+  border-color: var(--ss-black);
+}
+
+/* Color Swatches */
+.swatch-group {
+  display: flex;
+  gap: 6px;
+  margin: 10px 0 6px 0;
+}
+
+.swatch-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50% !important;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.swatch-dot:hover, .swatch-dot.active {
+  transform: scale(1.3);
+  box-shadow: 0 0 0 1px var(--ss-black);
+}
+
+.product-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  letter-spacing: -0.01em;
+}
+
+.product-spec-line {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ss-text-muted);
+  margin-bottom: 4px;
+}
+
+.product-price {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--ss-black);
+}
+
+/* ==========================================================================
+   Slide-Over Right Drawers (Bag, Search, Wishlist - Strictly Under Header)
+   ========================================================================== */
+.offcanvas-bag,
+.offcanvas-search,
+.offcanvas-wishlist,
+.offcanvas-profile,
+.offcanvas-drawer,
+.offcanvas-start,
+.offcanvas.offcanvas-end,
+.offcanvas.offcanvas-start {
+  top: var(--ss-drawer-top, 56px) !important;
+  height: calc(100vh - var(--ss-drawer-top, 56px)) !important;
+  height: calc(100dvh - var(--ss-drawer-top, 56px)) !important;
+  width: 440px !important;
+  max-width: 100vw;
+  border-left: 1px solid var(--ss-border) !important;
+  border-top: none !important;
+  background: var(--ss-white) !important;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.12) !important;
+  z-index: 1050 !important;
+}
+
+.offcanvas-start,
+.offcanvas.offcanvas-start {
+  border-left: none !important;
+  border-right: 1px solid var(--ss-border) !important;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Offcanvas backdrop: strictly below header so header remains 100% clear and clickable */
+.offcanvas-backdrop {
+  top: var(--ss-drawer-top, 56px) !important;
+  height: calc(100vh - var(--ss-drawer-top, 56px)) !important;
+  height: calc(100dvh - var(--ss-drawer-top, 56px)) !important;
+  z-index: 1045 !important;
+  background-color: rgba(0, 0, 0, 0.45) !important;
+  transition: opacity 0.25s ease !important;
+}
+
+.offcanvas-backdrop.show {
+  opacity: 1 !important;
+}
+
+.header-action-btn.active {
+  background: var(--ss-surface-light, #f0f0f2);
+  color: var(--ss-black);
+}
+
+.search-tag-pill {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  background: var(--ss-surface-light);
+  border: 1px solid var(--ss-border);
+  color: var(--ss-black);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+.search-tag-pill:hover,
+.search-tag-pill.active {
+  background: var(--ss-black);
+  color: #ffffff;
+  border-color: var(--ss-black);
+}
+
+.search-result-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ss-border);
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+.search-result-card:hover {
+  background-color: var(--ss-surface-light);
+}
+
+.wishlist-drawer-card {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  border-bottom: 1px solid var(--ss-border);
+  align-items: center;
+}
+.wishlist-drawer-thumb {
+  width: 70px;
+  height: 88px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--ss-border);
+}
+
+.free-shipping-tracker {
+  background: var(--ss-surface-light);
+  border-bottom: 1px solid var(--ss-border);
+  padding: 16px 20px;
+}
+
+.shipping-progress-track {
+  height: 4px;
+  background: var(--ss-border);
+  position: relative;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.shipping-progress-fill {
+  height: 100%;
+  background: var(--ss-black);
+  transition: width 0.35s ease;
+}
+
+.cart-item-row {
+  display: flex;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--ss-border);
+}
+
+.cart-item-thumb {
+  width: 80px;
+  height: 100px;
+  object-fit: cover;
+  background: #f0f0f0;
+}
+
+.qty-control-box {
+  display: inline-flex;
+  border: 1px solid var(--ss-border);
+}
+
+.qty-btn {
+  background: transparent;
+  border: none;
+  width: 28px;
+  height: 28px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qty-display {
+  width: 32px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-left: 1px solid var(--ss-border);
+  border-right: 1px solid var(--ss-border);
+}
+
+
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.footer-superscience {
+  background-color: var(--ss-black);
+  color: var(--ss-white);
+  padding: 64px 0 32px 0;
+  border-top: 1px solid #222222;
+}
+
+.footer-heading {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+  color: var(--ss-white);
+}
+
+.footer-link-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-link-list li {
+  margin-bottom: 10px;
+}
+
+.footer-link-list a {
+  color: #888888;
+  text-decoration: none;
+  font-size: 0.8125rem;
+  transition: color 0.15s ease;
+}
+
+.footer-link-list a:hover {
+  color: var(--ss-white);
+}
+
+.footer-input {
+  background: #111111;
+  border: 1px solid #333333;
+  color: #ffffff;
+  padding: 10px 14px;
+  font-size: 0.8125rem;
+}
+
+.footer-input:focus {
+  background: #181818;
+  border-color: #ffffff;
+  color: #ffffff;
+  outline: none;
+}
+
+/* Toast Container */
+.toast-container-ss {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1090;
+}
+
+.toast-ss {
+  background: var(--ss-black);
+  color: var(--ss-white);
+  border: 1px solid #333333;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
