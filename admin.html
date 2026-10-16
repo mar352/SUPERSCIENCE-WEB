@@ -110,7 +110,7 @@
       </h2>
 
       <p style="color: #aaa; font-size: 13.5px; line-height: 1.6; margin-bottom: 20px;">
-        The <strong>SUPERSCIENCE Seller & Admin Dashboard</strong> is an enterprise operations console containing real-time gross revenue metrics, confidential customer shipping data, size inventory controls, and PostgreSQL database telemetry.
+        The <strong>SUPERSCIENCE Seller & Admin Dashboard</strong> is an operations console containing real-time gross revenue metrics, confidential customer shipping data, and product inventory controls.
       </p>
 
       <div style="background: #111; border: 1px solid #262626; padding: 16px; margin-bottom: 22px; font-family: monospace; font-size: 12px; line-height: 1.75;">
@@ -251,7 +251,7 @@
             </button>
           </li>
 
-          <div class="sidebar-group-title mt-3">ARCHIVE & ENGINE</div>
+          <div class="sidebar-group-title mt-3">MARKETING & CAMPAIGNS</div>
 
           <li class="nav-item">
             <button class="sidebar-nav-link" id="tab-marketing-btn" data-bs-toggle="tab" data-bs-target="#tab-marketing" type="button" data-title="Promotions & Newsletter Archive">
@@ -259,14 +259,6 @@
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
               </svg>
               <span>Promos & Subscribers</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="sidebar-nav-link" id="tab-telemetry-btn" data-bs-toggle="tab" data-bs-target="#tab-telemetry" type="button" data-title="Database & Server Telemetry">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-              </svg>
-              <span>PostgreSQL Telemetry</span>
             </button>
           </li>
         </ul>
@@ -797,62 +789,6 @@
             </div>
           </div>
         </div>
-
-        <!-- ====================================================================
-             TAB 7: Database & Server Telemetry
-             ==================================================================== -->
-        <div class="tab-pane fade" id="tab-telemetry" role="tabpanel">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-              <h5 class="font-brand fw-bold mb-0">POSTGRESQL & SERVER TELEMETRY CONSOLE</h5>
-              <span class="font-mono text-muted small">Node.js Express backend and PostgreSQL health diagnostics.</span>
-            </div>
-            <button id="btn-seed-db" class="btn btn-sm btn-ss-dark font-mono rounded-0">
-              SEED / RE-SYNC CATALOG
-            </button>
-          </div>
-
-          <div id="db-alert-msg" class="p-3 bg-white border font-mono small mb-4" style="display: none;"></div>
-
-          <div class="row g-4">
-            <div class="col-12 col-lg-6">
-              <div class="p-3 border h-100 bg-white">
-                <h6 class="font-mono fw-bold mb-2">OPTION 1: FREE CLOUD DATABASE (SUPABASE / NEON)</h6>
-                <p class="small text-secondary mb-3">
-                  You can get a free instant PostgreSQL database from <strong>Supabase</strong> (supabase.com) or <strong>Neon</strong> (neon.tech) in 30 seconds.
-                </p>
-                <ol class="small text-secondary ps-3 mb-3">
-                  <li>Create a free database on <strong>Supabase</strong> or <strong>Neon</strong>.</li>
-                  <li>Copy the connection string (URI).</li>
-                  <li>Open the file <code>.env</code> in your project root.</li>
-                  <li>Set <code>DATABASE_URL</code> to your URI:</li>
-                </ol>
-                <div class="code-box mb-2">
-DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres?sslmode=require
-                </div>
-              </div>
-            </div>
-
-            <div class="col-12 col-lg-6">
-              <div class="p-3 border h-100 bg-white">
-                <h6 class="font-mono fw-bold mb-2">OPTION 2: LOCAL POSTGRESQL (PGADMIN / LOCALHOST)</h6>
-                <p class="small text-secondary mb-3">
-                  If you have PostgreSQL installed on your machine or inside Docker:
-                </p>
-                <div class="code-box mb-2">
-# In .env file:
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/superscience
-
-# Or individual settings:
-PGHOST=localhost
-PGPORT=5432
-PGUSER=postgres
-PGPASSWORD=your_password
-PGDATABASE=superscience
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         </div>
