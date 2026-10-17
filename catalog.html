@@ -65,7 +65,7 @@
           <li class="nav-item">
             <a class="nav-link nav-link-custom" href="contact.html">Fitting & Showroom</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item seller-only" id="nav-seller-dashboard" style="display: none !important;">
             <a class="nav-link nav-link-custom" href="admin.html">Dashboard</a>
           </li>
         </ul>
@@ -80,7 +80,7 @@
           </svg>
         </button>
 
-        <button class="header-action-btn open-wishlist-trigger" title="Wishlist">
+        <button class="header-action-btn open-wishlist-trigger" id="open-wishlist-btn" title="Wishlist">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path
               d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
@@ -123,7 +123,7 @@
                   <line x1="3" y1="6" x2="21" y2="6"></line>
                   <path d="M16 10a4 4 0 0 1-8 0"></path>
                 </svg>
-                <span>Orders & Specimen Tracking</span>
+                <span>Orders & Tracking</span>
               </a>
             </li>
             <li>
@@ -132,7 +132,7 @@
                   <circle cx="12" cy="12" r="10"></circle>
                   <polyline points="12 6 12 12 16 14"></polyline>
                 </svg>
-                <span>Biomechanical Fit Matrix</span>
+                <span>Size Calculator</span>
               </a>
             </li>
             <li>
@@ -140,7 +140,7 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                 </svg>
-                <span>Saved Specimen Vault</span>
+                <span>Saved Items</span>
               </a>
             </li>
             <li>
@@ -150,7 +150,7 @@
                   <line x1="12" y1="20" x2="12" y2="4"></line>
                   <line x1="6" y1="20" x2="6" y2="14"></line>
                 </svg>
-                <span>Active Workout Protocol</span>
+                <span>Workout Programs</span>
               </a>
             </li>
             <li>
@@ -159,11 +159,11 @@
                   <circle cx="12" cy="12" r="3"></circle>
                   <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                 </svg>
-                <span>Credentials & Address</span>
+                <span>Account & Address</span>
               </a>
             </li>
-            <li><hr class="dropdown-divider my-1"></li>
-            <li>
+            <li class="seller-only" style="display: none !important;"><hr class="dropdown-divider my-1"></li>
+            <li class="seller-only" style="display: none !important;">
               <a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2 small" href="admin.html">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
@@ -171,7 +171,7 @@
                   <line x1="6" y1="6" x2="6.01" y2="6"></line>
                   <line x1="6" y1="18" x2="6.01" y2="18"></line>
                 </svg>
-                <span>Seller & Atelier Dashboard</span>
+                <span>Seller Dashboard</span>
                 <span class="badge bg-dark text-white rounded-0 ms-auto font-mono" style="font-size:0.6rem;">SELLER</span>
               </a>
             </li>
@@ -188,7 +188,14 @@
           </ul>
         </div>
 
-        <button class="header-action-btn" id="open-bag-btn" title="Your Bag">
+        <!-- Customer Support Live Chat Trigger (Visible when logged in) -->
+        <button class="header-action-btn open-chat-trigger" id="navbar-chat-btn" title="Customer Support" aria-label="Open Customer Support" style="display: none;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </button>
+
+        <button class="header-action-btn open-bag-trigger" id="open-bag-btn" title="Your Bag">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -231,7 +238,16 @@
           </svg>
           Athlete Profile
         </a>
-        <a href="admin.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase border-top d-flex align-items-center justify-content-between">
+        <a href="javascript:void(0)" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase d-flex align-items-center justify-content-between" id="mobile-nav-chat-link" style="display:none;" onclick="if(window.openConciergeChat) window.openConciergeChat();">
+          <div class="d-flex align-items-center">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span>Support Chat</span>
+          </div>
+          <span class="badge bg-success font-mono rounded-0" style="font-size:0.6rem;">LIVE</span>
+        </a>
+        <a href="admin.html" id="mobile-nav-seller-link" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase border-top d-flex align-items-center justify-content-between seller-only" style="display: none !important;">
           <span class="d-flex align-items-center">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2">
               <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
@@ -264,7 +280,7 @@
           </p>
         </div>
         <div class="col-12 col-md-4 text-md-end mt-3 mt-md-0">
-          <span class="badge bg-black font-mono text-white px-3 py-2 rounded-0" style="font-size:0.75rem;"><span id="header-specimens-count">12</span> SPECIMENS AVAILABLE</span>
+          <span class="badge bg-black font-mono text-white px-3 py-2 rounded-0" style="font-size:0.75rem;"><span id="header-specimens-count">12</span> PIECES AVAILABLE</span>
         </div>
       </div>
     </div>
@@ -279,7 +295,7 @@
       <div class="filter-bar mb-4">
         <!-- Category Tabs (Full Width - Zero Orphan Buttons) -->
         <div class="d-flex flex-wrap gap-2 mb-3">
-          <button class="filter-pill-btn active" data-category="all">ALL SPECIMENS</button>
+          <button class="filter-pill-btn active" data-category="all">ALL APPAREL</button>
           <button class="filter-pill-btn" data-category="tshirts">T-SHIRTS</button>
           <button class="filter-pill-btn" data-category="shorts">SHORTS</button>
           <button class="filter-pill-btn" data-category="caps">CAPS</button>
@@ -289,8 +305,8 @@
         <div
           class="d-flex flex-column flex-md-row justify-content-between align-items-md-center pt-2 border-top gap-3 font-mono small">
           <div class="text-muted d-flex align-items-center gap-2">
-            <span class="badge bg-black font-mono text-white px-2 py-1" id="catalog-specimens-count">12 SPECIMENS</span>
-            <span>DROP 01 // OVERSIZED BOX-CUT SPECIMENS</span>
+            <span class="badge bg-black font-mono text-white px-2 py-1" id="catalog-specimens-count">12 PRODUCTS</span>
+            <span>DROP 01 // OVERSIZED BOX-CUT APPAREL</span>
           </div>
 
           <!-- Sort & View Switcher -->
@@ -363,7 +379,7 @@
             <li><a href="programs.html">Workout Protocols</a></li>
             <li><a href="contact.html">Fitting & Showroom</a></li>
             <li><a href="profile.html">Athlete Profile</a></li>
-            <li><a href="admin.html">Seller Dashboard</a></li>
+            <li class="seller-only" style="display: none !important;"><a href="admin.html">Seller Dashboard</a></li>
           </ul>
         </div>
 
@@ -426,7 +442,7 @@
           <path d="M16 10a4 4 0 0 1-8 0"></path>
         </svg>
         <div class="fw-bold text-uppercase mb-2">YOUR BAG IS EMPTY</div>
-        <p class="text-secondary small mb-4">You currently have no garment specimens selected for dispatch.</p>
+        <p class="text-secondary small mb-4">You currently have no items selected for dispatch.</p>
         <button class="btn btn-ss-dark rounded-0 px-4" data-bs-dismiss="offcanvas">EXPLORE DROP 01</button>
       </div>
 
@@ -481,7 +497,7 @@
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <h5 class="offcanvas-title font-mono text-uppercase fs-6 fw-bold mb-0" id="searchOffcanvasLabel">SEARCH SPECIMENS</h5>
+        <h5 class="offcanvas-title font-mono text-uppercase fs-6 fw-bold mb-0" id="searchOffcanvasLabel">SEARCH PRODUCTS</h5>
       </div>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
@@ -538,7 +554,7 @@
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
         </svg>
         <h5 class="offcanvas-title font-mono text-uppercase fs-6 fw-bold mb-0" id="wishlistOffcanvasLabel">
-          SAVED SPECIMENS (<span id="wishlist-drawer-count">0</span>)
+          SAVED ITEMS (<span id="wishlist-drawer-count">0</span>)
         </h5>
       </div>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -557,9 +573,9 @@
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-muted mb-3">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
         </svg>
-        <div class="fw-bold text-uppercase mb-2 font-mono">NO SAVED SPECIMENS</div>
+        <div class="fw-bold text-uppercase mb-2 font-mono">NO SAVED ITEMS</div>
         <p class="text-muted small mb-4">Tap the heart icon on any garment to save it to your wishlist drawer.</p>
-        <button class="btn btn-ss-dark rounded-0 px-4" data-bs-dismiss="offcanvas">EXPLORE SPECIMENS</button>
+        <button class="btn btn-ss-dark rounded-0 px-4" data-bs-dismiss="offcanvas">EXPLORE COLLECTION</button>
       </div>
 
       <!-- Items List -->
@@ -583,7 +599,7 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
       <div class="modal-content rounded-0">
         <div class="modal-header border-bottom">
-          <span class="font-mono small text-muted">GARMENT SPECIMEN SPEC SHEET</span>
+          <span class="font-mono small text-muted">GARMENT SPEC SHEET</span>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body p-4">
@@ -747,7 +763,7 @@
               </svg>
             </div>
             <h3 class="fw-bold font-brand mb-1">ORDER CONFIRMED</h3>
-            <p class="text-secondary small mb-3">Thank you for your order. Your garment specimens have been registered
+            <p class="text-secondary small mb-3">Thank you for your order. Your garments have been registered
               for dispatch.</p>
 
             <div class="p-3 border bg-light font-mono text-start small mb-4 mx-auto" style="max-width: 440px;">

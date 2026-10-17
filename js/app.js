@@ -3,6 +3,8 @@ import { products } from "./products.js";
 import { workoutPrograms } from "./programs.js";
 import { Store, formatPrice } from "./store.js";
 import { API } from "./api.js";
+import { Auth } from "./auth.js";
+import { Chat } from "./chat.js";
 
 /* ==========================================================================
    Header & Drawer Metrics Alignment (Zero-Gap Sticky Alignment)
@@ -17,21 +19,113 @@ export function updateHeaderDrawerMetrics() {
   document.documentElement.style.setProperty("--ss-drawer-top", `${navBottom}px`);
 }
 
+// Drawer header button active states helper
+function updateHeaderButtonActiveStates(activeOffcanvasEl = null) {
+  const bagOpen = activeOffcanvasEl && (activeOffcanvasEl.id === "offcanvasBag" || activeOffcanvasEl.id === "bagOffcanvas");
+  const wishlistOpen = activeOffcanvasEl && activeOffcanvasEl.id === "wishlistOffcanvas";
+  const searchOpen = activeOffcanvasEl && (activeOffcanvasEl.id === "searchOffcanvas" || activeOffcanvasEl.id === "searchModal");
+
+  document.querySelectorAll(".open-bag-trigger, #open-bag-btn").forEach(btn => {
+    btn.classList.toggle("active", Boolean(bagOpen));
+  });
+  document.querySelectorAll(".open-wishlist-trigger, #open-wishlist-btn").forEach(btn => {
+    btn.classList.toggle("active", Boolean(wishlistOpen));
+  });
+  document.querySelectorAll(".open-search-trigger, #open-search-btn").forEach(btn => {
+    btn.classList.toggle("active", Boolean(searchOpen));
+  });
+}
+
+// Global coordinator to ensure only ONE offcanvas drawer is open at a time
+export function closeAllDrawers(exceptElement = null) {
+  document.querySelectorAll(".offcanvas.show, .offcanvas.showing").forEach((el) => {
+    if (el !== exceptElement) {
+      if (window.bootstrap) {
+        const inst = bootstrap.Offcanvas.getInstance(el);
+        if (inst) {
+          inst.hide();
+        }
+      }
+    }
+  });
+  document.querySelectorAll(".dropdown-menu.show").forEach((m) => {
+    m.classList.remove("show");
+    const toggle = m.closest(".dropdown")?.querySelector('[data-bs-toggle="dropdown"]');
+    if (toggle) {
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.classList.remove("show");
+    }
+  });
+}
+window.closeAllDrawers = closeAllDrawers;
+
 // Global listeners to keep drawer top perfectly synchronized with the header
 window.addEventListener("resize", updateHeaderDrawerMetrics);
 window.addEventListener("scroll", updateHeaderDrawerMetrics, { passive: true });
-document.addEventListener("show.bs.offcanvas", updateHeaderDrawerMetrics);
 
-document.addEventListener("DOMContentLoaded", () => {
-  Store.init();
+// Collapse any already-open offcanvas when another is triggered
+document.addEventListener("show.bs.offcanvas", (e) => {
   updateHeaderDrawerMetrics();
-  initApp();
+  const openingEl = e.target;
+  closeAllDrawers(openingEl);
+  updateHeaderButtonActiveStates(openingEl);
+});
+
+// Maintain active state when offcanvas finishes showing
+document.addEventListener("shown.bs.offcanvas", (e) => {
+  updateHeaderButtonActiveStates(e.target);
+});
+
+// Clean up backdrops and update active indicators when offcanvas hides
+document.addEventListener("hidden.bs.offcanvas", () => {
+  const activeRemaining = document.querySelector(".offcanvas.show:not(.hiding), .offcanvas.showing");
+  updateHeaderButtonActiveStates(activeRemaining);
+
+  setTimeout(() => {
+    const anyOpen = document.querySelector(".offcanvas.show, .offcanvas.showing");
+    if (!anyOpen) {
+      document.querySelectorAll(".offcanvas-backdrop").forEach((b) => b.remove());
+      document.body.classList.remove("modal-open");
+      document.body.style.removeProperty("overflow");
+      document.body.style.removeProperty("padding-right");
+      updateHeaderButtonActiveStates(null);
+    }
+  }, 100);
+});
+
+// Close all open drawers when dropdowns (like user profile) open
+document.addEventListener("show.bs.dropdown", () => {
+  closeAllDrawers();
 });
 
 let currentCategory = "all";
 let currentSort = "featured";
 let currentGridView = 4; // 4 columns desktop default
 let currentProgramFilter = "all";
+let activeWorkoutPrograms = [...workoutPrograms];
+let isFetchingPrograms = false;
+
+// Live active products state (PostgreSQL database primary with bundled fallback)
+let activeProducts = [...products];
+let isFetchingProducts = false;
+
+export async function fetchLiveProducts(force = false) {
+  if (isFetchingProducts && !force) return activeProducts;
+  isFetchingProducts = true;
+  try {
+    const res = await API.getProducts("all");
+    if (res && res.data && Array.isArray(res.data) && res.data.length > 0) {
+      activeProducts = res.data;
+      window.activeProducts = activeProducts;
+      window.dispatchEvent(new CustomEvent("superscience:products-loaded", { detail: activeProducts }));
+    }
+  } catch (e) {
+    console.warn("[Products] Live sync offline, using bundled fallback:", e.message);
+  } finally {
+    isFetchingProducts = false;
+  }
+  return activeProducts;
+}
 
 function normalizeCategory(cat) {
   if (!cat) return "all";
@@ -40,6 +134,78 @@ function normalizeCategory(cat) {
   if (c === "cap" || c === "hat" || c === "accessories") return "caps";
   if (c === "short") return "shorts";
   return c;
+}
+
+/* ==========================================================================
+   Seller Preview Mode Banner & Restrictions Engine
+   ========================================================================== */
+export function setupSellerModeUI() {
+  const isSeller = Auth.isSellerMode();
+  const existingBanner = document.getElementById("seller-mode-alert-bar");
+  if (document.body) {
+    document.body.classList.toggle("seller-mode-active", isSeller);
+  }
+  if (document.documentElement) {
+    document.documentElement.classList.toggle("seller-mode-active", isSeller);
+  }
+
+  // Universal button remover for sellers across all pages, modals, sidebars, and header navigation
+  const buyerElements = document.querySelectorAll(
+    ".open-wishlist-trigger, #open-wishlist-btn, .open-bag-trigger, #open-bag-btn, #bag-checkout-btn, #btn-proceed-checkout, #checkout-drawer-btn, #move-all-wishlist-to-bag, #wishlist-footer-actions, #btn-move-vault-to-bag, #pdp-modal-add-btn, .quick-size-bar, .wishlist-btn-card, .quick-add-wishlist-btn, .quick-add-apparel-btn, #bag-footer-checkout, .move-vault-single-btn"
+  );
+  buyerElements.forEach(el => {
+    el.style.display = isSeller ? "none" : "";
+  });
+
+  if (Auth && typeof Auth.syncSellerVisibility === "function") {
+    Auth.syncSellerVisibility();
+  }
+
+  if (!isSeller) {
+    if (existingBanner) existingBanner.remove();
+    updateHeaderDrawerMetrics();
+    return;
+  }
+
+  const admin = Auth.getAdmin();
+  const adminName = admin ? (admin.name || "Seller") : "Seller";
+
+  if (!existingBanner) {
+    const banner = document.createElement("div");
+    banner.id = "seller-mode-alert-bar";
+    banner.className = "seller-mode-alert-bar";
+    banner.innerHTML = `
+      <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center py-2 px-3 gap-2">
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge bg-warning text-dark font-mono fw-bold rounded-0" style="font-size:0.68rem; letter-spacing:0.04em;">SELLER STORE PREVIEW</span>
+          <span class="font-mono text-white small" style="font-size:0.75rem;">
+            Viewing as <strong>${adminName}</strong>. Buyer actions (Add to Bag, Wishlist, Checkout) are <strong>strictly disabled</strong>.
+          </span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <a href="admin.html" class="btn btn-warning btn-sm rounded-0 font-mono fw-bold py-1 px-3 text-dark text-decoration-none" style="font-size:0.72rem;">
+            &larr; BACK TO DASHBOARD
+          </a>
+          <button id="btn-seller-exit-preview" class="btn btn-outline-light btn-sm rounded-0 font-mono py-1 px-2" style="font-size:0.72rem;" title="Exit Seller View to test Buyer mode">
+            EXIT SELLER VIEW
+          </button>
+        </div>
+      </div>
+    `;
+
+    const announcementBar = document.querySelector(".announcement-bar");
+    if (announcementBar) {
+      announcementBar.parentNode.insertBefore(banner, announcementBar);
+    } else {
+      document.body.prepend(banner);
+    }
+
+    banner.querySelector("#btn-seller-exit-preview")?.addEventListener("click", () => {
+      Auth.exitSellerMode();
+    });
+  }
+
+  updateHeaderDrawerMetrics();
 }
 
 function initApp() {
@@ -52,6 +218,16 @@ function initApp() {
     currentProgramFilter = urlParams.get("split");
   }
 
+  // Initialize and synchronize athlete/admin authentication session
+  Auth.init();
+  Chat.init();
+
+
+  // Setup Seller Mode Banner & Restrictions
+  setupSellerModeUI();
+
+  // 1. Initial immediate render with cached/bundled items
+  renderHomepageHero();
   renderCategorySpotlights();
   renderWorkoutPrograms();
   renderProducts();
@@ -66,11 +242,60 @@ function initApp() {
   updateHeaderBadges();
   updateHeaderDrawerMetrics();
 
+  // 2. Asynchronously pull latest live database products from PostgreSQL & re-render
+  fetchLiveProducts().then(() => {
+    renderProducts();
+    renderFeaturedProducts();
+    renderWishlistContents();
+  }).catch(err => {
+    console.warn("[Products Init Sync Error]:", err);
+  });
+
+  // 3. Listen for cross-tab or admin product additions/edits & hero updates
+  window.addEventListener("superscience:products-updated", async () => {
+    await fetchLiveProducts(true);
+    renderProducts();
+    renderFeaturedProducts();
+    renderWishlistContents();
+  });
+
+  window.addEventListener("superscience:hero-updated", () => {
+    renderHomepageHero();
+  });
+
+  window.addEventListener("storage", async (e) => {
+    if (e.key === "superscience:last-product-update") {
+      await fetchLiveProducts(true);
+      renderProducts();
+      renderFeaturedProducts();
+      renderWishlistContents();
+    }
+    if (e.key === "superscience:hero-settings") {
+      renderHomepageHero();
+    }
+  });
+
+  // Re-sync when user returns or focuses tab from admin panel
+  window.addEventListener("focus", async () => {
+    await fetchLiveProducts(true);
+    renderProducts();
+    renderFeaturedProducts();
+    renderHomepageHero();
+  });
+
   // Listen to store updates
   window.addEventListener("superscience:state-updated", () => {
     updateHeaderBadges();
     renderBagContents();
     renderWishlistContents();
+  });
+
+  // Listen to authentication state changes
+  window.addEventListener("superscience:auth-updated", () => {
+    Auth.updateNavigationHeaderAuth();
+    setupSellerModeUI();
+    renderProducts();
+    renderFeaturedProducts();
   });
 }
 
@@ -89,6 +314,70 @@ function updateHeaderBadges() {
     wishlistBadge.textContent = wCount;
     wishlistBadge.style.display = wCount > 0 ? "inline-block" : "none";
   });
+}
+
+/* ==========================================================================
+   Homepage Hero Section CMS Sync
+   ========================================================================== */
+function applyHeroSettingsToDOM(hero) {
+  if (!hero) return;
+
+  const badgeEl = document.getElementById("hero-badge");
+  if (badgeEl && hero.badge) badgeEl.textContent = hero.badge;
+
+  const titleEl = document.getElementById("hero-title");
+  if (titleEl && hero.title) titleEl.textContent = hero.title;
+
+  const subEl = document.getElementById("hero-subtitle");
+  if (subEl && hero.subtitle) subEl.textContent = hero.subtitle;
+
+  const pBtn = document.getElementById("hero-primary-btn");
+  if (pBtn) {
+    if (hero.primaryBtnText) pBtn.textContent = hero.primaryBtnText;
+    if (hero.primaryBtnLink) pBtn.setAttribute("href", hero.primaryBtnLink);
+  }
+
+  const sBtn = document.getElementById("hero-secondary-btn");
+  if (sBtn) {
+    if (hero.secondaryBtnText) sBtn.textContent = hero.secondaryBtnText;
+    if (hero.secondaryBtnLink) sBtn.setAttribute("href", hero.secondaryBtnLink);
+  }
+
+  const imgEl = document.getElementById("hero-photo-img");
+  if (imgEl && hero.imageUrl) {
+    imgEl.src = hero.imageUrl;
+    imgEl.alt = hero.title || "SUPERSCIENCE Hero Editorial Campaign";
+  }
+
+  const tagLeft = document.getElementById("hero-photo-tag-left");
+  if (tagLeft && hero.photoTagLeft) tagLeft.textContent = hero.photoTagLeft;
+
+  const tagRight = document.getElementById("hero-photo-tag-right");
+  if (tagRight && hero.photoTagRight) tagRight.textContent = hero.photoTagRight;
+}
+
+async function renderHomepageHero() {
+  const heroSection = document.getElementById("homepage-hero-section");
+  if (!heroSection) return;
+
+  // 1. Instant zero-flicker render from cached settings
+  try {
+    const cached = localStorage.getItem("superscience:hero-settings");
+    if (cached) {
+      applyHeroSettingsToDOM(JSON.parse(cached));
+    }
+  } catch (e) {}
+
+  // 2. Fetch live settings from server API
+  try {
+    const res = await API.getHeroSettings();
+    if (res && res.success && res.hero) {
+      applyHeroSettingsToDOM(res.hero);
+      localStorage.setItem("superscience:hero-settings", JSON.stringify(res.hero));
+    }
+  } catch (err) {
+    console.warn("[Hero Settings Sync Error]:", err);
+  }
 }
 
 /* ==========================================================================
@@ -142,27 +431,49 @@ function renderCategorySpotlights() {
 }
 
 /* ==========================================================================
-   Science-Based Workout Programs Showcase (Featured on Home Page)
+   Science-Based Workout Programs Showcase (Featured on Home Page & Programs)
    ========================================================================== */
-function renderWorkoutPrograms() {
+async function renderWorkoutPrograms() {
   const container = document.getElementById("workout-programs-grid");
   if (!container) return;
 
-  const filtered = workoutPrograms.filter(p => {
+  // Attempt to fetch latest programs from server API once
+  if (!isFetchingPrograms) {
+    isFetchingPrograms = true;
+    try {
+      const res = await API.getPrograms();
+      if (res && res.data && res.data.length > 0) {
+        activeWorkoutPrograms = res.data;
+      }
+    } catch (e) {
+      console.warn("[Programs] Using bundled workout programs:", e.message);
+    }
+  }
+
+  const filtered = activeWorkoutPrograms.filter(p => {
     if (currentProgramFilter === "all") return true;
     return p.split === currentProgramFilter;
   });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="col-12 py-5 text-center font-mono">
+        <div class="text-muted">No workout protocols registered under "${currentProgramFilter}".</div>
+      </div>
+    `;
+    return;
+  }
 
   container.innerHTML = filtered.map(prog => `
     <div class="col-12 col-md-6 col-lg-4 mb-4">
       <div class="program-card">
         <div class="program-img-wrapper">
-          <img src="${prog.image}" alt="${prog.title}">
+          <img src="${prog.image || 'assets/stock/program_upper_lower.jpg'}" alt="${prog.title}">
           <div class="program-badge">${prog.frequency}</div>
         </div>
         <div class="program-body">
           <div class="program-title">${prog.title}</div>
-          <div class="text-muted small mb-3">${prog.subtitle}</div>
+          <div class="text-muted small mb-3">${prog.subtitle || ''}</div>
           
           <ul class="program-meta-list">
             <li class="program-meta-item"><span>Weekly Volume:</span> <strong>${prog.weeklyVolume}</strong></li>
@@ -196,12 +507,12 @@ function renderProducts() {
   const grid = document.getElementById("product-grid");
   if (!grid) return;
 
-  let list = [...products];
+  let list = [...activeProducts];
 
   // Category filter
   if (currentCategory !== "all") {
     const norm = normalizeCategory(currentCategory);
-    list = list.filter(p => p.category === norm);
+    list = list.filter(p => normalizeCategory(p.category) === norm);
   }
 
   // Sorting
@@ -210,57 +521,91 @@ function renderProducts() {
   } else if (currentSort === "price-desc") {
     list.sort((a, b) => b.price - a.price);
   } else if (currentSort === "gsm") {
-    list.sort((a, b) => parseInt(b.gsm) - parseInt(a.gsm));
+    list.sort((a, b) => (parseInt(b.gsm) || 0) - (parseInt(a.gsm) || 0));
   }
 
   // Dynamic specimens counter badge
   const countBadge = document.getElementById("catalog-specimens-count");
   if (countBadge) {
-    countBadge.textContent = `${list.length} SPECIMENS`;
+    countBadge.textContent = `${list.length} PRODUCTS`;
+  }
+
+  if (list.length === 0) {
+    grid.innerHTML = `
+      <div class="col-12 py-5 text-center font-mono">
+        <div class="text-muted mb-2">No garments found under "${currentCategory.toUpperCase()}".</div>
+        <button class="btn btn-ss-dark btn-sm rounded-0" onclick="setCategoryFilter('all')">VIEW ALL PRODUCTS</button>
+      </div>
+    `;
+    return;
   }
 
   // Grid column classes
   const colClass = currentGridView === 2 ? "col-6 col-md-6" : "col-6 col-md-4 col-lg-3";
 
   grid.innerHTML = list.map(product => {
+    const isSeller = Auth.isSellerMode();
     const inWishlist = Store.isInWishlist(product.id);
+    const primaryImg = (product.images && product.images.primary)
+      ? product.images.primary
+      : (typeof product.images === "string" ? product.images : "assets/products/d0d159a5-2fc7-4bb2-b155-ccdcc942f226.jfif");
+    const colors = (product.colors && product.colors.length > 0) ? product.colors : [{ hex: "#0a0a0a", name: "Blackout" }];
+    const sizes = (product.sizes && product.sizes.length > 0) ? product.sizes : [
+      { size: "S", inStock: true },
+      { size: "M", inStock: true },
+      { size: "L", inStock: true },
+      { size: "XL", inStock: true }
+    ];
+
     return `
       <div class="${colClass} mb-4">
         <div class="product-card" data-product-id="${product.id}">
           <div class="product-image-container">
-            <img class="product-img" src="${product.images.primary}" alt="${product.name}">
+            <img class="product-img" src="${primaryImg}" alt="${product.name}" loading="lazy">
             
-            <button class="wishlist-btn-card ${inWishlist ? 'active' : ''}" data-product-id="${product.id}" title="Save to Wishlist">
+            ${isSeller ? '' : `
+            <button class="wishlist-btn-card ${inWishlist ? 'active' : ''}" 
+                    data-product-id="${product.id}" 
+                    title="Save to Wishlist">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="${inWishlist ? '#000' : 'none'}" stroke="currentColor" stroke-width="2">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
               </svg>
             </button>
+            `}
 
             ${product.badges && product.badges.length > 0 ? `
               <div class="product-badge-tag">${product.badges[0]}</div>
             ` : ''}
 
             <!-- Gymshark Hover Quick-Size Bar -->
+            ${isSeller ? '' : `
             <div class="quick-size-bar">
-              <span class="small font-mono text-muted me-1 d-none d-sm-inline" style="line-height:28px;">SIZE:</span>
-              ${product.sizes.map(s => `
-                <button class="quick-size-btn" data-product-id="${product.id}" data-size="${s.size}" ${!s.inStock ? 'disabled' : ''}>
+              <span class="small font-mono text-muted me-1 d-none d-sm-inline" style="line-height:28px;">
+                SIZE:
+              </span>
+              ${sizes.map(s => `
+                <button class="quick-size-btn" 
+                        data-product-id="${product.id}" 
+                        data-size="${s.size}" 
+                        ${!s.inStock ? 'disabled' : ''}
+                        title="Quick Add ${s.size}">
                   ${s.size}
                 </button>
               `).join('')}
             </div>
+            `}
           </div>
 
           <div class="pt-2">
             <!-- Swatches -->
             <div class="swatch-group">
-              ${product.colors.map((c, i) => `
+              ${colors.map((c, i) => `
                 <div class="swatch-dot ${i === 0 ? 'active' : ''}" style="background-color: ${c.hex};" title="${c.name}" data-color-name="${c.name}"></div>
               `).join('')}
             </div>
 
             <div class="product-title open-pdp-trigger" data-product-id="${product.id}">${product.name}</div>
-            <div class="product-spec-line">${product.gsm} • ${product.fit}</div>
+            <div class="product-spec-line">${product.gsm || '380 GSM'} • ${product.fit || 'Oversized Boxy'}</div>
             <div class="product-price">${formatPrice(product.price)}</div>
           </div>
         </div>
@@ -278,45 +623,69 @@ function renderFeaturedProducts() {
   const grid = document.getElementById("featured-product-grid");
   if (!grid) return;
 
-  const list = products.slice(0, 4);
+  const isSeller = Auth.isSellerMode();
+  const list = activeProducts.slice(0, 4);
 
   grid.innerHTML = list.map(product => {
     const inWishlist = Store.isInWishlist(product.id);
+    const primaryImg = (product.images && product.images.primary)
+      ? product.images.primary
+      : (typeof product.images === "string" ? product.images : "assets/products/d0d159a5-2fc7-4bb2-b155-ccdcc942f226.jfif");
+    const colors = (product.colors && product.colors.length > 0) ? product.colors : [{ hex: "#0a0a0a", name: "Blackout" }];
+    const sizes = (product.sizes && product.sizes.length > 0) ? product.sizes : [
+      { size: "S", inStock: true },
+      { size: "M", inStock: true },
+      { size: "L", inStock: true },
+      { size: "XL", inStock: true }
+    ];
+
     return `
       <div class="col-6 col-md-3 mb-4">
         <div class="product-card" data-product-id="${product.id}">
           <div class="product-image-container">
-            <img class="product-img" src="${product.images.primary}" alt="${product.name}">
+            <img class="product-img" src="${primaryImg}" alt="${product.name}" loading="lazy">
             
-            <button class="wishlist-btn-card ${inWishlist ? 'active' : ''}" data-product-id="${product.id}" title="Save to Wishlist">
+            ${isSeller ? '' : `
+            <button class="wishlist-btn-card ${inWishlist ? 'active' : ''}" 
+                    data-product-id="${product.id}" 
+                    title="Save to Wishlist">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="${inWishlist ? '#000' : 'none'}" stroke="currentColor" stroke-width="2">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
               </svg>
             </button>
+            `}
 
             ${product.badges && product.badges.length > 0 ? `
               <div class="product-badge-tag">${product.badges[0]}</div>
             ` : ""}
 
+            ${isSeller ? '' : `
             <div class="quick-size-bar">
               <div class="quick-size-label">QUICK ADD</div>
               <div class="quick-size-options">
-                ${product.sizes.map(s => `
-                  <button class="quick-size-btn" data-product-id="${product.id}" data-size="${s.size}">${s.size}</button>
+                ${sizes.map(s => `
+                  <button class="quick-size-btn" 
+                          data-product-id="${product.id}" 
+                          data-size="${s.size}" 
+                          ${!s.inStock ? 'disabled' : ''}
+                          title="Quick Add ${s.size}">
+                    ${s.size}
+                  </button>
                 `).join("")}
               </div>
             </div>
+            `}
           </div>
 
           <div class="product-info">
             <div class="product-swatches">
-              ${product.colors.map((c, i) => `
+              ${colors.map((c, i) => `
                 <span class="product-swatch ${i === 0 ? 'active' : ''}" style="background-color: ${c.hex};" title="${c.name}"></span>
               `).join("")}
             </div>
 
             <div class="product-title open-pdp-trigger" data-product-id="${product.id}">${product.name}</div>
-            <div class="product-spec-line">${product.gsm} • ${product.fit}</div>
+            <div class="product-spec-line">${product.gsm || '380 GSM'} • ${product.fit || 'Oversized Boxy'}</div>
             <div class="product-price">${formatPrice(product.price)}</div>
           </div>
         </div>
@@ -332,9 +701,13 @@ function attachProductEvents() {
   document.querySelectorAll(".quick-size-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
+      if (Auth.isSellerMode()) {
+        showToast("⚠️ SELLER ACCOUNT: You cannot add items to bag as a Seller.");
+        return;
+      }
       const pId = btn.getAttribute("data-product-id");
       const size = btn.getAttribute("data-size");
-      const product = products.find(p => p.id === pId);
+      const product = activeProducts.find(p => p.id === pId) || products.find(p => p.id === pId);
       if (product) {
         Store.addToCart(product, size);
         showToast(`Added ${product.name} (Size ${size}) to your bag.`);
@@ -343,10 +716,14 @@ function attachProductEvents() {
     });
   });
 
-  // Wishlist Button
+  // Wishlist Button (Heart)
   document.querySelectorAll(".wishlist-btn-card").forEach(btn => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
+      if (Auth.isSellerMode()) {
+        showToast("⚠️ SELLER ACCOUNT: You cannot heart or wishlist items as a Seller.");
+        return;
+      }
       const pId = btn.getAttribute("data-product-id");
       const added = Store.toggleWishlist(pId);
       btn.classList.toggle("active", added);
@@ -505,12 +882,30 @@ function setupBagDrawer() {
 
 function handleBagTriggerClick(e) {
   e.preventDefault();
-  openBagDrawer();
+  const el = document.getElementById("offcanvasBag") || document.getElementById("bagOffcanvas");
+  if (el && el.classList.contains("show")) {
+    closeBagDrawer();
+  } else {
+    openBagDrawer();
+  }
+}
+
+function closeBagDrawer() {
+  const el = document.getElementById("offcanvasBag") || document.getElementById("bagOffcanvas");
+  if (el && window.bootstrap) {
+    const inst = bootstrap.Offcanvas.getInstance(el) || bagOffcanvas;
+    if (inst) inst.hide();
+  }
 }
 
 function openBagDrawer() {
-  updateHeaderDrawerMetrics();
+  if (Auth.isSellerMode()) {
+    showToast("⚠️ SELLER PREVIEW: Shopping bag is disabled for Seller accounts.");
+    return;
+  }
   const el = document.getElementById("offcanvasBag") || document.getElementById("bagOffcanvas");
+  closeAllDrawers(el);
+  updateHeaderDrawerMetrics();
   if (!bagOffcanvas && el && window.bootstrap) {
     bagOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(el);
   }
@@ -519,9 +914,11 @@ function openBagDrawer() {
     renderBagContents();
   }
 }
+window.openBagDrawer = openBagDrawer;
+window.closeBagDrawer = closeBagDrawer;
 
 function renderBagContents() {
-  const container = document.getElementById("bag-items-list");
+  const container = document.getElementById("bag-items-list") || document.getElementById("bag-items-container");
   const emptyState = document.getElementById("bag-empty-state");
   const trackerMsg = document.getElementById("free-shipping-msg");
   const trackerFill = document.getElementById("free-shipping-fill");
@@ -529,7 +926,7 @@ function renderBagContents() {
   const discountRow = document.getElementById("bag-discount-row");
   const discountEl = document.getElementById("bag-discount-price");
   const totalEl = document.getElementById("bag-total-price");
-  const checkoutBtn = document.getElementById("bag-checkout-btn");
+  const checkoutBtn = document.getElementById("bag-checkout-btn") || document.getElementById("btn-proceed-checkout");
 
   if (!container) return;
 
@@ -613,6 +1010,38 @@ function renderBagContents() {
     }
   }
   if (totalEl) totalEl.textContent = formatPrice(totals.total);
+
+  // Seller Preview Mode Enforcement in Bag Drawer: completely remove checkout button
+  if (Auth.isSellerMode()) {
+    if (checkoutBtn) {
+      checkoutBtn.style.display = "none";
+    }
+    const checkoutFooter = document.getElementById("bag-footer-checkout");
+    if (checkoutFooter) {
+      checkoutFooter.style.display = "none";
+    }
+    let sellerNotice = document.getElementById("bag-seller-mode-notice");
+    if (!sellerNotice && container) {
+      sellerNotice = document.createElement("div");
+      sellerNotice.id = "bag-seller-mode-notice";
+      sellerNotice.className = "alert alert-warning rounded-0 font-mono small py-2 mb-3 border-warning d-flex align-items-center gap-2";
+      sellerNotice.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="flex-shrink-0">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        <div><strong>SELLER ACCOUNT</strong>: You are viewing store in preview mode. Checkout and ordering are disabled for Sellers.</div>
+      `;
+      container.parentNode.insertBefore(sellerNotice, container);
+    }
+  } else {
+    if (checkoutBtn) {
+      checkoutBtn.style.display = "";
+    }
+    const sellerNotice = document.getElementById("bag-seller-mode-notice");
+    if (sellerNotice) sellerNotice.remove();
+  }
 }
 
 /* ==========================================================================
@@ -628,7 +1057,7 @@ function setupWorkoutModal() {
 }
 
 function openWorkoutModal(progId) {
-  const prog = workoutPrograms.find(p => p.id === progId);
+  const prog = activeWorkoutPrograms.find(p => p.id === progId) || workoutPrograms.find(p => p.id === progId);
   if (!prog) return;
 
   const modalEl = document.getElementById("workoutProgramModal") || document.getElementById("workoutDetailModal");
@@ -708,7 +1137,8 @@ function openWorkoutModal(progId) {
   // Apparel Tie-in
   const apparelBox = document.getElementById("modal-prog-apparel");
   if (apparelBox && prog.apparelRecommendation) {
-    const recommendedProduct = products.find(p => p.id === prog.apparelRecommendation.productId);
+    const recId = prog.apparelRecommendation.productId;
+    const recommendedProduct = activeProducts.find(p => p.id === recId) || products.find(p => p.id === recId);
     apparelBox.innerHTML = `
       <div class="p-3 border bg-light d-flex align-items-center justify-content-between">
         <div>
@@ -716,7 +1146,7 @@ function openWorkoutModal(progId) {
           <strong>${prog.apparelRecommendation.name}</strong>
           <div class="small text-muted mt-1">${prog.apparelRecommendation.reason}</div>
         </div>
-        ${recommendedProduct ? `
+        ${(recommendedProduct && !Auth.isSellerMode()) ? `
           <button class="btn btn-ss-dark btn-sm rounded-0 text-nowrap ms-3 quick-add-apparel-btn" data-product-id="${recommendedProduct.id}">
             QUICK ADD TO BAG (${formatPrice(recommendedProduct.price)})
           </button>
@@ -727,6 +1157,10 @@ function openWorkoutModal(progId) {
     const addBtn = apparelBox.querySelector(".quick-add-apparel-btn");
     if (addBtn) {
       addBtn.addEventListener("click", () => {
+        if (Auth.isSellerMode()) {
+          showToast("⚠️ SELLER PREVIEW: Purchasing is disabled for Seller accounts.");
+          return;
+        }
         Store.addToCart(recommendedProduct, "L");
         showToast(`Added ${recommendedProduct.name} to your bag.`);
         openBagDrawer();
@@ -759,7 +1193,7 @@ function setupProductModal() {
 }
 
 function openProductModal(productId) {
-  const product = products.find(p => p.id === productId);
+  const product = activeProducts.find(p => p.id === productId) || products.find(p => p.id === productId);
   if (!product) return;
 
   const modalEl = document.getElementById("productDetailModal");
@@ -768,33 +1202,44 @@ function openProductModal(productId) {
   }
   if (!productModalInstance) return;
 
+  const colors = (product.colors && product.colors.length > 0) ? product.colors : [{ hex: "#0a0a0a", name: "Blackout" }];
+  const sizes = (product.sizes && product.sizes.length > 0) ? product.sizes : [
+    { size: "S", inStock: true },
+    { size: "M", inStock: true },
+    { size: "L", inStock: true },
+    { size: "XL", inStock: true }
+  ];
+  const primaryImg = (product.images && product.images.primary)
+    ? product.images.primary
+    : (typeof product.images === "string" ? product.images : "assets/products/d0d159a5-2fc7-4bb2-b155-ccdcc942f226.jfif");
+
   activeModalProduct = product;
-  activeModalColor = product.colors[0].name;
-  activeModalSize = product.sizes[0].size;
+  activeModalColor = colors[0].name;
+  activeModalSize = sizes[0].size;
 
   const titleEl = document.getElementById("pdp-modal-title");
   if (titleEl) titleEl.textContent = product.name;
   const priceEl = document.getElementById("pdp-modal-price");
   if (priceEl) priceEl.textContent = formatPrice(product.price);
   const descEl = document.getElementById("pdp-modal-desc");
-  if (descEl) descEl.textContent = product.description;
+  if (descEl) descEl.textContent = product.description || "Engineered luxury heavyweight streetwear garment calibrated for hypertrophy athletes.";
   const gsmEl = document.getElementById("pdp-modal-gsm");
-  if (gsmEl) gsmEl.textContent = product.gsm;
+  if (gsmEl) gsmEl.textContent = product.gsm || "380 GSM";
   const fitEl = document.getElementById("pdp-modal-fit");
-  if (fitEl) fitEl.textContent = product.fit;
+  if (fitEl) fitEl.textContent = product.fit || "Oversized Boxy Fit";
   const fabricEl = document.getElementById("pdp-modal-fabric");
-  if (fabricEl) fabricEl.textContent = product.fabric;
+  if (fabricEl) fabricEl.textContent = product.fabric || "100% Combed Heavyweight Organic Cotton";
   const workoutTieInEl = document.getElementById("pdp-modal-workout-tiein");
-  if (workoutTieInEl) workoutTieInEl.textContent = product.workoutTieIn;
+  if (workoutTieInEl) workoutTieInEl.textContent = product.workoutTieIn || "Calibrated for heavy compound lifting.";
 
   // Main Image
   const imgEl = document.getElementById("pdp-modal-main-img");
-  if (imgEl) imgEl.src = product.images.primary;
+  if (imgEl) imgEl.src = primaryImg;
 
   // Color Swatches (supports both pdp-modal-colors and pdp-modal-swatches)
   const colorContainer = document.getElementById("pdp-modal-colors") || document.getElementById("pdp-modal-swatches");
   if (colorContainer) {
-    colorContainer.innerHTML = product.colors.map(c => `
+    colorContainer.innerHTML = colors.map(c => `
       <button class="btn btn-outline-dark btn-sm rounded-0 me-2 mb-2 pdp-color-btn ${c.name === activeModalColor ? 'active' : ''}" data-color-name="${c.name}">
         ${c.name}
       </button>
@@ -812,7 +1257,7 @@ function openProductModal(productId) {
   // Sizes Selector
   const sizeContainer = document.getElementById("pdp-modal-sizes");
   if (sizeContainer) {
-    sizeContainer.innerHTML = product.sizes.map(s => `
+    sizeContainer.innerHTML = sizes.map(s => `
       <button class="btn btn-outline-dark btn-sm rounded-0 me-2 mb-2 pdp-size-btn ${s.size === activeModalSize ? 'active' : ''}" data-size="${s.size}">
         ${s.size}
       </button>
@@ -830,12 +1275,22 @@ function openProductModal(productId) {
   // Add to Bag CTA
   const addToBagBtn = document.getElementById("pdp-modal-add-btn");
   if (addToBagBtn) {
-    addToBagBtn.onclick = () => {
-      Store.addToCart(activeModalProduct, activeModalSize, activeModalColor);
-      showToast(`Added ${activeModalProduct.name} (${activeModalSize}) to your bag.`);
-      productModalInstance.hide();
-      openBagDrawer();
-    };
+    if (Auth.isSellerMode()) {
+      addToBagBtn.style.display = "none";
+    } else {
+      addToBagBtn.style.display = "";
+      addToBagBtn.classList.remove("disabled");
+      addToBagBtn.removeAttribute("disabled");
+      addToBagBtn.innerHTML = `ADD TO BAG`;
+      addToBagBtn.style.cursor = "pointer";
+      addToBagBtn.style.opacity = "1";
+      addToBagBtn.onclick = () => {
+        Store.addToCart(activeModalProduct, activeModalSize, activeModalColor);
+        showToast(`Added ${activeModalProduct.name} (${activeModalSize}) to your bag.`);
+        productModalInstance.hide();
+        openBagDrawer();
+      };
+    }
   }
 
   productModalInstance.show();
@@ -846,9 +1301,23 @@ function openProductModal(productId) {
    ========================================================================== */
 let searchDrawerInstance = null;
 
-function openSearchDrawer() {
-  updateHeaderDrawerMetrics();
+function closeSearchDrawer() {
   const el = document.getElementById("searchOffcanvas") || document.getElementById("searchModal");
+  if (el && window.bootstrap) {
+    if (el.classList.contains("offcanvas") || el.id.includes("Offcanvas")) {
+      const inst = bootstrap.Offcanvas.getInstance(el) || searchDrawerInstance;
+      if (inst) inst.hide();
+    } else {
+      const inst = bootstrap.Modal.getInstance(el) || searchDrawerInstance;
+      if (inst) inst.hide();
+    }
+  }
+}
+
+function openSearchDrawer() {
+  const el = document.getElementById("searchOffcanvas") || document.getElementById("searchModal");
+  closeAllDrawers(el);
+  updateHeaderDrawerMetrics();
   if (!el || !window.bootstrap) return;
 
   if (el.classList.contains("offcanvas") || el.id.includes("Offcanvas")) {
@@ -870,8 +1339,15 @@ function openSearchDrawer() {
 
 function handleSearchTriggerClick(e) {
   e.preventDefault();
-  openSearchDrawer();
+  const el = document.getElementById("searchOffcanvas") || document.getElementById("searchModal");
+  if (el && el.classList.contains("show")) {
+    closeSearchDrawer();
+  } else {
+    openSearchDrawer();
+  }
 }
+window.openSearchDrawer = openSearchDrawer;
+window.closeSearchDrawer = closeSearchDrawer;
 
 function handleSearchKeyboardShortcut(e) {
   if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -947,8 +1423,8 @@ function renderSearchResults(query) {
     return;
   }
 
-  const matches = products.filter(p => {
-    const nameMatch = p.name.toLowerCase().includes(q);
+  const matches = activeProducts.filter(p => {
+    const nameMatch = (p.name || "").toLowerCase().includes(q);
     const catMatch = (p.category || "").toLowerCase().includes(q) || (p.categoryLabel || "").toLowerCase().includes(q);
     const gsmMatch = (p.gsm || "").toLowerCase().includes(q);
     const descMatch = (p.description || "").toLowerCase().includes(q);
@@ -958,24 +1434,27 @@ function renderSearchResults(query) {
   if (matches.length === 0) {
     searchResults.innerHTML = `
       <div class="p-4 text-center text-muted small font-mono">
-        NO SPECIMEN MATCHES FOUND FOR "${q.toUpperCase()}".
+        NO PRODUCTS FOUND FOR "${q.toUpperCase()}".
       </div>
     `;
     return;
   }
 
-  searchResults.innerHTML = matches.map(p => `
-    <div class="search-match-item p-3 border-bottom d-flex align-items-center justify-content-between cursor-pointer" data-product-id="${p.id}" style="cursor: pointer; transition: background 0.15s ease;">
-      <div class="d-flex align-items-center gap-3">
-        <img src="${p.images.primary}" alt="${p.name}" style="width: 50px; height: 60px; object-fit: cover;" class="border">
-        <div>
-          <div class="font-brand fw-bold text-dark fs-6">${p.name}</div>
-          <div class="text-muted font-mono" style="font-size:0.75rem;">${p.gsm || ''} • ${formatPrice(p.price)}</div>
+  searchResults.innerHTML = matches.map(p => {
+    const img = (p.images && p.images.primary) ? p.images.primary : (typeof p.images === "string" ? p.images : "assets/products/d0d159a5-2fc7-4bb2-b155-ccdcc942f226.jfif");
+    return `
+      <div class="search-match-item p-3 border-bottom d-flex align-items-center justify-content-between cursor-pointer" data-product-id="${p.id}" style="cursor: pointer; transition: background 0.15s ease;">
+        <div class="d-flex align-items-center gap-3">
+          <img src="${img}" alt="${p.name}" style="width: 50px; height: 60px; object-fit: cover;" class="border">
+          <div>
+            <div class="font-brand fw-bold text-dark fs-6">${p.name}</div>
+            <div class="text-muted font-mono" style="font-size:0.75rem;">${p.gsm || ''} • ${formatPrice(p.price)}</div>
+          </div>
         </div>
+        <button class="btn btn-outline-dark btn-sm rounded-0 font-mono" style="font-size:0.7rem;">VIEW</button>
       </div>
-      <button class="btn btn-outline-dark btn-sm rounded-0 font-mono" style="font-size:0.7rem;">VIEW</button>
-    </div>
-  `).join("");
+    `;
+  }).join("");
 
   searchResults.querySelectorAll(".search-match-item").forEach(item => {
     item.addEventListener("click", () => {
@@ -995,10 +1474,28 @@ function setupSearchModal() {
    ========================================================================== */
 let wishlistDrawerInstance = null;
 
+function closeWishlistDrawer() {
+  const el = document.getElementById("wishlistOffcanvas") || document.getElementById("wishlistModal");
+  if (el && window.bootstrap) {
+    if (el.classList.contains("offcanvas") || el.id.includes("Offcanvas")) {
+      const inst = bootstrap.Offcanvas.getInstance(el) || wishlistDrawerInstance;
+      if (inst) inst.hide();
+    } else {
+      const inst = bootstrap.Modal.getInstance(el) || wishlistDrawerInstance;
+      if (inst) inst.hide();
+    }
+  }
+}
+
 function openWishlistDrawer() {
+  if (Auth.isSellerMode()) {
+    showToast("⚠️ SELLER PREVIEW: Saved wishlist vault is disabled for Seller accounts.");
+    return;
+  }
+  const el = document.getElementById("wishlistOffcanvas") || document.getElementById("wishlistModal");
+  closeAllDrawers(el);
   updateHeaderDrawerMetrics();
   renderWishlistContents();
-  const el = document.getElementById("wishlistOffcanvas") || document.getElementById("wishlistModal");
   if (!el || !window.bootstrap) return;
 
   if (el.classList.contains("offcanvas") || el.id.includes("Offcanvas")) {
@@ -1012,8 +1509,15 @@ function openWishlistDrawer() {
 
 function handleWishlistTriggerClick(e) {
   e.preventDefault();
-  openWishlistDrawer();
+  const el = document.getElementById("wishlistOffcanvas") || document.getElementById("wishlistModal");
+  if (el && el.classList.contains("show")) {
+    closeWishlistDrawer();
+  } else {
+    openWishlistDrawer();
+  }
 }
+window.openWishlistDrawer = openWishlistDrawer;
+window.closeWishlistDrawer = closeWishlistDrawer;
 
 function setupWishlistDrawer() {
   const el = document.getElementById("wishlistOffcanvas") || document.getElementById("wishlistModal");
@@ -1037,22 +1541,33 @@ function setupWishlistDrawer() {
       Store.saveWishlist();
       renderWishlistContents();
       updateHeaderBadges();
-      showToast("Cleared all saved wishlist specimens.");
+      showToast("Cleared all saved wishlist items.");
     };
   }
 
   const moveAllBtn = document.getElementById("move-all-wishlist-to-bag");
+  const footerActions = document.getElementById("wishlist-footer-actions");
+  if (Auth.isSellerMode()) {
+    if (moveAllBtn) moveAllBtn.style.display = "none";
+    if (footerActions) footerActions.style.display = "none";
+  } else {
+    if (moveAllBtn) moveAllBtn.style.display = "";
+  }
   if (moveAllBtn) {
     moveAllBtn.onclick = () => {
+      if (Auth.isSellerMode()) {
+        showToast("⚠️ SELLER PREVIEW: Moving items to bag is disabled for Seller accounts.");
+        return;
+      }
       const savedIds = [...(Store.state.wishlist || [])];
       if (savedIds.length === 0) {
         showToast("No items in wishlist to move.");
         return;
       }
       savedIds.forEach(id => {
-        const prod = products.find(p => p.id === id);
+        const prod = activeProducts.find(p => p.id === id) || products.find(p => p.id === id);
         if (prod) {
-          Store.addToCart(prod, prod.sizes[0]?.size || "L");
+          Store.addToCart(prod, prod.sizes?.[0]?.size || "L");
         }
       });
       Store.state.wishlist = [];
@@ -1075,7 +1590,7 @@ function renderWishlistContents() {
   const drawerCount = document.getElementById("wishlist-drawer-count");
 
   const savedIds = Store.state.wishlist || [];
-  const items = products.filter(p => savedIds.includes(p.id));
+  const items = activeProducts.filter(p => savedIds.includes(p.id));
 
   if (drawerCount) {
     drawerCount.textContent = items.length;
@@ -1089,35 +1604,45 @@ function renderWishlistContents() {
     if (footerActions) footerActions.style.display = "none";
   } else {
     if (emptyState) emptyState.style.display = "none";
-    if (footerActions) footerActions.style.display = "block";
+    if (footerActions) footerActions.style.display = Auth.isSellerMode() ? "none" : "block";
 
-    container.innerHTML = items.map(p => `
-      <div class="wishlist-item-row p-3 border-bottom d-flex align-items-center gap-3">
-        <img src="${p.images.primary}" alt="${p.name}" style="width: 60px; height: 75px; object-fit: cover;" class="border flex-shrink-0">
-        <div class="flex-grow-1 min-w-0">
-          <div class="fw-bold font-brand text-uppercase fs-6 text-truncate mb-1">${p.name}</div>
-          <div class="font-mono text-muted small mb-2">${p.gsm || ''} • ${formatPrice(p.price)}</div>
-          <div class="d-flex gap-2">
-            <button class="btn btn-ss-dark btn-sm rounded-0 font-mono quick-add-wishlist-btn" data-product-id="${p.id}" style="font-size:0.7rem; padding: 4px 10px;">
-              ADD TO BAG
-            </button>
-            <button class="btn btn-outline-danger btn-sm rounded-0 remove-wishlist-btn" data-product-id="${p.id}" title="Remove from wishlist" style="font-size:0.7rem; padding: 4px 8px;">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
+    const isSeller = Auth.isSellerMode();
+    container.innerHTML = items.map(p => {
+      const img = (p.images && p.images.primary) ? p.images.primary : (typeof p.images === "string" ? p.images : "assets/products/d0d159a5-2fc7-4bb2-b155-ccdcc942f226.jfif");
+      return `
+        <div class="wishlist-item-row p-3 border-bottom d-flex align-items-center gap-3">
+          <img src="${img}" alt="${p.name}" style="width: 60px; height: 75px; object-fit: cover;" class="border flex-shrink-0">
+          <div class="flex-grow-1 min-w-0">
+            <div class="fw-bold font-brand text-uppercase fs-6 text-truncate mb-1">${p.name}</div>
+            <div class="font-mono text-muted small mb-2">${p.gsm || ''} • ${formatPrice(p.price)}</div>
+            <div class="d-flex gap-2">
+              ${isSeller ? '' : `
+              <button class="btn btn-ss-dark btn-sm rounded-0 font-mono quick-add-wishlist-btn" data-product-id="${p.id}" style="font-size:0.7rem; padding: 4px 10px;">
+                ADD TO BAG
+              </button>
+              `}
+              <button class="btn btn-outline-danger btn-sm rounded-0 remove-wishlist-btn" data-product-id="${p.id}" title="Remove from wishlist" style="font-size:0.7rem; padding: 4px 8px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    `).join("");
+      `;
+    }).join("");
 
     container.querySelectorAll(".quick-add-wishlist-btn").forEach(btn => {
       btn.addEventListener("click", () => {
+        if (Auth.isSellerMode()) {
+          showToast("⚠️ SELLER PREVIEW: Adding items to bag is disabled for Seller accounts.");
+          return;
+        }
         const pId = btn.getAttribute("data-product-id");
-        const prod = products.find(p => p.id === pId);
+        const prod = activeProducts.find(p => p.id === pId) || products.find(p => p.id === pId);
         if (prod) {
-          Store.addToCart(prod, prod.sizes[0]?.size || "L");
+          Store.addToCart(prod, prod.sizes?.[0]?.size || "L");
           showToast(`Added ${prod.name} to your bag.`);
           if (wishlistDrawerInstance) wishlistDrawerInstance.hide();
           openBagDrawer();
@@ -1151,13 +1676,14 @@ function setupCheckoutModal() {
     checkoutModalInstance = bootstrap.Modal.getOrCreateInstance(el);
   }
 
-  const proceedBtn = document.getElementById("bag-checkout-btn");
-  if (proceedBtn) {
-    proceedBtn.addEventListener("click", () => {
+  document.querySelectorAll("#bag-checkout-btn, #btn-proceed-checkout").forEach(btn => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      if (Auth.isSellerMode()) return;
       if (bagOffcanvas) bagOffcanvas.hide();
       openCheckoutModal();
-    });
-  }
+    };
+  });
 
   const form = document.getElementById("checkout-form") || document.getElementById("checkout-shipping-form");
   if (form) {
@@ -1169,6 +1695,11 @@ function setupCheckoutModal() {
 }
 
 function openCheckoutModal() {
+  if (Auth.isSellerMode()) {
+    showToast("⚠️ SELLER PREVIEW: Checkout is disabled for Seller/Admin accounts.");
+    return;
+  }
+
   const totals = Store.getTotals();
   const summaryEl = document.getElementById("checkout-order-summary");
   if (summaryEl) {
@@ -1184,6 +1715,22 @@ function openCheckoutModal() {
       </div>
     `;
   }
+
+  // Pre-fill with authenticated athlete data if session is active
+  const currentUser = Auth.getUser();
+  if (currentUser) {
+    const form = document.getElementById("checkout-form") || document.getElementById("checkout-shipping-form");
+    if (form) {
+      const inputs = form.querySelectorAll("input");
+      if (inputs[0] && (!inputs[0].value || inputs[0].value === "Marcus Vance")) {
+        inputs[0].value = currentUser.name;
+      }
+      if (inputs[1] && (!inputs[1].value || inputs[1].value === "athlete@superscience.test")) {
+        inputs[1].value = currentUser.email;
+      }
+    }
+  }
+
   const el = document.getElementById("checkoutModal");
   if (!checkoutModalInstance && el && window.bootstrap) {
     checkoutModalInstance = bootstrap.Modal.getOrCreateInstance(el);
@@ -1191,13 +1738,64 @@ function openCheckoutModal() {
   if (checkoutModalInstance) checkoutModalInstance.show();
 }
 
-function completeCheckout() {
+async function completeCheckout() {
+  if (Auth.isSellerMode()) {
+    showToast("⚠️ SELLER PREVIEW: Orders cannot be placed from a Seller account.");
+    return;
+  }
+
   const confirmationBox = document.getElementById("checkout-confirmation-view");
   const formBox = document.getElementById("checkout-form-view");
   const orderId = "SS-ORD-" + Math.floor(100000 + Math.random() * 900000);
 
-  document.getElementById("confirmed-order-id").textContent = orderId;
-  document.getElementById("confirmed-order-date").textContent = new Date().toUTCString();
+  const currentUser = Auth.getUser();
+  const form = document.getElementById("checkout-form") || document.getElementById("checkout-shipping-form");
+  let customerName = currentUser ? currentUser.name : "Guest Athlete";
+  let customerEmail = currentUser ? currentUser.email : "guest@superscience.test";
+  let customerAddress = "Central Warehouse Delivery";
+  let customerCity = "Central";
+
+  if (form) {
+    const inputs = form.querySelectorAll("input");
+    if (inputs[0] && inputs[0].value) customerName = inputs[0].value.trim();
+    if (inputs[1] && inputs[1].value) customerEmail = inputs[1].value.trim();
+    if (inputs[2] && inputs[2].value) customerAddress = inputs[2].value.trim();
+    if (inputs[3] && inputs[3].value) customerCity = inputs[3].value.trim();
+  }
+
+  const totals = Store.getTotals();
+  const items = Store.state.cart.map(i => ({
+    id: i.id,
+    name: i.name,
+    size: i.size,
+    color: i.color,
+    quantity: i.quantity,
+    price: i.price
+  }));
+
+  try {
+    await API.createOrder({
+      id: orderId,
+      customer_name: customerName,
+      customer_email: customerEmail,
+      customer_address: customerAddress,
+      customer_city: customerCity,
+      customer_country: "Philippines / Worldwide Express",
+      items,
+      subtotal: totals.subtotal,
+      discount: totals.discount,
+      shipping: totals.shipping,
+      total: totals.total,
+      promo_code: Store.state.promoCode
+    });
+  } catch (err) {
+    console.warn("[Checkout] Order record sync warning:", err);
+  }
+
+  const idEl = document.getElementById("confirmed-order-id");
+  const dateEl = document.getElementById("confirmed-order-date");
+  if (idEl) idEl.textContent = orderId;
+  if (dateEl) dateEl.textContent = new Date().toUTCString();
 
   if (formBox) formBox.style.display = "none";
   if (confirmationBox) confirmationBox.style.display = "block";
@@ -1236,3 +1834,23 @@ window.openProductModal = openProductModal;
 window.openWorkoutModal = openWorkoutModal;
 window.setCategoryFilter = setCategoryFilter;
 window.setProgramFilter = setProgramFilter;
+window.activeProducts = activeProducts;
+window.fetchLiveProducts = fetchLiveProducts;
+window.Auth = Auth;
+window.openAuthModal = (t) => Auth.openAuthModal(t);
+window.setupSellerModeUI = setupSellerModeUI;
+window.isSellerMode = () => Auth.isSellerMode();
+window.exitSellerMode = () => Auth.exitSellerMode();
+
+// Boot application after all variables, state, and modules are initialized
+function boot() {
+  Store.init();
+  updateHeaderDrawerMetrics();
+  initApp();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", boot);
+} else {
+  boot();
+}

@@ -1,28 +1,36 @@
-const { Pool } = require('pg');
+const { Pool, Client } = require('pg');
 require('dotenv').config();
 
 // PostgreSQL Connection Pool Configuration
 // Supports either a full DATABASE_URL (Supabase, Neon, Render, Railway, local)
 // or individual PG* environment variables.
-const connectionString = process.env.DATABASE_URL;
-
-const poolConfig = connectionString
-  ? {
+function buildPoolConfig() {
+  const connectionString = process.env.DATABASE_URL;
+  if (connectionString) {
+    return {
       connectionString,
       ssl: process.env.PGSSL === 'true' || connectionString.includes('sslmode=require') || connectionString.includes('supabase.co') || connectionString.includes('neon.tech')
         ? { rejectUnauthorized: false }
         : false
-    }
-  : {
-      host: process.env.PGHOST || 'localhost',
-      port: parseInt(process.env.PGPORT || '5432', 10),
-      user: process.env.PGUSER || 'postgres',
-      password: process.env.PGPASSWORD || 'postgres',
-      database: process.env.PGDATABASE || 'superscience',
-      ssl: process.env.PGSSL === 'true' ? { rejectUnauthorized: false } : false
     };
+  }
 
-const pool = new Pool(poolConfig);
+  const cfg = {
+    host: process.env.PGHOST || 'localhost',
+    port: parseInt(process.env.PGPORT || '5432', 10),
+    user: process.env.PGUSER || 'postgres',
+    database: process.env.PGDATABASE || 'superscience',
+    ssl: process.env.PGSSL === 'true' ? { rejectUnauthorized: false } : false
+  };
+
+  if (process.env.PGPASSWORD && process.env.PGPASSWORD.trim() !== '') {
+    cfg.password = process.env.PGPASSWORD;
+  }
+
+  return cfg;
+}
+
+const pool = new Pool(buildPoolConfig());
 
 pool.on('error', (err) => {
   console.error('[PostgreSQL Pool Error]:', err.message);
@@ -39,9 +47,41 @@ async function query(text, params) {
   return res;
 }
 
+// Automatically create database if it doesn't exist yet
+async function ensureDatabaseExists() {
+  const targetDb = process.env.PGDATABASE || 'superscience';
+  if (targetDb === 'postgres') return;
+
+  try {
+    const adminConfig = {
+      host: process.env.PGHOST || 'localhost',
+      port: parseInt(process.env.PGPORT || '5432', 10),
+      user: process.env.PGUSER || 'postgres',
+      database: 'postgres',
+      ssl: process.env.PGSSL === 'true' ? { rejectUnauthorized: false } : false
+    };
+    if (process.env.PGPASSWORD && process.env.PGPASSWORD.trim() !== '') {
+      adminConfig.password = process.env.PGPASSWORD;
+    }
+
+    const client = new Client(adminConfig);
+    await client.connect();
+    const checkRes = await client.query('SELECT 1 FROM pg_database WHERE datname = $1', [targetDb]);
+    if (checkRes.rowCount === 0) {
+      console.log(`[PostgreSQL] Database "${targetDb}" does not exist. Creating it now...`);
+      await client.query(`CREATE DATABASE "${targetDb}"`);
+      console.log(`[PostgreSQL] Database "${targetDb}" created successfully.`);
+    }
+    await client.end();
+  } catch (err) {
+    // Non-fatal, pool will report if it cannot connect
+  }
+}
+
 // Test connection without throwing an unhandled fatal error
 async function testConnection() {
   try {
+    await ensureDatabaseExists();
     const res = await pool.query('SELECT NOW() as current_time, current_database() as database');
     return {
       connected: true,
@@ -61,3 +101,4 @@ module.exports = {
   query,
   testConnection
 };
+

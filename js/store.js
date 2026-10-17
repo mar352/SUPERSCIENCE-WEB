@@ -51,7 +51,26 @@ export const Store = {
     this.notifyUpdate();
   },
 
+  isSellerModeActive() {
+    if (typeof window !== "undefined") {
+      if (window.Auth && typeof window.Auth.isSellerMode === "function") {
+        return window.Auth.isSellerMode();
+      }
+      if (typeof window.isSellerMode === "function") {
+        return window.isSellerMode();
+      }
+    }
+    return false;
+  },
+
   addToCart(product, size = "L", color = null, quantity = 1) {
+    if (this.isSellerModeActive()) {
+      if (window.showToast) {
+        window.showToast("⚠️ SELLER ACCOUNT: You cannot add items to bag as a Seller.");
+      }
+      return false;
+    }
+
     const selectedColor = color || (product.colors && product.colors[0] ? product.colors[0].name : "Standard");
     const existingIndex = this.state.cart.findIndex(
       item => item.id === product.id && item.size === size && item.color === selectedColor
@@ -99,6 +118,13 @@ export const Store = {
   },
 
   toggleWishlist(productId) {
+    if (this.isSellerModeActive()) {
+      if (window.showToast) {
+        window.showToast("⚠️ SELLER ACCOUNT: You cannot heart or wishlist items as a Seller.");
+      }
+      return false;
+    }
+
     const idx = this.state.wishlist.indexOf(productId);
     let added = false;
     if (idx > -1) {

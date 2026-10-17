@@ -1,4 +1,36 @@
+const crypto = require('crypto');
 const { pool, query } = require('../db');
+
+function hashPassword(password, salt) {
+  return crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+}
+
+const initialUsers = [
+  {
+    id: 'USR-ADMIN-01',
+    email: 'admin@superscience.ph',
+    password: 'admin123',
+    salt: 'salt_admin_8842',
+    name: 'Store Admin',
+    role: 'admin',
+    athlete_id: 'SS-SELLER-01',
+    tier: 'ADMIN // MASTER'
+  },
+  {
+    id: 'USR-ATH-01',
+    email: 'lifter@superscience.test',
+    password: 'password123',
+    salt: 'salt_user_3914',
+    name: 'Marcus Vance',
+    role: 'user',
+    athlete_id: 'SS-ATH-9821',
+    tier: 'TIER 01'
+  }
+];
+
+initialUsers.forEach(u => {
+  u.password_hash = hashPassword(u.password, u.salt);
+});
 
 const initialProducts = [
   {
@@ -440,6 +472,58 @@ async function initializeDatabase() {
     `);
     console.log('✓ Table "newsletter_subscribers" ready.');
 
+    // 6. Users & Accounts Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id VARCHAR(50) PRIMARY KEY,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password_hash VARCHAR(255) NOT NULL,
+        salt VARCHAR(255) NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        role VARCHAR(50) DEFAULT 'user',
+        athlete_id VARCHAR(50),
+        tier VARCHAR(50) DEFAULT 'TIER 01',
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    console.log('✓ Table "users" ready.');
+
+    // 7. Persistent User & Admin Sessions Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS sessions (
+        token VARCHAR(128) PRIMARY KEY,
+        user_id VARCHAR(50) NOT NULL,
+        role VARCHAR(50) NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        expires_at TIMESTAMP WITH TIME ZONE NOT NULL
+      );
+    `);
+    console.log('✓ Table "sessions" ready.');
+
+    // 8. Chat Messages Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS chat_messages (
+        id SERIAL PRIMARY KEY,
+        user_id VARCHAR(50) NOT NULL,
+        sender VARCHAR(50) NOT NULL,
+        sender_name VARCHAR(255),
+        message TEXT NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    console.log('✓ Table "chat_messages" ready.');
+
+    // Seed Initial Users & Admin
+    console.log('[PostgreSQL] Seeding admin and athlete accounts...');
+    for (const u of initialUsers) {
+      await query(`
+        INSERT INTO users (id, email, password_hash, salt, name, role, athlete_id, tier)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        ON CONFLICT (email) DO NOTHING;
+      `, [u.id, u.email, u.password_hash, u.salt, u.name, u.role, u.athlete_id, u.tier]);
+    }
+    console.log(`✓ Seeded ${initialUsers.length} user accounts successfully.`);
+
     // Seed Initial Products
     console.log('[PostgreSQL] Seeding initial product catalog...');
     for (const p of initialProducts) {
@@ -497,4 +581,4 @@ if (require.main === module) {
   initializeDatabase();
 }
 
-module.exports = { initializeDatabase, initialProducts };
+module.exports = { initializeDatabase, initialProducts, initialUsers, hashPassword };
