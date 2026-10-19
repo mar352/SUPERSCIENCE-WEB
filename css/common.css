@@ -416,6 +416,8 @@ body[style*="overflow:hidden"] {
     z-index: 2;
     display: flex !important;
     align-items: center !important;
+    gap: 4px !important;
+    flex-shrink: 0;
   }
   .navbar-col-center {
     position: absolute !important;
@@ -426,48 +428,79 @@ body[style*="overflow:hidden"] {
     pointer-events: auto;
     padding: 0 !important;
     margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   .navbar-logo-img {
-    height: 22px !important;
-    max-width: 140px !important;
+    height: 20px !important;
+    max-width: 95px !important;
+    width: auto !important;
   }
   .navbar-col-right {
     z-index: 2;
     display: flex !important;
     align-items: center !important;
     gap: 3px !important;
+    flex-shrink: 0;
   }
   .header-action-btn {
-    padding: 5px 5px !important;
-    width: 32px !important;
-    height: 32px !important;
+    padding: 4px !important;
+    width: 30px !important;
+    height: 30px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
   }
   .header-action-btn svg {
-    width: 18px !important;
-    height: 18px !important;
+    width: 17px !important;
+    height: 17px !important;
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   .navbar-superscience .container-fluid {
     padding-left: 10px !important;
     padding-right: 10px !important;
   }
   .navbar-logo-img {
-    height: 18px !important;
-    max-width: 115px !important;
+    height: 19px !important;
+    max-width: 88px !important;
+  }
+  .navbar-col-left {
+    gap: 2px !important;
+  }
+  .navbar-col-right {
+    gap: 2px !important;
   }
   .header-action-btn {
-    padding: 4px 3px !important;
-    width: 29px !important;
-    height: 29px !important;
+    padding: 3px !important;
+    width: 28px !important;
+    height: 28px !important;
   }
   .header-action-btn svg {
     width: 16px !important;
     height: 16px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .navbar-superscience .container-fluid {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+  .navbar-logo-img {
+    height: 17px !important;
+    max-width: 78px !important;
+  }
+  .header-action-btn {
+    padding: 2px !important;
+    width: 25px !important;
+    height: 25px !important;
+  }
+  .header-action-btn svg {
+    width: 15px !important;
+    height: 15px !important;
   }
   .navbar-col-right {
     gap: 1px !important;
