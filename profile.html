@@ -192,6 +192,7 @@
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body p-0">
+      <div id="mobile-nav-account-card"></div>
       <div class="list-group list-group-flush">
         <a href="index.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Home</a>
         <a href="catalog.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Shop
@@ -279,8 +280,7 @@
             <div>
               <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
                 <h1 class="font-brand fs-3 fw-bold mb-0 lh-1" id="athlete-display-name">Marcus Vance</h1>
-                <span class="badge bg-success font-mono rounded-0 py-1 px-2" style="font-size:0.65rem;">VERIFIED
-                  ATHLETE</span>
+                <span class="badge bg-success font-mono rounded-0 py-1 px-2" style="font-size:0.65rem;" id="athlete-badge-verified">VERIFIED ATHLETE</span>
               </div>
               <div class="font-mono text-muted small" style="font-size:0.775rem;">
                 MEMBER // STRENGTH & FITNESS
@@ -321,7 +321,7 @@
               SIGN OUT
             </button>
           </div>
-          <div class="font-mono text-muted small mt-2" style="font-size:0.7rem;">
+          <div class="font-mono text-muted small mt-2" style="font-size:0.7rem;" id="athlete-auth-status-text">
             AUTHENTICATED VIA SUPERSCIENCE PASSKEY // LAST ACTIVE: TODAY
           </div>
         </div>
@@ -1173,15 +1173,19 @@
 
     function loadProfileData() {
       const authUser = Auth.getUser();
+      const isLogged = Auth.isUserLoggedIn();
       let base = Object.assign({}, defaultProfile);
       try {
         const saved = localStorage.getItem(STORAGE_KEY_PROFILE);
         if (saved) base = Object.assign(base, JSON.parse(saved));
       } catch (e) { }
 
-      if (authUser) {
+      if (isLogged && authUser) {
         base.name = authUser.name || base.name;
         base.email = authUser.email || base.email;
+      } else {
+        base.name = "Guest Athlete";
+        base.email = "";
       }
       return base;
     }
@@ -1206,22 +1210,71 @@
       bootProfile();
     }
 
+    let profileListenersSetup = false;
+
     async function initProfilePage() {
+      const isLogged = Auth.isUserLoggedIn();
       const authUser = Auth.getUser();
       const profile = loadProfileData();
 
-      if (authUser) {
-        const nameEl = document.getElementById("athlete-display-name");
-        const initEl = document.getElementById("athlete-avatar-initials");
-        const breadcrumbEl = document.getElementById("breadcrumb-athlete-identity");
-        const idEl = document.getElementById("athlete-badge-id");
-        const tierEl = document.getElementById("athlete-badge-tier");
+      const nameEl = document.getElementById("athlete-display-name");
+      const initEl = document.getElementById("athlete-avatar-initials");
+      const breadcrumbEl = document.getElementById("breadcrumb-athlete-identity");
+      const idEl = document.getElementById("athlete-badge-id");
+      const tierEl = document.getElementById("athlete-badge-tier");
+      const verifiedEl = document.getElementById("athlete-badge-verified");
+      const switchBtn = document.getElementById("btn-switch-athlete");
+      const logoutBtn = document.getElementById("btn-logout-athlete");
+      const statusText = document.getElementById("athlete-auth-status-text");
 
+      if (isLogged && authUser) {
         if (nameEl) nameEl.textContent = authUser.name;
         if (initEl) initEl.textContent = authUser.name.split(" ").map(w => w[0]).join("").toUpperCase() || "ATH";
-        if (breadcrumbEl) breadcrumbEl.textContent = `${authUser.name.toUpperCase()} (${authUser.athleteId || 'SS-ATH-0000'})`;
-        if (idEl) idEl.textContent = `ID: ${authUser.athleteId || 'SS-ATH-0000'}`;
-        if (tierEl) tierEl.textContent = `${authUser.tier || 'TIER 01'} PASS ACTIVE`;
+        if (breadcrumbEl) breadcrumbEl.textContent = `${authUser.name.toUpperCase()} (${authUser.athleteId || 'SS-ATH-9821'})`;
+        if (idEl) idEl.textContent = `ID: ${authUser.athleteId || 'SS-ATH-9821'}`;
+        if (tierEl) {
+          tierEl.textContent = `${authUser.tier || 'TIER 01'} PASS ACTIVE`;
+          tierEl.className = "athlete-badge-pass";
+        }
+        if (verifiedEl) {
+          verifiedEl.textContent = "VERIFIED ATHLETE";
+          verifiedEl.className = "badge bg-success font-mono rounded-0 py-1 px-2";
+        }
+        if (switchBtn) {
+          switchBtn.textContent = "SWITCH ACCOUNT";
+          switchBtn.className = "btn btn-outline-dark rounded-0 font-mono small py-2 px-3";
+          switchBtn.style.display = "inline-block";
+        }
+        if (logoutBtn) {
+          logoutBtn.style.display = "inline-block";
+        }
+        if (statusText) {
+          statusText.textContent = `DATABASE SESSION ACTIVE // SIGNED IN AS ${authUser.email}`;
+        }
+      } else {
+        if (nameEl) nameEl.textContent = "Guest Athlete (Not Signed In)";
+        if (initEl) initEl.textContent = "GS";
+        if (breadcrumbEl) breadcrumbEl.textContent = "GUEST SESSION (NOT SIGNED IN)";
+        if (idEl) idEl.textContent = "ID: GUEST-DEVICE";
+        if (tierEl) {
+          tierEl.textContent = "GUEST SESSION - NOT SIGNED IN";
+          tierEl.className = "badge bg-secondary font-mono text-white rounded-0 py-1 px-2";
+        }
+        if (verifiedEl) {
+          verifiedEl.textContent = "GUEST PREVIEW";
+          verifiedEl.className = "badge bg-secondary font-mono text-white rounded-0 py-1 px-2";
+        }
+        if (switchBtn) {
+          switchBtn.textContent = "SIGN IN / REGISTER";
+          switchBtn.className = "btn btn-ss-dark rounded-0 font-mono small py-2 px-3 fw-bold";
+          switchBtn.style.display = "inline-block";
+        }
+        if (logoutBtn) {
+          logoutBtn.style.display = "none";
+        }
+        if (statusText) {
+          statusText.textContent = "GUEST PREVIEW MODE // SIGN IN TO PERSIST SESSION TO DATABASE";
+        }
       }
 
       populateProfileInputs(profile);
@@ -1230,21 +1283,25 @@
       await loadAthleteOrders();
       renderVaultGrid();
 
-      // Listen for global store updates (e.g. wishlist toggle)
-      window.addEventListener("superscience:state-updated", () => {
-        renderVaultGrid();
-        updateVaultCountBadge();
-      });
+      if (!profileListenersSetup) {
+        profileListenersSetup = true;
 
-      // Switch athlete account / Sign in
-      document.getElementById("btn-switch-athlete")?.addEventListener("click", () => {
-        Auth.openAuthModal("login");
-      });
+        // Listen for global store updates (e.g. wishlist toggle)
+        window.addEventListener("superscience:state-updated", () => {
+          renderVaultGrid();
+          updateVaultCountBadge();
+        });
 
-      // Sign out athlete
-      document.getElementById("btn-logout-athlete")?.addEventListener("click", () => {
-        Auth.logoutUser();
-      });
+        // Switch athlete account / Sign in
+        document.getElementById("btn-switch-athlete")?.addEventListener("click", () => {
+          Auth.openAuthModal("login");
+        });
+
+        // Sign out athlete
+        document.getElementById("btn-logout-athlete")?.addEventListener("click", () => {
+          Auth.logoutUser();
+        });
+      }
 
       // Bio fit form submit
       const fitForm = document.getElementById("bio-fit-form");

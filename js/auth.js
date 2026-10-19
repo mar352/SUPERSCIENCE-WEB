@@ -328,19 +328,28 @@ export const Auth = {
     }
   },
 
-  // Update header dropdown across storefront pages
+  // Update header dropdown and mobile drawer across storefront pages
   updateNavigationHeaderAuth() {
-    const dropdown = document.querySelector(".profile-nav-dropdown");
-    if (!dropdown) return;
-
     const user = this.getUser();
     const isLogged = this.isUserLoggedIn();
+    const isSeller = this.isSellerMode();
+    const admin = this.getAdmin();
+
+    // 1. Update Desktop Dropdown
+    this.updateDesktopProfileDropdown(user, isLogged, isSeller, admin);
+
+    // 2. Update Mobile Drawer (#mobileNavOffcanvas)
+    this.updateMobileNavAccount(user, isLogged, isSeller, admin);
+  },
+
+  updateDesktopProfileDropdown(user, isLogged, isSeller, admin) {
+    const dropdown = document.querySelector(".profile-nav-dropdown");
+    if (!dropdown) return;
 
     const menuEl = dropdown.querySelector(".profile-dropdown-menu");
     if (!menuEl) return;
 
-    if (this.isSellerMode()) {
-      const admin = this.getAdmin();
+    if (isSeller) {
       menuEl.innerHTML = `
         <li class="px-3 py-2 bg-light border-bottom border-warning">
           <div class="d-flex align-items-center gap-2 mb-1">
@@ -567,6 +576,101 @@ export const Auth = {
     }
   },
 
+  // Update Mobile Offcanvas Drawer (#mobileNavOffcanvas) with Account Session Card
+  updateMobileNavAccount(user, isLogged, isSeller, admin) {
+    const mobileOffcanvas = document.getElementById("mobileNavOffcanvas");
+    if (!mobileOffcanvas) return;
+
+    let accountCard = document.getElementById("mobile-nav-account-card");
+    if (!accountCard) {
+      accountCard = document.createElement("div");
+      accountCard.id = "mobile-nav-account-card";
+      const offcanvasBody = mobileOffcanvas.querySelector(".offcanvas-body");
+      if (offcanvasBody) {
+        offcanvasBody.insertBefore(accountCard, offcanvasBody.firstChild);
+      } else {
+        mobileOffcanvas.appendChild(accountCard);
+      }
+    }
+
+    if (isSeller) {
+      accountCard.innerHTML = `
+        <div class="p-3 bg-light border-bottom border-warning">
+          <div class="d-flex align-items-center justify-content-between mb-1">
+            <span class="badge bg-warning text-dark font-mono rounded-0 fw-bold" style="font-size:0.6rem;">SELLER PREVIEW</span>
+            <span class="badge bg-dark text-white font-mono rounded-0" style="font-size:0.58rem;">ADMIN MODE</span>
+          </div>
+          <div class="fw-bold font-brand text-dark fs-6 lh-1 mb-1">${escapeHtml(admin ? admin.name : "Seller Console")}</div>
+          <div class="font-mono text-muted text-truncate mb-2" style="font-size:0.72rem;">${escapeHtml(admin ? admin.email : "seller@superscience.test")}</div>
+          <div class="d-flex gap-2">
+            <a href="admin.html" class="btn btn-dark btn-sm rounded-0 font-mono flex-fill py-1 text-center text-decoration-none" style="font-size:0.72rem;">
+              DASHBOARD
+            </a>
+            <button class="btn btn-outline-danger btn-sm rounded-0 font-mono py-1 px-2" style="font-size:0.72rem;" id="mobile-btn-logout-seller">
+              EXIT
+            </button>
+          </div>
+        </div>
+      `;
+      accountCard.querySelector("#mobile-btn-logout-seller")?.addEventListener("click", () => this.exitSellerMode());
+      return;
+    }
+
+    if (isLogged && user) {
+      accountCard.innerHTML = `
+        <div class="p-3 bg-light border-bottom">
+          <div class="d-flex align-items-center justify-content-between mb-1">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-black text-white font-mono rounded-0" style="font-size:0.6rem;">${escapeHtml(user.tier || "TIER 01")}</span>
+              <span class="font-mono text-muted" style="font-size:0.68rem;">ID: ${escapeHtml(user.athleteId || "SS-ATH-9821")}</span>
+            </div>
+            <span class="badge bg-success font-mono rounded-0" style="font-size:0.58rem;">LOGGED IN</span>
+          </div>
+          <div class="fw-bold font-brand text-dark fs-6 lh-1 mb-1">${escapeHtml(user.name)}</div>
+          <div class="font-mono text-muted text-truncate mb-2" style="font-size:0.72rem;">${escapeHtml(user.email)}</div>
+          <div class="d-flex gap-2">
+            <a href="profile.html" class="btn btn-ss-dark btn-sm rounded-0 font-mono flex-fill py-1 text-center text-decoration-none" style="font-size:0.72rem;">
+              MY PROFILE
+            </a>
+            <button class="btn btn-outline-danger btn-sm rounded-0 font-mono py-1 px-2" style="font-size:0.72rem;" id="mobile-btn-logout-athlete">
+              SIGN OUT
+            </button>
+          </div>
+        </div>
+      `;
+      accountCard.querySelector("#mobile-btn-logout-athlete")?.addEventListener("click", () => this.logoutUser());
+    } else {
+      accountCard.innerHTML = `
+        <div class="p-3 bg-light border-bottom">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="badge bg-secondary text-white font-mono rounded-0" style="font-size:0.6rem; letter-spacing:0.05em;">GUEST SESSION</span>
+            <span class="font-mono text-muted" style="font-size:0.68rem;">NOT SIGNED IN</span>
+          </div>
+          <div class="font-mono text-dark fw-bold mb-1" style="font-size:0.8rem;">ATHLETE MEMBER PORTAL</div>
+          <p class="font-mono text-muted mb-2" style="font-size:0.72rem; line-height:1.35;">
+            Sign in to sync your bag, orders, and training protocol across your devices.
+          </p>
+          <div class="d-grid gap-2">
+            <button class="btn btn-ss-dark rounded-0 font-mono py-2 small d-flex align-items-center justify-content-center gap-2 fw-bold" id="mobile-btn-open-login">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <span>SIGN IN / REGISTER &rarr;</span>
+            </button>
+          </div>
+        </div>
+      `;
+      accountCard.querySelector("#mobile-btn-open-login")?.addEventListener("click", () => {
+        if (window.bootstrap) {
+          const offcanvasInstance = bootstrap.Offcanvas.getInstance(mobileOffcanvas);
+          if (offcanvasInstance) offcanvasInstance.hide();
+        }
+        this.openAuthModal("login");
+      });
+    }
+  },
+
   // Require login modal trigger for protected actions (Bag, Wishlist Heart, etc.)
   requireLogin(feature = "this feature", onSuccess = null) {
     this._pendingAuthAction = onSuccess;
@@ -693,6 +797,32 @@ export const Auth = {
                   <form id="form-athlete-login" novalidate>
                     <div id="auth-login-alert" class="alert alert-danger font-mono small rounded-0 py-2 d-none mb-3"></div>
 
+                    <!-- 1-Click Database Athlete Login Card -->
+                    <div class="p-3 bg-light border border-dark mb-3">
+                      <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="badge bg-black text-white font-mono rounded-0" style="font-size:0.6rem;">DATABASE ACCOUNT</span>
+                          <span class="badge bg-success font-mono rounded-0" style="font-size:0.58rem;">VERIFIED</span>
+                        </div>
+                        <span class="font-mono text-muted" style="font-size:0.65rem;">TIER 01 ATHLETE</span>
+                      </div>
+                      <div class="d-flex align-items-center justify-content-between gap-2">
+                        <div class="overflow-hidden">
+                          <div class="fw-bold font-brand text-dark lh-1 text-truncate" style="font-size:0.92rem;">Marcus Vance</div>
+                          <div class="font-mono text-muted text-truncate" style="font-size:0.72rem;">lifter@superscience.test</div>
+                        </div>
+                        <button type="button" class="btn btn-ss-dark btn-sm rounded-0 font-mono fw-bold px-3 py-2 text-nowrap" id="btn-quick-one-click-login" style="font-size:0.72rem;">
+                          1-CLICK SIGN IN &rarr;
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                      <hr class="flex-grow-1 my-0">
+                      <span class="font-mono text-muted small" style="font-size:0.68rem; letter-spacing:0.04em;">OR ENTER CREDENTIALS</span>
+                      <hr class="flex-grow-1 my-0">
+                    </div>
+
                     <div class="mb-3">
                       <label class="font-mono small text-muted text-uppercase mb-1" style="font-size:0.72rem;">EMAIL ADDRESS</label>
                       <input type="email" class="form-control rounded-0 font-mono" id="login-input-email" placeholder="lifter@superscience.test" required autocomplete="email">
@@ -808,6 +938,50 @@ export const Auth = {
         btn.classList.add("text-dark", "border-bottom", "border-dark", "border-2");
       });
     });
+
+    // 1-Click One Tap Database Login
+    const oneClickLoginBtn = document.getElementById("btn-quick-one-click-login");
+    if (oneClickLoginBtn) {
+      oneClickLoginBtn.addEventListener("click", async () => {
+        const loginAlert = document.getElementById("auth-login-alert");
+        if (loginAlert) {
+          loginAlert.classList.add("d-none");
+          loginAlert.textContent = "";
+        }
+        oneClickLoginBtn.disabled = true;
+        oneClickLoginBtn.textContent = "SIGNING IN...";
+
+        const res = await this.loginUser("lifter@superscience.test", "password123");
+        oneClickLoginBtn.disabled = false;
+        oneClickLoginBtn.textContent = "1-CLICK SIGN IN \u2192";
+
+        if (res.success) {
+          const inst = bootstrap.Modal.getInstance(modalEl);
+          if (inst) inst.hide();
+
+          if (window.showToast) {
+            window.showToast(`Authenticated as ${res.user.name}. Welcome back.`);
+          }
+
+          if (window.location.pathname.includes("profile.html") && typeof window.loadAthleteProfileData === "function") {
+            window.loadAthleteProfileData();
+          }
+
+          if (this._pendingAuthAction && typeof this._pendingAuthAction === "function") {
+            const action = this._pendingAuthAction;
+            this._pendingAuthAction = null;
+            setTimeout(() => {
+              try { action(); } catch (err) { console.error("[Auth] Pending action callback failed:", err); }
+            }, 350);
+          }
+        } else {
+          if (loginAlert) {
+            loginAlert.textContent = res.error || "Authentication failed.";
+            loginAlert.classList.remove("d-none");
+          }
+        }
+      });
+    }
 
     // Quick fill demo button
     const quickFillBtn = document.getElementById("btn-quick-fill-athlete");
