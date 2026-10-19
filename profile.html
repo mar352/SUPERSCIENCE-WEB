@@ -52,14 +52,6 @@
           </svg>
         </button>
 
-        <!-- Mobile Search Trigger (Left-aligned next to burger for balanced layout) -->
-        <button class="header-action-btn open-search-trigger d-lg-none ms-1 ms-sm-2" title="Search Products (Cmd+K)" aria-label="Search">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </button>
-
         <!-- Desktop Navigation Menu -->
         <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarNav">
           <ul class="navbar-nav mb-0">
@@ -102,16 +94,16 @@
           </svg>
           <span>What are you looking for?</span>
         </button>
-        <!-- Search Icon Trigger (Desktop Compact: 992px to 1199px) -->
-        <button class="header-action-btn open-search-trigger d-none d-lg-inline-flex d-xl-none" title="Search Products (Cmd+K)">
+        <!-- Search Icon Trigger (Mobile & Compact Desktop: < 1200px) -->
+        <button class="header-action-btn open-search-trigger d-inline-flex d-xl-none" title="Search Products (Cmd+K)" aria-label="Search">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
 
-        <!-- Wishlist Trigger -->
-        <button class="header-action-btn open-wishlist-trigger" id="open-wishlist-btn" title="Wishlist">
+        <!-- Wishlist Trigger (Desktop only) -->
+        <button class="header-action-btn open-wishlist-trigger d-none d-lg-inline-flex" id="open-wishlist-btn" title="Wishlist">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path
               d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
@@ -120,8 +112,8 @@
           <span id="wishlist-badge-count" class="badge-counter" style="display:none;">0</span>
         </button>
 
-        <!-- Athlete Profile Dropdown -->
-        <div class="dropdown profile-nav-dropdown">
+        <!-- Athlete Profile Dropdown (Desktop only) -->
+        <div class="dropdown profile-nav-dropdown d-none d-lg-inline-flex">
           <button class="header-action-btn active text-dark" id="profileDropdownBtn" data-bs-toggle="dropdown"
             aria-expanded="false" title="Athlete Account & Orders" aria-label="Athlete Account">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"
@@ -168,8 +160,8 @@
           </ul>
         </div>
 
-        <!-- Customer Support Live Chat Trigger (Visible when logged in) -->
-        <button class="header-action-btn open-chat-trigger" id="navbar-chat-btn" title="Customer Support"
+        <!-- Customer Support Live Chat Trigger (Desktop only, drawer handles mobile) -->
+        <button class="header-action-btn open-chat-trigger d-none d-lg-inline-flex" id="navbar-chat-btn" title="Customer Support"
           aria-label="Open Customer Support" style="display: none;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
@@ -216,6 +208,15 @@
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
           Athlete Profile
+        </a>
+        <a href="javascript:void(0)" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase d-flex align-items-center justify-content-between open-wishlist-trigger" onclick="if(window.openWishlistDrawer) window.openWishlistDrawer();">
+          <div class="d-flex align-items-center">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <span>Saved Items</span>
+          </div>
+          <span class="badge bg-black text-white font-mono rounded-0 wishlist-badge-counter" style="font-size:0.65rem; display:none;">0</span>
         </a>
         <a href="javascript:void(0)"
           class="list-group-item list-group-item-action py-3 fw-bold text-uppercase d-flex align-items-center justify-content-between"
