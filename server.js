@@ -2029,14 +2029,19 @@ app.get('*', (req, res) => {
 });
 
 // Start listening
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`\n======================================================`);
-  console.log(`⚡ SUPERSCIENCE Web & API Server Running`);
-  console.log(`🌐 Local URL:  http://localhost:${PORT}`);
-  console.log(`📡 API Status: http://localhost:${PORT}/api/health`);
-  console.log(`📦 Catalog:    http://localhost:${PORT}/api/products`);
-  console.log(`======================================================\n`);
-  autoInitSchemaIfConnected();
-});
+let server;
+if (!process.env.VERCEL) {
+  server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`\n======================================================`);
+    console.log(`⚡ SUPERSCIENCE Web & API Server Running`);
+    console.log(`🌐 Local URL:  http://localhost:${PORT}`);
+    console.log(`📡 API Status: http://localhost:${PORT}/api/health`);
+    console.log(`📦 Catalog:    http://localhost:${PORT}/api/products`);
+    console.log(`======================================================\n`);
+    autoInitSchemaIfConnected();
+  });
+}
 
-module.exports = { app, server };
+module.exports = app;
+module.exports.app = app;
+module.exports.server = server;
