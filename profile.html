@@ -8,6 +8,11 @@
   <meta name="description"
     content="Member dashboard, order tracking, size calculator, and saved workout plans for SUPERSCIENCE members.">
 
+  <!-- Tab Favicon -->
+  <link rel="icon" type="image/png" href="stock/superscience-logo.png">
+  <link rel="shortcut icon" type="image/png" href="stock/superscience-logo.png">
+  <link rel="apple-touch-icon" href="stock/superscience-logo.png">
+
   <!-- Bootstrap 5.3 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -35,49 +40,62 @@
        ======================================================================== -->
   <nav class="navbar navbar-expand-lg navbar-superscience sticky-top">
     <div class="container-fluid px-3 px-md-5">
-      <!-- Mobile Toggle Button -->
-      <button class="navbar-toggler rounded-0 border-0 p-0 me-3 d-lg-none" type="button" data-bs-toggle="offcanvas"
-        data-bs-target="#mobileNavOffcanvas" aria-controls="mobileNavOffcanvas">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
+      <!-- 1. Left: Navigation Menu & Mobile Toggle -->
+      <div class="navbar-col-left">
+        <!-- Mobile Toggle Button -->
+        <button class="navbar-toggler rounded-0 border-0 p-0 me-3 d-lg-none" type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#mobileNavOffcanvas" aria-controls="mobileNavOffcanvas">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
 
-      <!-- Brandmark Logo -->
-      <a class="navbar-brand-logo me-4 font-brand" href="index.html" title="SUPERSCIENCE">
-        <img src="assets/logo-black.png" alt="SUPERSCIENCE" class="navbar-logo-img" style="height: 26px; width: auto;">
-      </a>
-
-      <!-- Desktop Navigation Menu -->
-      <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link nav-link-custom" href="index.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link nav-link-custom" href="catalog.html">Shop Collection</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link nav-link-custom" href="programs.html">Workout Programs</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link nav-link-custom" href="contact.html">Fitting & Showroom</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link nav-link-custom active" href="profile.html">Athlete Profile</a>
-          </li>
-          <li class="nav-item seller-only" id="nav-seller-dashboard" style="display: none !important;">
-            <a class="nav-link nav-link-custom" href="admin.html">Dashboard</a>
-          </li>
-        </ul>
+        <!-- Desktop Navigation Menu -->
+        <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarNav">
+          <ul class="navbar-nav mb-0">
+            <li class="nav-item">
+              <a class="nav-link nav-link-custom" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-link-custom" href="catalog.html">Shop Collection</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-link-custom" href="programs.html">Workout Programs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-link-custom" href="contact.html">Fitting & Showroom</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-link-custom active" href="profile.html">Athlete Profile</a>
+            </li>
+            <li class="nav-item seller-only" id="nav-seller-dashboard" style="display: none !important;">
+              <a class="nav-link nav-link-custom" href="admin.html">Dashboard</a>
+            </li>
+          </ul>
+        </div>
       </div>
 
-      <!-- Right Header Actions (Search, Wishlist, Profile, Cart) -->
-      <div class="d-flex align-items-center gap-2">
-        <!-- Search Trigger -->
-        <button class="header-action-btn open-search-trigger" title="Search Products (Cmd+K)">
+      <!-- 2. Center: Brandmark Logo -->
+      <div class="navbar-col-center">
+        <a class="navbar-brand-logo font-brand" href="index.html" title="SUPERSCIENCE">
+          <img src="assets/logo-black.png" alt="SUPERSCIENCE" class="navbar-logo-img" style="height: 26px; width: auto;">
+        </a>
+      </div>
+
+      <!-- 3. Right: Header Actions (Search, Wishlist, Profile, Cart) -->
+      <div class="navbar-col-right gap-2">
+        <!-- Search Pill Trigger (Gymshark Style) -->
+        <button class="navbar-search-pill open-search-trigger d-none d-xl-inline-flex" title="Search Products (Cmd+K)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span>What are you looking for?</span>
+        </button>
+        <!-- Search Icon Trigger (Mobile/Compact) -->
+        <button class="header-action-btn open-search-trigger d-xl-none" title="Search Products (Cmd+K)">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -96,13 +114,16 @@
 
         <!-- Athlete Profile Dropdown -->
         <div class="dropdown profile-nav-dropdown">
-          <button class="header-action-btn active text-dark" id="profileDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false" title="Athlete Account & Orders" aria-label="Athlete Account">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <button class="header-action-btn active text-dark" id="profileDropdownBtn" data-bs-toggle="dropdown"
+            aria-expanded="false" title="Athlete Account & Orders" aria-label="Athlete Account">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"
+              stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
           </button>
-          <ul class="dropdown-menu dropdown-menu-end profile-dropdown-menu rounded-0 shadow-sm border" aria-labelledby="profileDropdownBtn">
+          <ul class="dropdown-menu dropdown-menu-end profile-dropdown-menu rounded-0 shadow-sm border"
+            aria-labelledby="profileDropdownBtn">
             <li class="px-3 py-2 bg-light border-bottom">
               <div class="d-flex align-items-center gap-2 mb-1">
                 <span class="badge bg-black text-white font-mono rounded-0" style="font-size:0.6rem;">TIER 01</span>
@@ -111,21 +132,39 @@
               <div class="fw-bold font-brand text-dark fs-6 lh-1 mb-1">Marcus Vance</div>
               <div class="font-mono text-muted text-truncate" style="font-size:0.72rem;">lifter@superscience.test</div>
             </li>
-            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2 active bg-dark text-white" href="profile.html"><span>My Profile</span><span class="badge bg-light text-dark rounded-0 ms-auto font-mono" style="font-size:0.6rem;">CURRENT</span></a></li>
-            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="#orders-section"><span>Orders & Tracking</span></a></li>
-            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="#sizing-section"><span>Size Calculator</span></a></li>
-            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="#wishlist-section"><span>Saved Items</span></a></li>
-            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="#training-section"><span>Workout Programs</span></a></li>
-            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2" href="#account-section"><span>Account & Address</span></a></li>
-            <li class="seller-only" style="display: none !important;"><hr class="dropdown-divider my-1"></li>
-            <li class="seller-only" style="display: none !important;"><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2 small" href="admin.html"><span>Seller Dashboard</span><span class="badge bg-dark text-white rounded-0 ms-auto font-mono" style="font-size:0.6rem;">SELLER</span></a></li>
-            <li><button class="dropdown-item font-mono py-2 d-flex align-items-center gap-2 small text-danger" onclick="window.showToast('Signed out of Marcus Vance profile.')"><span>Switch / Sign Out</span></button></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2 active bg-dark text-white"
+                href="profile.html"><span>My Profile</span><span
+                  class="badge bg-light text-dark rounded-0 ms-auto font-mono"
+                  style="font-size:0.6rem;">CURRENT</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2"
+                href="#orders-section"><span>Orders & Tracking</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2"
+                href="#sizing-section"><span>Size Calculator</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2"
+                href="#wishlist-section"><span>Saved Items</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2"
+                href="#training-section"><span>Workout Programs</span></a></li>
+            <li><a class="dropdown-item font-mono py-2 d-flex align-items-center gap-2"
+                href="#account-section"><span>Account & Address</span></a></li>
+            <li class="seller-only" style="display: none !important;">
+              <hr class="dropdown-divider my-1">
+            </li>
+            <li class="seller-only" style="display: none !important;"><a
+                class="dropdown-item font-mono py-2 d-flex align-items-center gap-2 small"
+                href="admin.html"><span>Seller Dashboard</span><span
+                  class="badge bg-dark text-white rounded-0 ms-auto font-mono"
+                  style="font-size:0.6rem;">SELLER</span></a></li>
+            <li><button class="dropdown-item font-mono py-2 d-flex align-items-center gap-2 small text-danger"
+                onclick="window.showToast('Signed out of Marcus Vance profile.')"><span>Switch / Sign
+                  Out</span></button></li>
           </ul>
         </div>
 
         <!-- Customer Support Live Chat Trigger (Visible when logged in) -->
-        <button class="header-action-btn open-chat-trigger" id="navbar-chat-btn" title="Customer Support" aria-label="Open Customer Support" style="display: none;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <button class="header-action-btn open-chat-trigger" id="navbar-chat-btn" title="Customer Support"
+          aria-label="Open Customer Support" style="display: none;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
           </svg>
         </button>
@@ -155,28 +194,40 @@
     <div class="offcanvas-body p-0">
       <div class="list-group list-group-flush">
         <a href="index.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Home</a>
-        <a href="catalog.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Shop Collection</a>
-        <a href="programs.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Workout Programs</a>
-        <a href="contact.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Fitting & Showroom</a>
-        <a href="profile.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase bg-light border-top">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2">
+        <a href="catalog.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Shop
+          Collection</a>
+        <a href="programs.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Workout
+          Programs</a>
+        <a href="contact.html" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase">Fitting &
+          Showroom</a>
+        <a href="profile.html"
+          class="list-group-item list-group-item-action py-3 fw-bold text-uppercase bg-light border-top">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            class="me-2">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
           Athlete Profile
         </a>
-        <a href="javascript:void(0)" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase d-flex align-items-center justify-content-between" id="mobile-nav-chat-link" style="display:none;" onclick="if(window.openConciergeChat) window.openConciergeChat();">
+        <a href="javascript:void(0)"
+          class="list-group-item list-group-item-action py-3 fw-bold text-uppercase d-flex align-items-center justify-content-between"
+          id="mobile-nav-chat-link" style="display:none;"
+          onclick="if(window.openConciergeChat) window.openConciergeChat();">
           <div class="d-flex align-items-center">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" class="me-2">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
             <span>Support Chat</span>
           </div>
           <span class="badge bg-success font-mono rounded-0" style="font-size:0.6rem;">LIVE</span>
         </a>
-        <a href="admin.html" id="mobile-nav-seller-link" class="list-group-item list-group-item-action py-3 fw-bold text-uppercase border-top d-flex align-items-center justify-content-between seller-only" style="display: none !important;">
+        <a href="admin.html" id="mobile-nav-seller-link"
+          class="list-group-item list-group-item-action py-3 fw-bold text-uppercase border-top d-flex align-items-center justify-content-between seller-only"
+          style="display: none !important;">
           <span class="d-flex align-items-center">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              class="me-2">
               <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
               <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
             </svg>
@@ -219,7 +270,8 @@
             <div>
               <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
                 <h1 class="font-brand fs-3 fw-bold mb-0 lh-1" id="athlete-display-name">Marcus Vance</h1>
-                <span class="badge bg-success font-mono rounded-0 py-1 px-2" style="font-size:0.65rem;">VERIFIED ATHLETE</span>
+                <span class="badge bg-success font-mono rounded-0 py-1 px-2" style="font-size:0.65rem;">VERIFIED
+                  ATHLETE</span>
               </div>
               <div class="font-mono text-muted small" style="font-size:0.775rem;">
                 MEMBER // STRENGTH & FITNESS
@@ -233,7 +285,9 @@
             <span class="badge bg-white text-dark border font-mono rounded-0 py-1 px-2" style="font-size:0.65rem;">
               DISPATCH TIER: WORLDWIDE EXPRESS
             </span>
-            <a href="admin.html" id="hero-seller-badge" class="badge bg-dark text-white font-mono rounded-0 py-1 px-2 text-decoration-none seller-only" style="font-size:0.65rem; display: none !important;">
+            <a href="admin.html" id="hero-seller-badge"
+              class="badge bg-dark text-white font-mono rounded-0 py-1 px-2 text-decoration-none seller-only"
+              style="font-size:0.65rem; display: none !important;">
               SELLER DASHBOARD &rarr;
             </a>
           </div>
@@ -242,8 +296,10 @@
         <!-- Right Quick Actions & Sync Status -->
         <div class="col-12 col-lg-5 text-lg-end">
           <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
-            <button class="btn btn-ss-dark rounded-0 font-mono small py-2 px-3 d-inline-flex align-items-center gap-2" id="btn-profile-launch-chat" onclick="if(window.openConciergeChat) window.openConciergeChat();">
-              <span class="ss-chat-pulse-dot" style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#22c55e;"></span>
+            <button class="btn btn-ss-dark rounded-0 font-mono small py-2 px-3 d-inline-flex align-items-center gap-2"
+              id="btn-profile-launch-chat" onclick="if(window.openConciergeChat) window.openConciergeChat();">
+              <span class="ss-chat-pulse-dot"
+                style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#22c55e;"></span>
               <span>SUPPORT CHAT</span>
             </button>
             <button class="btn btn-outline-dark rounded-0 font-mono small py-2 px-3" id="btn-recalibrate-sizing">
@@ -303,7 +359,8 @@
     <div class="container-fluid px-3 px-md-5">
       <div class="d-flex overflow-x-auto" id="profile-tabs-nav" style="scrollbar-width:none;">
         <button class="profile-tab-btn active" data-tab="orders">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            class="me-1">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -311,20 +368,25 @@
           ORDERS & TRACKING (<span id="tab-orders-count">0</span>)
         </button>
         <button class="profile-tab-btn" data-tab="sizing">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            class="me-1">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
           SIZE CALCULATOR
         </button>
         <button class="profile-tab-btn" data-tab="wishlist">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            class="me-1">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+            </path>
           </svg>
           SAVED ITEMS (<span id="tab-wishlist-count">0</span>)
         </button>
         <button class="profile-tab-btn" data-tab="protocol">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            class="me-1">
             <line x1="18" y1="20" x2="18" y2="10"></line>
             <line x1="12" y1="20" x2="12" y2="4"></line>
             <line x1="6" y1="20" x2="6" y2="14"></line>
@@ -332,7 +394,8 @@
           WORKOUT PROGRAMS
         </button>
         <button class="profile-tab-btn" data-tab="account">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            class="me-1">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
@@ -355,7 +418,8 @@
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
           <div>
             <h2 class="font-brand fs-4 fw-bold mb-1">ORDERS & DISPATCH TRACKING</h2>
-            <p class="font-mono text-muted small mb-0">Live orders synchronized from SUPERSCIENCE PostgreSQL database</p>
+            <p class="font-mono text-muted small mb-0">Live orders synchronized from SUPERSCIENCE PostgreSQL database
+            </p>
           </div>
           <div class="d-flex gap-2">
             <button class="btn btn-outline-dark rounded-0 font-mono small py-1 px-3" id="btn-refresh-orders">
@@ -375,7 +439,8 @@
 
         <!-- Empty Orders State -->
         <div id="orders-empty-state" class="text-center py-5 bg-white border" style="display:none;">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-muted mb-3">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            class="text-muted mb-3">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -452,7 +517,8 @@
                   <button type="submit" class="btn btn-ss-dark rounded-0 font-mono small py-2 px-4">
                     CALCULATE MY SIZE
                   </button>
-                  <button type="button" class="btn btn-outline-dark rounded-0 font-mono small py-2 px-3" id="btn-reset-fit">
+                  <button type="button" class="btn btn-outline-dark rounded-0 font-mono small py-2 px-3"
+                    id="btn-reset-fit">
                     RESET
                   </button>
                 </div>
@@ -496,7 +562,8 @@
               </div>
 
               <div class="mt-4 pt-2">
-                <a href="catalog.html" class="btn btn-light w-100 rounded-0 font-mono small py-2 text-uppercase fw-bold text-dark">
+                <a href="catalog.html"
+                  class="btn btn-light w-100 rounded-0 font-mono small py-2 text-uppercase fw-bold text-dark">
                   SHOP YOUR SIZE &rarr;
                 </a>
               </div>
@@ -525,11 +592,15 @@
         </div>
 
         <div id="vault-empty-state" class="text-center py-5 bg-white border" style="display:none;">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-muted mb-3">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            class="text-muted mb-3">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+            </path>
           </svg>
           <h4 class="font-brand fw-bold mb-1">YOUR WISHLIST IS EMPTY</h4>
-          <p class="font-mono text-muted small mb-3">Tap the heart icon on any garment in the catalog to pin it here.</p>
+          <p class="font-mono text-muted small mb-3">Tap the heart icon on any garment in the catalog to pin it here.
+          </p>
           <a href="catalog.html" class="btn btn-ss-dark rounded-0 font-mono small px-4 py-2">EXPLORE COLLECTION</a>
         </div>
 
@@ -556,7 +627,8 @@
               </div>
 
               <p class="font-mono text-muted small mb-4">
-                A structured 4-day workout plan designed to build muscle and strength. Includes exercise targets, sets, and rest times.
+                A structured 4-day workout plan designed to build muscle and strength. Includes exercise targets, sets,
+                and rest times.
               </p>
 
               <!-- Routine Breakdown Accordion/Table -->
@@ -606,7 +678,8 @@
               </div>
 
               <div class="d-flex flex-wrap gap-2">
-                <button class="btn btn-ss-dark rounded-0 font-mono small py-2 px-3" onclick="openWorkoutModal('4-day-hypertrophy')">
+                <button class="btn btn-ss-dark rounded-0 font-mono small py-2 px-3"
+                  onclick="openWorkoutModal('4-day-hypertrophy')">
                   VIEW WORKOUT DETAILS &rarr;
                 </button>
                 <a href="programs.html" class="btn btn-outline-dark rounded-0 font-mono small py-2 px-3">
@@ -690,7 +763,8 @@
                   <button type="submit" class="btn btn-ss-dark rounded-0 font-mono small py-2 px-4">
                     SAVE ADDRESS & DETAILS
                   </button>
-                  <button type="button" class="btn btn-outline-dark rounded-0 font-mono small py-2 px-3" id="btn-export-profile">
+                  <button type="button" class="btn btn-outline-dark rounded-0 font-mono small py-2 px-3"
+                    id="btn-export-profile">
                     EXPORT PROFILE DATA (JSON)
                   </button>
                 </div>
@@ -718,8 +792,11 @@
               </div>
 
               <div class="mb-3">
-                <button type="button" class="btn btn-ss-dark w-100 rounded-0 font-mono small py-2 d-flex align-items-center justify-content-center gap-2" onclick="if(window.openConciergeChat) window.openConciergeChat();">
-                  <span class="ss-chat-pulse-dot" style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#22c55e;"></span>
+                <button type="button"
+                  class="btn btn-ss-dark w-100 rounded-0 font-mono small py-2 d-flex align-items-center justify-content-center gap-2"
+                  onclick="if(window.openConciergeChat) window.openConciergeChat();">
+                  <span class="ss-chat-pulse-dot"
+                    style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#22c55e;"></span>
                   <span>OPEN SUPPORT CHAT &rarr;</span>
                 </button>
               </div>
@@ -785,10 +862,12 @@
         <!-- Col 4: Newsletter -->
         <div class="col-12 col-md-6 col-lg-3">
           <div class="footer-heading">JOIN THE RESEARCH ARCHIVE</div>
-          <p class="text-secondary small">Subscribe for early access to Drop 02 and new evidence-based lifting programs.</p>
+          <p class="text-secondary small">Subscribe for early access to Drop 02 and new evidence-based lifting programs.
+          </p>
           <form onsubmit="event.preventDefault(); showToast('Subscribed! 10% discount code: SCIENCE10'); this.reset();"
             class="d-flex">
-            <input type="email" class="form-control rounded-0 footer-input me-2" placeholder="Enter your email" required>
+            <input type="email" class="form-control rounded-0 footer-input me-2" placeholder="Enter your email"
+              required>
             <button type="submit" class="btn btn-ss-white rounded-0 text-nowrap px-3">JOIN</button>
           </form>
         </div>
@@ -887,49 +966,80 @@
     </div>
   </div>
 
-  <!-- Slide-Over Search Drawer (Offcanvas-End) -->
-  <div class="offcanvas offcanvas-end offcanvas-search offcanvas-drawer rounded-0" tabindex="-1" id="searchOffcanvas"
+  <!-- ========================================================================
+       Gymshark-Style Top Search Overlay (Full-Width Top Dropdown)
+       ======================================================================== -->
+  <div class="offcanvas offcanvas-top offcanvas-search-top rounded-0 border-0" tabindex="-1" id="searchOffcanvas"
     aria-labelledby="searchOffcanvasLabel">
-    <div class="offcanvas-header border-bottom py-3">
-      <div class="d-flex align-items-center gap-2">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <h5 class="offcanvas-title font-mono text-uppercase fs-6 fw-bold mb-0" id="searchOffcanvasLabel">SEARCH
-          PRODUCTS</h5>
-      </div>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
+    <!-- Top Header Bar with Centered Input & Close Button -->
+    <div class="search-top-header">
+      <div class="container-fluid px-3 px-md-5 d-flex align-items-center justify-content-between position-relative">
+        <div class="search-header-spacer d-none d-md-block"></div>
 
-    <div class="p-3 border-bottom bg-light">
-      <div class="input-group">
-        <span class="input-group-text bg-white border-end-0 rounded-0 text-muted">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div class="search-top-input-box">
+          <svg class="search-box-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-        </span>
-        <input type="text" id="search-input"
-          class="form-control border-start-0 rounded-0 font-mono small text-uppercase py-2"
-          placeholder="SEARCH BY NAME, CATEGORY, OR GSM...">
-        <button class="btn btn-outline-dark rounded-0 px-2" id="clear-search-btn" type="button" title="Clear Search"
-          style="display:none;">&times;</button>
-      </div>
+          <input type="text" id="search-input" class="search-box-input" placeholder="What are you looking for?" autocomplete="off" spellcheck="false">
+          <button type="button" id="clear-search-btn" class="search-box-clear" title="Clear Search" style="display: none;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
 
-      <div class="d-flex flex-wrap gap-1 mt-2 pt-1">
-        <span class="search-tag-pill active" data-search-tag="">ALL</span>
-        <span class="search-tag-pill" data-search-tag="t-shirt">T-SHIRTS</span>
-        <span class="search-tag-pill" data-search-tag="shorts">SHORTS</span>
-        <span class="search-tag-pill" data-search-tag="cap">CAPS</span>
-        <span class="search-tag-pill" data-search-tag="380 GSM">380 GSM</span>
+        <button type="button" class="search-top-close-btn" data-bs-dismiss="offcanvas" aria-label="Close" title="Close Search (Esc)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
     </div>
 
-    <div class="offcanvas-body p-0 d-flex flex-column">
-      <div id="search-results-list" class="flex-grow-1 overflow-auto">
-        <div class="p-4 text-center text-muted small font-mono">
-          Type above or select a tag to filter garments instantly.
+    <!-- Main Content: Trending Searches (Left) + Best Sellers / Live Matches (Right) -->
+    <div class="search-top-content px-3 px-md-5">
+      <div class="container-fluid px-0">
+        <div class="row g-4 g-xl-5">
+          <!-- Left Column: TRENDING SEARCHES -->
+          <div class="col-12 col-lg-3 col-xl-2 search-trending-col">
+            <h6 class="search-column-title">TRENDING SEARCHES</h6>
+            <div class="trending-searches-list d-flex flex-column gap-2" id="trending-searches-container">
+              <button type="button" class="trending-search-item" data-search-term="Heavyweight Boxy Tee">Heavyweight Boxy Tee</button>
+              <button type="button" class="trending-search-item" data-search-term="Training Shorts">Training Shorts</button>
+              <button type="button" class="trending-search-item" data-search-term="French Terry">French Terry</button>
+              <button type="button" class="trending-search-item" data-search-term="380 GSM">380 GSM Cotton</button>
+              <button type="button" class="trending-search-item" data-search-term="Trucker Cap">Trucker Cap</button>
+              <button type="button" class="trending-search-item" data-search-term="Workout Programs">Workout Programs</button>
+            </div>
+          </div>
+
+          <!-- Right Column: BEST SELLERS (Default) OR LIVE SEARCH RESULTS (When typing) -->
+          <div class="col-12 col-lg-9 col-xl-10">
+            <!-- BEST SELLERS SHOWCASE -->
+            <div id="search-bestsellers-wrapper">
+              <div class="d-flex align-items-center justify-content-between mb-3 pb-1">
+                <h6 class="search-column-title mb-0">BEST SELLERS</h6>
+                <a href="catalog.html" class="search-view-all-link" data-bs-dismiss="offcanvas">View All</a>
+              </div>
+              <div class="row g-3 g-md-4" id="search-bestsellers-grid">
+                <!-- Dynamically populated 4 best-seller product cards -->
+              </div>
+            </div>
+
+            <!-- LIVE SEARCH RESULTS SHOWCASE -->
+            <div id="search-results-wrapper" style="display: none;">
+              <div class="d-flex align-items-center justify-content-between mb-3 pb-1">
+                <h6 class="search-column-title mb-0" id="search-results-heading">SEARCH RESULTS</h6>
+                <span class="font-mono text-muted small" id="search-results-count"></span>
+              </div>
+              <div class="row g-3 g-md-4" id="search-results-grid">
+                <!-- Dynamically populated search match cards -->
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -987,11 +1097,13 @@
                   </div>
                   <div class="mb-3">
                     <label class="form-label font-mono small text-uppercase">EMAIL ADDRESS</label>
-                    <input type="email" class="form-control rounded-0" id="checkout-email" value="lifter@superscience.test" required>
+                    <input type="email" class="form-control rounded-0" id="checkout-email"
+                      value="lifter@superscience.test" required>
                   </div>
                   <div class="mb-3">
                     <label class="form-label font-mono small text-uppercase">SHIPPING ADDRESS</label>
-                    <input type="text" class="form-control rounded-0" id="checkout-address" value="100 Olympic Way" required>
+                    <input type="text" class="form-control rounded-0" id="checkout-address" value="100 Olympic Way"
+                      required>
                   </div>
                   <button type="submit" class="btn btn-ss-dark w-100 py-3">CONFIRM & DISPATCH ORDER</button>
                 </form>
@@ -1056,7 +1168,7 @@
       try {
         const saved = localStorage.getItem(STORAGE_KEY_PROFILE);
         if (saved) base = Object.assign(base, JSON.parse(saved));
-      } catch (e) {}
+      } catch (e) { }
 
       if (authUser) {
         base.name = authUser.name || base.name;
@@ -1190,7 +1302,11 @@
       // Move all vault to bag
       document.getElementById("btn-move-vault-to-bag")?.addEventListener("click", () => {
         if (window.isSellerMode && window.isSellerMode()) {
-          window.showToast("⚠️ SELLER PREVIEW: Moving items to bag is disabled for Seller accounts.");
+          window.showToast("SELLER PREVIEW: Moving items to bag is disabled for Seller accounts.");
+          return;
+        }
+        if (!Auth.isUserLoggedIn()) {
+          Auth.requireLogin("Shopping Bag (Bag)");
           return;
         }
         const ids = Store.state.wishlist || [];
@@ -1548,7 +1664,11 @@
 
     window.handleMoveSingleVaultToBag = (productId) => {
       if (window.isSellerMode && window.isSellerMode()) {
-        window.showToast("⚠️ SELLER PREVIEW: Purchasing is disabled for Seller accounts.");
+        window.showToast("SELLER PREVIEW: Purchasing is disabled for Seller accounts.");
+        return;
+      }
+      if (!Auth.isUserLoggedIn()) {
+        Auth.requireLogin("Shopping Bag (Bag)");
         return;
       }
       const prod = getProductById(productId);

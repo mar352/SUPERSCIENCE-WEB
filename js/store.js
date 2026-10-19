@@ -66,9 +66,18 @@ export const Store = {
   addToCart(product, size = "L", color = null, quantity = 1) {
     if (this.isSellerModeActive()) {
       if (window.showToast) {
-        window.showToast("⚠️ SELLER ACCOUNT: You cannot add items to bag as a Seller.");
+        window.showToast("SELLER ACCOUNT: You cannot add items to bag as a Seller.");
       }
       return false;
+    }
+
+    if (typeof window !== "undefined" && window.Auth && typeof window.Auth.isUserLoggedIn === "function") {
+      if (!window.Auth.isUserLoggedIn()) {
+        if (typeof window.Auth.requireLogin === "function") {
+          window.Auth.requireLogin("Shopping Bag (Bag)");
+        }
+        return false;
+      }
     }
 
     const selectedColor = color || (product.colors && product.colors[0] ? product.colors[0].name : "Standard");
@@ -120,9 +129,18 @@ export const Store = {
   toggleWishlist(productId) {
     if (this.isSellerModeActive()) {
       if (window.showToast) {
-        window.showToast("⚠️ SELLER ACCOUNT: You cannot heart or wishlist items as a Seller.");
+        window.showToast("SELLER ACCOUNT: You cannot heart or wishlist items as a Seller.");
       }
       return false;
+    }
+
+    if (typeof window !== "undefined" && window.Auth && typeof window.Auth.isUserLoggedIn === "function") {
+      if (!window.Auth.isUserLoggedIn()) {
+        if (typeof window.Auth.requireLogin === "function") {
+          window.Auth.requireLogin("Wishlist (Heart)");
+        }
+        return false;
+      }
     }
 
     const idx = this.state.wishlist.indexOf(productId);

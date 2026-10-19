@@ -16,6 +16,7 @@ export const Auth = {
   _userToken: null,
   _admin: null,
   _adminToken: null,
+  _pendingAuthAction: null,
 
   init() {
     try {
@@ -566,29 +567,74 @@ export const Auth = {
     }
   },
 
+  // Require login modal trigger for protected actions (Bag, Wishlist Heart, etc.)
+  requireLogin(feature = "this feature", onSuccess = null) {
+    this._pendingAuthAction = onSuccess;
+    const feat = String(feature || "").toLowerCase();
+    const isWishlist = feat.includes("wishlist") || feat.includes("heart");
+    const isBag = feat.includes("bag") || feat.includes("cart");
+
+    let action = "ATHLETE LOGIN REQUIRED";
+    let message = `Please sign in or create an athlete account to access ${feature}.`;
+    let toastMsg = `LOGIN REQUIRED: Please sign in or register to access ${feature}.`;
+
+    if (isWishlist) {
+      action = "HEART // WISHLIST VAULT ACCESS";
+      message = "You must be signed in to save garments to your wishlist vault.";
+      toastMsg = "LOGIN REQUIRED: Please sign in or register to access your Wishlist.";
+    } else if (isBag) {
+      action = "BAG // SHOPPING CART ACCESS";
+      message = "You must be signed in to add garments and access your Shopping Bag.";
+      toastMsg = "LOGIN REQUIRED: Please sign in or register to access your Shopping Bag.";
+    }
+
+    if (typeof window !== "undefined" && window.showToast) {
+      window.showToast(toastMsg);
+    }
+
+    this.openAuthModal("login", { action, message });
+  },
+
   // Open modal for login or registration
-  openAuthModal(initialTab = "login") {
+  openAuthModal(initialTab = "login", reason = null) {
     this.ensureAuthModalRendered();
     const modalEl = document.getElementById("superscienceAuthModal");
     if (!modalEl) return;
 
+    const banner = document.getElementById("auth-modal-required-banner");
+    const headerTag = document.getElementById("auth-modal-header-tag");
+    const actionEl = document.getElementById("auth-modal-required-action");
+    const msgEl = document.getElementById("auth-modal-required-msg");
+
+    if (reason) {
+      if (banner) banner.classList.remove("d-none");
+      if (headerTag) headerTag.textContent = "LOGIN REQUIRED";
+      if (actionEl) actionEl.textContent = reason.action || "LOGIN REQUIRED";
+      if (msgEl) msgEl.textContent = reason.message || "Please sign in or create an athlete account to continue.";
+    } else {
+      if (banner) banner.classList.add("d-none");
+      if (headerTag) headerTag.textContent = "MEMBER PORTAL";
+    }
+
     // Switch tab
     if (initialTab === "register") {
       const regTabBtn = document.getElementById("auth-tab-register-btn");
-      if (regTabBtn) {
-        const tab = new bootstrap.Tab(regTabBtn);
+      if (regTabBtn && window.bootstrap) {
+        const tab = bootstrap.Tab.getOrCreateInstance(regTabBtn);
         tab.show();
       }
     } else {
       const loginTabBtn = document.getElementById("auth-tab-login-btn");
-      if (loginTabBtn) {
-        const tab = new bootstrap.Tab(loginTabBtn);
+      if (loginTabBtn && window.bootstrap) {
+        const tab = bootstrap.Tab.getOrCreateInstance(loginTabBtn);
         tab.show();
       }
     }
 
-    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-    modal.show();
+    if (window.bootstrap) {
+      const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+      modal.show();
+    }
   },
 
   // Ensure universal modal exists in DOM
@@ -597,16 +643,33 @@ export const Auth = {
 
     const modalHtml = `
       <div class="modal fade" id="superscienceAuthModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" style="max-width: 480px;">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 490px;">
           <div class="modal-content rounded-0 border-dark shadow-lg" style="border-width: 2px;">
             <!-- Modal Header -->
             <div class="modal-header bg-black text-white rounded-0 py-3 px-4 border-0">
               <div class="d-flex align-items-center gap-2">
                 <span class="font-brand fs-5 fw-bold text-uppercase" style="letter-spacing: -0.02em;">SUPERSCIENCE</span>
                 <span class="text-white-50 font-mono small">•</span>
-                <span class="font-mono small text-white-50 text-uppercase" style="font-size: 0.72rem;">MEMBER PORTAL</span>
+                <span class="font-mono small text-white-50 text-uppercase" id="auth-modal-header-tag" style="font-size: 0.72rem;">MEMBER PORTAL</span>
               </div>
               <button type="button" class="btn-close btn-close-white rounded-0" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Visual Login Required Banner (Shown dynamically when login is required) -->
+            <div id="auth-modal-required-banner" class="alert alert-dark bg-black text-white rounded-0 border-0 m-0 px-4 py-3 border-bottom border-warning d-none">
+              <div class="d-flex align-items-center justify-content-between mb-1">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-danger text-white font-mono rounded-0 px-2 py-1" style="font-size:0.65rem; letter-spacing:0.08em; font-weight:700;">LOGIN REQUIRED</span>
+                  <span class="font-mono text-warning small fw-bold" id="auth-modal-required-action">ACTION LOCKED</span>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-warning">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              </div>
+              <div class="font-mono small text-white-50" id="auth-modal-required-msg" style="font-size:0.75rem; line-height: 1.4;">
+                Please sign in to your athlete account or create a new account to continue.
+              </div>
             </div>
 
             <!-- Tab Switcher -->
@@ -651,7 +714,7 @@ export const Auth = {
                         </label>
                       </div>
                       <button type="button" class="btn btn-sm btn-outline-dark rounded-0 font-mono" style="font-size:0.65rem;" id="btn-quick-fill-athlete">
-                        ⚡ Quick Fill Demo
+                        Quick Fill Demo
                       </button>
                     </div>
 
@@ -726,6 +789,13 @@ export const Auth = {
     const modalEl = document.getElementById("superscienceAuthModal");
     if (!modalEl) return;
 
+    modalEl.addEventListener("hidden.bs.modal", () => {
+      const banner = document.getElementById("auth-modal-required-banner");
+      if (banner) banner.classList.add("d-none");
+      const headerTag = document.getElementById("auth-modal-header-tag");
+      if (headerTag) headerTag.textContent = "MEMBER PORTAL";
+    });
+
     // Tab button styling sync
     const tabBtns = modalEl.querySelectorAll("#authModalTabs button");
     tabBtns.forEach(btn => {
@@ -778,7 +848,7 @@ export const Auth = {
 
         const res = await this.loginUser(email, password);
         loginBtn.disabled = false;
-        loginBtn.textContent = "AUTHENTICATE & ENTER VAULT";
+        loginBtn.textContent = "SIGN IN";
 
         if (res.success) {
           const inst = bootstrap.Modal.getInstance(modalEl);
@@ -791,6 +861,15 @@ export const Auth = {
           // If currently on profile.html, reload data
           if (window.location.pathname.includes("profile.html") && typeof window.loadAthleteProfileData === "function") {
             window.loadAthleteProfileData();
+          }
+
+          // Execute pending action (e.g. open bag drawer, open wishlist, or toggle wishlist)
+          if (this._pendingAuthAction && typeof this._pendingAuthAction === "function") {
+            const action = this._pendingAuthAction;
+            this._pendingAuthAction = null;
+            setTimeout(() => {
+              try { action(); } catch (err) { console.error("[Auth] Pending action callback failed:", err); }
+            }, 350);
           }
         } else {
           loginAlert.textContent = res.error || "Invalid email or password.";
@@ -832,7 +911,7 @@ export const Auth = {
 
         const res = await this.registerUser(name, email, password, fit);
         regBtn.disabled = false;
-        regBtn.textContent = "CREATE ATHLETE PROFILE";
+        regBtn.textContent = "CREATE ACCOUNT";
 
         if (res.success) {
           const inst = bootstrap.Modal.getInstance(modalEl);
@@ -844,6 +923,15 @@ export const Auth = {
 
           if (window.location.pathname.includes("profile.html") && typeof window.loadAthleteProfileData === "function") {
             window.loadAthleteProfileData();
+          }
+
+          // Execute pending action
+          if (this._pendingAuthAction && typeof this._pendingAuthAction === "function") {
+            const action = this._pendingAuthAction;
+            this._pendingAuthAction = null;
+            setTimeout(() => {
+              try { action(); } catch (err) { console.error("[Auth] Pending action callback failed:", err); }
+            }, 350);
           }
         } else {
           regAlert.textContent = res.error || "Failed to create account.";

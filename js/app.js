@@ -702,17 +702,26 @@ function attachProductEvents() {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       if (Auth.isSellerMode()) {
-        showToast("⚠️ SELLER ACCOUNT: You cannot add items to bag as a Seller.");
+        showToast("SELLER ACCOUNT: You cannot add items to bag as a Seller.");
         return;
       }
       const pId = btn.getAttribute("data-product-id");
       const size = btn.getAttribute("data-size");
       const product = activeProducts.find(p => p.id === pId) || products.find(p => p.id === pId);
-      if (product) {
-        Store.addToCart(product, size);
-        showToast(`Added ${product.name} (Size ${size}) to your bag.`);
-        openBagDrawer();
+      if (!product) return;
+
+      if (!Auth.isUserLoggedIn()) {
+        Auth.requireLogin("Shopping Bag (Bag)", () => {
+          Store.addToCart(product, size);
+          showToast(`Added ${product.name} (Size ${size}) to your bag.`);
+          openBagDrawer();
+        });
+        return;
       }
+
+      Store.addToCart(product, size);
+      showToast(`Added ${product.name} (Size ${size}) to your bag.`);
+      openBagDrawer();
     });
   });
 
@@ -721,13 +730,26 @@ function attachProductEvents() {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       if (Auth.isSellerMode()) {
-        showToast("⚠️ SELLER ACCOUNT: You cannot heart or wishlist items as a Seller.");
+        showToast("SELLER ACCOUNT: You cannot heart or wishlist items as a Seller.");
         return;
       }
       const pId = btn.getAttribute("data-product-id");
+
+      if (!Auth.isUserLoggedIn()) {
+        Auth.requireLogin("Wishlist (Heart)", () => {
+          const added = Store.toggleWishlist(pId);
+          btn.classList.toggle("active", added);
+          const svg = btn.querySelector("svg");
+          if (svg) svg.setAttribute("fill", added ? "#000" : "none");
+          showToast(added ? "Item saved to your Wishlist." : "Item removed from Wishlist.");
+        });
+        return;
+      }
+
       const added = Store.toggleWishlist(pId);
       btn.classList.toggle("active", added);
-      btn.querySelector("svg").setAttribute("fill", added ? "#000" : "none");
+      const svg = btn.querySelector("svg");
+      if (svg) svg.setAttribute("fill", added ? "#000" : "none");
       showToast(added ? "Item saved to your Wishlist." : "Item removed from Wishlist.");
     });
   });
@@ -882,6 +904,14 @@ function setupBagDrawer() {
 
 function handleBagTriggerClick(e) {
   e.preventDefault();
+  if (Auth.isSellerMode()) {
+    showToast("SELLER PREVIEW: Shopping bag is disabled for Seller accounts.");
+    return;
+  }
+  if (!Auth.isUserLoggedIn()) {
+    Auth.requireLogin("Shopping Bag (Bag)", () => openBagDrawer());
+    return;
+  }
   const el = document.getElementById("offcanvasBag") || document.getElementById("bagOffcanvas");
   if (el && el.classList.contains("show")) {
     closeBagDrawer();
@@ -900,7 +930,11 @@ function closeBagDrawer() {
 
 function openBagDrawer() {
   if (Auth.isSellerMode()) {
-    showToast("⚠️ SELLER PREVIEW: Shopping bag is disabled for Seller accounts.");
+    showToast("SELLER PREVIEW: Shopping bag is disabled for Seller accounts.");
+    return;
+  }
+  if (!Auth.isUserLoggedIn()) {
+    Auth.requireLogin("Shopping Bag (Bag)", () => openBagDrawer());
     return;
   }
   const el = document.getElementById("offcanvasBag") || document.getElementById("bagOffcanvas");
@@ -1158,7 +1192,15 @@ function openWorkoutModal(progId) {
     if (addBtn) {
       addBtn.addEventListener("click", () => {
         if (Auth.isSellerMode()) {
-          showToast("⚠️ SELLER PREVIEW: Purchasing is disabled for Seller accounts.");
+          showToast("SELLER PREVIEW: Purchasing is disabled for Seller accounts.");
+          return;
+        }
+        if (!Auth.isUserLoggedIn()) {
+          Auth.requireLogin("Shopping Bag (Bag)", () => {
+            Store.addToCart(recommendedProduct, "L");
+            showToast(`Added ${recommendedProduct.name} to your bag.`);
+            openBagDrawer();
+          });
           return;
         }
         Store.addToCart(recommendedProduct, "L");
@@ -1285,6 +1327,15 @@ function openProductModal(productId) {
       addToBagBtn.style.cursor = "pointer";
       addToBagBtn.style.opacity = "1";
       addToBagBtn.onclick = () => {
+        if (!Auth.isUserLoggedIn()) {
+          Auth.requireLogin("Shopping Bag (Bag)", () => {
+            Store.addToCart(activeModalProduct, activeModalSize, activeModalColor);
+            showToast(`Added ${activeModalProduct.name} (${activeModalSize}) to your bag.`);
+            if (productModalInstance) productModalInstance.hide();
+            openBagDrawer();
+          });
+          return;
+        }
         Store.addToCart(activeModalProduct, activeModalSize, activeModalColor);
         showToast(`Added ${activeModalProduct.name} (${activeModalSize}) to your bag.`);
         productModalInstance.hide();
@@ -1320,6 +1371,8 @@ function openSearchDrawer() {
   updateHeaderDrawerMetrics();
   if (!el || !window.bootstrap) return;
 
+  renderSearchBestSellers();
+
   if (el.classList.contains("offcanvas") || el.id.includes("Offcanvas")) {
     searchDrawerInstance = bootstrap.Offcanvas.getOrCreateInstance(el);
     searchDrawerInstance.show();
@@ -1334,7 +1387,7 @@ function openSearchDrawer() {
       input.focus();
       input.select();
     }
-  }, 300);
+  }, 250);
 }
 
 function handleSearchTriggerClick(e) {
@@ -1354,6 +1407,145 @@ function handleSearchKeyboardShortcut(e) {
     e.preventDefault();
     openSearchDrawer();
   }
+}
+
+function renderSearchProductCard(product) {
+  const img = (product.images && product.images.primary)
+    ? product.images.primary
+    : (typeof product.images === "string" ? product.images : "assets/products/d0d159a5-2fc7-4bb2-b155-ccdcc942f226.jfif");
+  const isWishlisted = Store.state.wishlist && Store.state.wishlist.includes(product.id);
+  const badgeText = (product.badges && product.badges.length > 0) ? product.badges[0] : (product.gsm || "380 GSM");
+  const fitText = product.fit || product.categoryLabel || "Boxy Fit";
+  const ratingText = product.rating ? `★ ${product.rating}` : "★ 4.9";
+
+  return `
+    <div class="col-6 col-md-3">
+      <div class="search-card" data-product-id="${product.id}">
+        <div class="search-card-img-wrapper">
+          <img src="${img}" alt="${product.name}" class="search-card-img" loading="lazy">
+          <button type="button" class="search-card-heart-btn ${isWishlisted ? 'active' : ''}" data-product-id="${product.id}" title="${isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}" aria-label="Wishlist">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="${isWishlisted ? '#dc2626' : 'none'}" stroke="${isWishlisted ? '#dc2626' : 'currentColor'}" stroke-width="2">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+          <span class="search-card-badge">${badgeText}</span>
+        </div>
+        <div class="search-card-info">
+          <div class="search-card-title-row">
+            <span class="search-card-title" title="${product.name}">${product.name}</span>
+            <span class="search-card-rating">${ratingText}</span>
+          </div>
+          <div class="search-card-subtitle">${fitText}</div>
+          <div class="search-card-price">${formatPrice(product.price)}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function bindSearchCardEvents(container) {
+  if (!container) return;
+  // Card click -> PDP Modal
+  container.querySelectorAll(".search-card").forEach(card => {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".search-card-heart-btn")) return;
+      const pid = card.getAttribute("data-product-id");
+      closeSearchDrawer();
+      openProductModal(pid);
+    });
+  });
+
+  // Heart click -> Wishlist toggle
+  container.querySelectorAll(".search-card-heart-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      if (!Auth.isUserLoggedIn()) {
+        Auth.requireLogin("Wishlist");
+        return;
+      }
+      const pid = btn.getAttribute("data-product-id");
+      Store.toggleWishlist(pid);
+      const isWishlisted = Store.state.wishlist && Store.state.wishlist.includes(pid);
+      btn.classList.toggle("active", isWishlisted);
+      const svg = btn.querySelector("svg");
+      if (svg) {
+        svg.setAttribute("fill", isWishlisted ? "#dc2626" : "none");
+        svg.setAttribute("stroke", isWishlisted ? "#dc2626" : "currentColor");
+      }
+    });
+  });
+}
+
+function renderSearchBestSellers() {
+  const container = document.getElementById("search-bestsellers-grid");
+  if (!container) return;
+  const bestSellers = activeProducts.slice(0, 4);
+  container.innerHTML = bestSellers.map(renderSearchProductCard).join("");
+  bindSearchCardEvents(container);
+}
+
+function renderLiveSearchResults(query) {
+  const bestSellersWrapper = document.getElementById("search-bestsellers-wrapper");
+  const resultsWrapper = document.getElementById("search-results-wrapper");
+  const resultsGrid = document.getElementById("search-results-grid");
+  const resultsCount = document.getElementById("search-results-count");
+  const resultsHeading = document.getElementById("search-results-heading");
+  const clearBtn = document.getElementById("clear-search-btn");
+
+  const q = (query || "").toLowerCase().trim();
+
+  if (clearBtn) clearBtn.style.display = q ? "flex" : "none";
+
+  if (q.length === 0) {
+    if (bestSellersWrapper) bestSellersWrapper.style.display = "block";
+    if (resultsWrapper) resultsWrapper.style.display = "none";
+    return;
+  }
+
+  if (bestSellersWrapper) bestSellersWrapper.style.display = "none";
+  if (resultsWrapper) resultsWrapper.style.display = "block";
+
+  const matches = activeProducts.filter(p => {
+    const nameMatch = (p.name || "").toLowerCase().includes(q);
+    const catMatch = (p.category || "").toLowerCase().includes(q) || (p.categoryLabel || "").toLowerCase().includes(q);
+    const gsmMatch = (p.gsm || "").toLowerCase().includes(q);
+    const fitMatch = (p.fit || "").toLowerCase().includes(q);
+    const descMatch = (p.description || "").toLowerCase().includes(q);
+    return nameMatch || catMatch || gsmMatch || fitMatch || descMatch;
+  });
+
+  if (resultsHeading) resultsHeading.textContent = `RESULTS FOR "${q.toUpperCase()}"`;
+  if (resultsCount) resultsCount.textContent = `${matches.length} ${matches.length === 1 ? 'ITEM' : 'ITEMS'}`;
+
+  if (!resultsGrid) return;
+
+  if (matches.length === 0) {
+    resultsGrid.innerHTML = `
+      <div class="col-12 py-5 text-center">
+        <div class="font-mono text-muted small text-uppercase mb-2">NO PRODUCTS MATCHING "${q.toUpperCase()}"</div>
+        <p class="text-secondary small mb-3">Try searching for keywords like "tee", "shorts", "blackout", or "380 GSM".</p>
+        <button type="button" class="btn btn-outline-dark rounded-0 font-mono small px-3 py-2" id="btn-search-empty-clear">
+          CLEAR AND VIEW BEST SELLERS
+        </button>
+      </div>
+    `;
+    const emptyClearBtn = document.getElementById("btn-search-empty-clear");
+    if (emptyClearBtn) {
+      emptyClearBtn.addEventListener("click", () => {
+        const input = document.getElementById("search-input");
+        if (input) {
+          input.value = "";
+          renderLiveSearchResults("");
+          input.focus();
+        }
+      });
+    }
+    return;
+  }
+
+  resultsGrid.innerHTML = matches.map(renderSearchProductCard).join("");
+  bindSearchCardEvents(resultsGrid);
 }
 
 function setupSearchDrawer() {
@@ -1381,12 +1573,25 @@ function setupSearchDrawer() {
     clearBtn.addEventListener("click", () => {
       searchInput.value = "";
       clearBtn.style.display = "none";
-      renderSearchResults("");
+      renderLiveSearchResults("");
       searchInput.focus();
     });
   }
 
-  // Quick tag suggestions
+  // Trending Searches Click Handlers (Gymshark Style)
+  document.querySelectorAll(".trending-search-item").forEach(item => {
+    item.addEventListener("click", () => {
+      const term = item.getAttribute("data-search-term") || item.textContent.trim();
+      if (searchInput) {
+        searchInput.value = term;
+        if (clearBtn) clearBtn.style.display = "flex";
+        renderLiveSearchResults(term);
+        searchInput.focus();
+      }
+    });
+  });
+
+  // Legacy search-tag-pill support
   document.querySelectorAll(".search-tag-pill").forEach(pill => {
     pill.addEventListener("click", () => {
       document.querySelectorAll(".search-tag-pill").forEach(p => p.classList.remove("active"));
@@ -1394,75 +1599,25 @@ function setupSearchDrawer() {
       const tag = pill.getAttribute("data-search-tag") || "";
       if (searchInput) {
         searchInput.value = tag;
-        if (clearBtn) clearBtn.style.display = tag ? "block" : "none";
+        if (clearBtn) clearBtn.style.display = tag ? "flex" : "none";
       }
-      renderSearchResults(tag);
+      renderLiveSearchResults(tag);
     });
   });
 
   if (searchInput) {
     searchInput.addEventListener("input", (e) => {
       const q = e.target.value.toLowerCase().trim();
-      if (clearBtn) clearBtn.style.display = q ? "block" : "none";
-      renderSearchResults(q);
+      renderLiveSearchResults(q);
     });
   }
+
+  // Pre-render bestsellers into search overlay
+  renderSearchBestSellers();
 }
 
 function renderSearchResults(query) {
-  const searchResults = document.getElementById("search-results-list");
-  if (!searchResults) return;
-
-  const q = (query || "").toLowerCase().trim();
-  if (q.length === 0) {
-    searchResults.innerHTML = `
-      <div class="p-4 text-center text-muted small font-mono">
-        Type above or select a tag to filter garments instantly.
-      </div>
-    `;
-    return;
-  }
-
-  const matches = activeProducts.filter(p => {
-    const nameMatch = (p.name || "").toLowerCase().includes(q);
-    const catMatch = (p.category || "").toLowerCase().includes(q) || (p.categoryLabel || "").toLowerCase().includes(q);
-    const gsmMatch = (p.gsm || "").toLowerCase().includes(q);
-    const descMatch = (p.description || "").toLowerCase().includes(q);
-    return nameMatch || catMatch || gsmMatch || descMatch;
-  });
-
-  if (matches.length === 0) {
-    searchResults.innerHTML = `
-      <div class="p-4 text-center text-muted small font-mono">
-        NO PRODUCTS FOUND FOR "${q.toUpperCase()}".
-      </div>
-    `;
-    return;
-  }
-
-  searchResults.innerHTML = matches.map(p => {
-    const img = (p.images && p.images.primary) ? p.images.primary : (typeof p.images === "string" ? p.images : "assets/products/d0d159a5-2fc7-4bb2-b155-ccdcc942f226.jfif");
-    return `
-      <div class="search-match-item p-3 border-bottom d-flex align-items-center justify-content-between cursor-pointer" data-product-id="${p.id}" style="cursor: pointer; transition: background 0.15s ease;">
-        <div class="d-flex align-items-center gap-3">
-          <img src="${img}" alt="${p.name}" style="width: 50px; height: 60px; object-fit: cover;" class="border">
-          <div>
-            <div class="font-brand fw-bold text-dark fs-6">${p.name}</div>
-            <div class="text-muted font-mono" style="font-size:0.75rem;">${p.gsm || ''} • ${formatPrice(p.price)}</div>
-          </div>
-        </div>
-        <button class="btn btn-outline-dark btn-sm rounded-0 font-mono" style="font-size:0.7rem;">VIEW</button>
-      </div>
-    `;
-  }).join("");
-
-  searchResults.querySelectorAll(".search-match-item").forEach(item => {
-    item.addEventListener("click", () => {
-      const pId = item.getAttribute("data-product-id");
-      if (searchDrawerInstance) searchDrawerInstance.hide();
-      openProductModal(pId);
-    });
-  });
+  renderLiveSearchResults(query);
 }
 
 function setupSearchModal() {
@@ -1489,7 +1644,11 @@ function closeWishlistDrawer() {
 
 function openWishlistDrawer() {
   if (Auth.isSellerMode()) {
-    showToast("⚠️ SELLER PREVIEW: Saved wishlist vault is disabled for Seller accounts.");
+    showToast("SELLER PREVIEW: Saved wishlist vault is disabled for Seller accounts.");
+    return;
+  }
+  if (!Auth.isUserLoggedIn()) {
+    Auth.requireLogin("Wishlist Vault (Heart)", () => openWishlistDrawer());
     return;
   }
   const el = document.getElementById("wishlistOffcanvas") || document.getElementById("wishlistModal");
@@ -1509,6 +1668,14 @@ function openWishlistDrawer() {
 
 function handleWishlistTriggerClick(e) {
   e.preventDefault();
+  if (Auth.isSellerMode()) {
+    showToast("SELLER PREVIEW: Saved wishlist vault is disabled for Seller accounts.");
+    return;
+  }
+  if (!Auth.isUserLoggedIn()) {
+    Auth.requireLogin("Wishlist Vault (Heart)", () => openWishlistDrawer());
+    return;
+  }
   const el = document.getElementById("wishlistOffcanvas") || document.getElementById("wishlistModal");
   if (el && el.classList.contains("show")) {
     closeWishlistDrawer();
@@ -1556,7 +1723,11 @@ function setupWishlistDrawer() {
   if (moveAllBtn) {
     moveAllBtn.onclick = () => {
       if (Auth.isSellerMode()) {
-        showToast("⚠️ SELLER PREVIEW: Moving items to bag is disabled for Seller accounts.");
+        showToast("SELLER PREVIEW: Moving items to bag is disabled for Seller accounts.");
+        return;
+      }
+      if (!Auth.isUserLoggedIn()) {
+        Auth.requireLogin("Shopping Bag (Bag)");
         return;
       }
       const savedIds = [...(Store.state.wishlist || [])];
@@ -1636,7 +1807,11 @@ function renderWishlistContents() {
     container.querySelectorAll(".quick-add-wishlist-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         if (Auth.isSellerMode()) {
-          showToast("⚠️ SELLER PREVIEW: Adding items to bag is disabled for Seller accounts.");
+          showToast("SELLER PREVIEW: Adding items to bag is disabled for Seller accounts.");
+          return;
+        }
+        if (!Auth.isUserLoggedIn()) {
+          Auth.requireLogin("Shopping Bag (Bag)");
           return;
         }
         const pId = btn.getAttribute("data-product-id");
@@ -1680,6 +1855,10 @@ function setupCheckoutModal() {
     btn.onclick = (e) => {
       e.preventDefault();
       if (Auth.isSellerMode()) return;
+      if (!Auth.isUserLoggedIn()) {
+        Auth.requireLogin("Checkout", () => openCheckoutModal());
+        return;
+      }
       if (bagOffcanvas) bagOffcanvas.hide();
       openCheckoutModal();
     };
@@ -1696,7 +1875,11 @@ function setupCheckoutModal() {
 
 function openCheckoutModal() {
   if (Auth.isSellerMode()) {
-    showToast("⚠️ SELLER PREVIEW: Checkout is disabled for Seller/Admin accounts.");
+    showToast("SELLER PREVIEW: Checkout is disabled for Seller/Admin accounts.");
+    return;
+  }
+  if (!Auth.isUserLoggedIn()) {
+    Auth.requireLogin("Checkout", () => openCheckoutModal());
     return;
   }
 
@@ -1740,7 +1923,7 @@ function openCheckoutModal() {
 
 async function completeCheckout() {
   if (Auth.isSellerMode()) {
-    showToast("⚠️ SELLER PREVIEW: Orders cannot be placed from a Seller account.");
+    showToast("SELLER PREVIEW: Orders cannot be placed from a Seller account.");
     return;
   }
 

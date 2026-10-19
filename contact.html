@@ -8,6 +8,11 @@
   <meta name="description"
     content="Book private showroom fitting appointments and sizing consultations with the SUPERSCIENCE team. Access comprehensive FAQs, garment care instructions, and customer support.">
 
+  <!-- Tab Favicon -->
+  <link rel="icon" type="image/png" href="stock/superscience-logo.png">
+  <link rel="shortcut icon" type="image/png" href="stock/superscience-logo.png">
+  <link rel="apple-touch-icon" href="stock/superscience-logo.png">
+
   <!-- Bootstrap 5.3 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -35,51 +40,66 @@
        ======================================================================== -->
   <nav class="navbar navbar-expand-lg navbar-superscience sticky-top">
     <div class="container-fluid px-3 px-md-5">
-      <!-- Mobile Toggle Button -->
-      <button class="navbar-toggler rounded-0 border-0 p-0 me-3 d-lg-none" type="button" data-bs-toggle="offcanvas"
-        data-bs-target="#mobileNavOffcanvas" aria-controls="mobileNavOffcanvas">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
+      <!-- 1. Left: Navigation Menu & Mobile Toggle -->
+      <div class="navbar-col-left">
+        <!-- Mobile Toggle Button -->
+        <button class="navbar-toggler rounded-0 border-0 p-0 me-3 d-lg-none" type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#mobileNavOffcanvas" aria-controls="mobileNavOffcanvas">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
 
-      <!-- Brandmark Logo -->
-      <a class="navbar-brand-logo me-4 font-brand" href="index.html" title="SUPERSCIENCE">
-        <img src="assets/logo-black.png" alt="SUPERSCIENCE" class="navbar-logo-img" style="height: 26px; width: auto;">
-      </a>
-
-      <!-- Desktop Navigation Menu -->
-      <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link nav-link-custom" href="index.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link nav-link-custom" href="catalog.html">Shop Collection</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link nav-link-custom" href="programs.html">Workout Programs</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link nav-link-custom active" href="contact.html">Fitting & Showroom</a>
-          </li>
-          <li class="nav-item seller-only" id="nav-seller-dashboard" style="display: none !important;">
-            <a class="nav-link nav-link-custom" href="admin.html">Dashboard</a>
-          </li>
-        </ul>
+        <!-- Desktop Navigation Menu -->
+        <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarNav">
+          <ul class="navbar-nav mb-0">
+            <li class="nav-item">
+              <a class="nav-link nav-link-custom" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-link-custom" href="catalog.html">Shop Collection</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-link-custom" href="programs.html">Workout Programs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-link-custom active" href="contact.html">Fitting & Showroom</a>
+            </li>
+            <li class="nav-item seller-only" id="nav-seller-dashboard" style="display: none !important;">
+              <a class="nav-link nav-link-custom" href="admin.html">Dashboard</a>
+            </li>
+          </ul>
+        </div>
       </div>
 
-      <!-- Right Header Actions (Search, Wishlist, Cart) -->
-      <div class="d-flex align-items-center gap-2">
-        <button class="header-action-btn open-search-trigger" title="Search Garments">
+      <!-- 2. Center: Brandmark Logo -->
+      <div class="navbar-col-center">
+        <a class="navbar-brand-logo font-brand" href="index.html" title="SUPERSCIENCE">
+          <img src="assets/logo-black.png" alt="SUPERSCIENCE" class="navbar-logo-img" style="height: 26px; width: auto;">
+        </a>
+      </div>
+
+      <!-- 3. Right: Header Actions (Search, Wishlist, Profile, Cart) -->
+      <div class="navbar-col-right gap-2">
+        <!-- Search Pill Trigger (Gymshark Style) -->
+        <button class="navbar-search-pill open-search-trigger d-none d-xl-inline-flex" title="Search Products (Cmd+K)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span>What are you looking for?</span>
+        </button>
+        <!-- Search Icon Trigger (Mobile/Compact) -->
+        <button class="header-action-btn open-search-trigger d-xl-none" title="Search Products (Cmd+K)">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
 
+        <!-- Wishlist Trigger -->
         <button class="header-action-btn open-wishlist-trigger" id="open-wishlist-btn" title="Wishlist">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path
@@ -125,7 +145,7 @@
           </svg>
         </button>
 
-        <button class="header-action-btn open-bag-trigger" id="open-bag-btn" title="Your Bag">
+        <button class="header-action-btn open-bag-trigger" id="open-bag-btn" title="Shopping Bag">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -588,58 +608,80 @@
   </div>
 
   <!-- ========================================================================
-       Slide-Over Search Drawer (Offcanvas-End)
+       Gymshark-Style Top Search Overlay (Full-Width Top Dropdown)
        ======================================================================== -->
-  <div class="offcanvas offcanvas-end offcanvas-search offcanvas-drawer rounded-0" tabindex="-1" id="searchOffcanvas"
+  <div class="offcanvas offcanvas-top offcanvas-search-top rounded-0 border-0" tabindex="-1" id="searchOffcanvas"
     aria-labelledby="searchOffcanvasLabel">
-    <div class="offcanvas-header border-bottom py-3">
-      <div class="d-flex align-items-center gap-2">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <h5 class="offcanvas-title font-mono text-uppercase fs-6 fw-bold mb-0" id="searchOffcanvasLabel">SEARCH PRODUCTS</h5>
-      </div>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
+    <!-- Top Header Bar with Centered Input & Close Button -->
+    <div class="search-top-header">
+      <div class="container-fluid px-3 px-md-5 d-flex align-items-center justify-content-between position-relative">
+        <div class="search-header-spacer d-none d-md-block"></div>
 
-    <!-- Live Search Input Box -->
-    <div class="p-3 border-bottom bg-light">
-      <div class="input-group">
-        <span class="input-group-text bg-white border-end-0 rounded-0 text-muted">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div class="search-top-input-box">
+          <svg class="search-box-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-        </span>
-        <input type="text" id="search-input" class="form-control border-start-0 rounded-0 font-mono small text-uppercase py-2"
-          placeholder="SEARCH BY NAME, CATEGORY, OR GSM..." autofocus>
-        <button class="btn btn-outline-dark rounded-0 px-2" id="clear-search-btn" type="button" title="Clear Search" style="display:none;">&times;</button>
-      </div>
+          <input type="text" id="search-input" class="search-box-input" placeholder="What are you looking for?" autocomplete="off" spellcheck="false">
+          <button type="button" id="clear-search-btn" class="search-box-clear" title="Clear Search" style="display: none;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
 
-      <!-- Quick Filter Tag Suggestions -->
-      <div class="d-flex flex-wrap gap-1 mt-2 pt-1">
-        <span class="search-tag-pill active" data-search-tag="">ALL</span>
-        <span class="search-tag-pill" data-search-tag="t-shirt">T-SHIRTS</span>
-        <span class="search-tag-pill" data-search-tag="shorts">SHORTS</span>
-        <span class="search-tag-pill" data-search-tag="cap">CAPS</span>
-        <span class="search-tag-pill" data-search-tag="380 GSM">380 GSM</span>
-        <span class="search-tag-pill" data-search-tag="420 GSM">420 GSM</span>
+        <button type="button" class="search-top-close-btn" data-bs-dismiss="offcanvas" aria-label="Close" title="Close Search (Esc)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
     </div>
 
-    <!-- Search Results / Specimen Matches -->
-    <div class="offcanvas-body p-0 d-flex flex-column">
-      <div id="search-results-list" class="flex-grow-1 overflow-auto">
-        <div class="p-4 text-center text-muted small font-mono">
-          Type above or select a tag to filter garments instantly.
-        </div>
-      </div>
+    <!-- Main Content: Trending Searches (Left) + Best Sellers / Live Matches (Right) -->
+    <div class="search-top-content px-3 px-md-5">
+      <div class="container-fluid px-0">
+        <div class="row g-4 g-xl-5">
+          <!-- Left Column: TRENDING SEARCHES -->
+          <div class="col-12 col-lg-3 col-xl-2 search-trending-col">
+            <h6 class="search-column-title">TRENDING SEARCHES</h6>
+            <div class="trending-searches-list d-flex flex-column gap-2" id="trending-searches-container">
+              <button type="button" class="trending-search-item" data-search-term="Heavyweight Boxy Tee">Heavyweight Boxy Tee</button>
+              <button type="button" class="trending-search-item" data-search-term="Training Shorts">Training Shorts</button>
+              <button type="button" class="trending-search-item" data-search-term="French Terry">French Terry</button>
+              <button type="button" class="trending-search-item" data-search-term="380 GSM">380 GSM Cotton</button>
+              <button type="button" class="trending-search-item" data-search-term="Trucker Cap">Trucker Cap</button>
+              <button type="button" class="trending-search-item" data-search-term="Workout Programs">Workout Programs</button>
+            </div>
+          </div>
 
-      <div class="p-3 border-top bg-light text-center">
-        <a href="catalog.html" class="font-mono small text-dark fw-bold text-decoration-underline" data-bs-dismiss="offcanvas">
-          VIEW FULL COLLECTION IN CATALOG &rarr;
-        </a>
+          <!-- Right Column: BEST SELLERS (Default) OR LIVE SEARCH RESULTS (When typing) -->
+          <div class="col-12 col-lg-9 col-xl-10">
+            <!-- BEST SELLERS SHOWCASE -->
+            <div id="search-bestsellers-wrapper">
+              <div class="d-flex align-items-center justify-content-between mb-3 pb-1">
+                <h6 class="search-column-title mb-0">BEST SELLERS</h6>
+                <a href="catalog.html" class="search-view-all-link" data-bs-dismiss="offcanvas">View All</a>
+              </div>
+              <div class="row g-3 g-md-4" id="search-bestsellers-grid">
+                <!-- Dynamically populated 4 best-seller product cards -->
+              </div>
+            </div>
+
+            <!-- LIVE SEARCH RESULTS SHOWCASE -->
+            <div id="search-results-wrapper" style="display: none;">
+              <div class="d-flex align-items-center justify-content-between mb-3 pb-1">
+                <h6 class="search-column-title mb-0" id="search-results-heading">SEARCH RESULTS</h6>
+                <span class="font-mono text-muted small" id="search-results-count"></span>
+              </div>
+              <div class="row g-3 g-md-4" id="search-results-grid">
+                <!-- Dynamically populated search match cards -->
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
