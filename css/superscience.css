@@ -222,21 +222,22 @@ body[style*="overflow:hidden"] {
 }
 
 .nav-link-custom {
-  font-size: 0.8125rem;
+  font-size: 0.76rem;
   font-weight: 600;
   text-transform: uppercase;
   color: var(--ss-black) !important;
-  padding: 8px 14px !important;
-  letter-spacing: 0.03em;
+  padding: 6px 10px !important;
+  letter-spacing: 0.04em;
   position: relative;
+  white-space: nowrap;
 }
 
 .nav-link-custom::after {
   content: '';
   position: absolute;
-  bottom: 2px;
-  left: 14px;
-  right: 14px;
+  bottom: 0px;
+  left: 10px;
+  right: 10px;
   height: 2px;
   background-color: var(--ss-black);
   transform: scaleX(0);
